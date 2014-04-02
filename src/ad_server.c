@@ -178,20 +178,20 @@ void ad_server_free(ad_server_t *server) {
     DEBUG("Released all the resources successfully.");
 }
 
-void ad_server_set_option(ad_server_t *server, char *key, char *value) {
+void ad_server_set_option(ad_server_t *server, const char *key, const char *value) {
     server->options->putstr(server->options, key, value);
 }
 
-char *ad_server_get_option(ad_server_t *server, char *key) {
+char *ad_server_get_option(ad_server_t *server, const char *key) {
     return server->options->getstr(server->options, key, false);
 }
 
-int ad_server_get_option_int(ad_server_t *server, char *key) {
+int ad_server_get_option_int(ad_server_t *server, const char *key) {
     char *value = ad_server_get_option(server, key);
     return (value) ? atoi(value) : 0;
 }
 
-qhashtbl_t *ad_server_get_stats(ad_server_t *server, char *key) {
+qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key) {
     return server->stats;
 }
 

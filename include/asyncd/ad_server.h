@@ -143,10 +143,10 @@ extern int ad_server_start(ad_server_t *server);
 extern void ad_server_stop(ad_server_t *server);
 extern void ad_server_free(ad_server_t *server);
 
-extern void ad_server_set_option(ad_server_t *server, char *key, char *value);
-extern char *ad_server_get_option(ad_server_t *server, char *key);
-extern int ad_server_get_option_int(ad_server_t *server, char *key);
-extern qhashtbl_t *ad_server_get_stats(ad_server_t *server, char *key);
+extern void ad_server_set_option(ad_server_t *server, const char *key, const char *value);
+extern char *ad_server_get_option(ad_server_t *server, const char *key);
+extern int ad_server_get_option_int(ad_server_t *server, const char *key);
+extern qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key);
 
 extern void ad_server_register_hook(ad_server_t *server, int hooktype,
                                     ad_callback cb, void *userdata);
