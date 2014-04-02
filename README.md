@@ -29,7 +29,6 @@ What I was looking for was.
 * Practical level of support in HTTP handler.
 * Flexible hook supports on both Method hook and Gradual way.
 * Snap-on SSL feature.
-* I don't want to duplicate same code base for the framing 
 
 So with these feature set, applications can expose RESTful API as customer facing
 interface and also use more lighter weight protocols for inter communication
