@@ -45,7 +45,8 @@ without thinking much about the underneath complexity.
 ## Why libasyncd?
 
 * Stands as a generic event-based server library.
-* Not only for HTTP server but also as a RPC server, as a Protocol Buffer channel, ...
+* Not only for HTTP server but also as a RPC server, as a Protocol Buffer channel,
+  as a Message transforming layer...
 * Embeddable library module - you write main().
 * Simple to use.
 * Support HTTP(coming soon) and BYPASS handler.
