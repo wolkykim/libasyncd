@@ -61,7 +61,6 @@ $ (cd lib; run2init-submodules.sh; cd qlibc; ./configure; make)
 $ ./configure
 $ make
 $ src/main_example
-wolkykim@arena:/home/wolkykim/ws/libasyncd $ src/main_example
 [DEBUG] Created a server object. [ad_server_new(),ad_server.c:53]
 [DEBUG] Starting a server. [ad_server_start(),ad_server.c:62]
 [DEBUG] server.port=2222 [ad_server_start(),ad_server.c:70]
