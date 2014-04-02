@@ -24,7 +24,7 @@ I couldn't pick my favorite at the end and here's my insight.
 What I was looking for was.
 
 * Must be easily embeddable.
-* Simple and nice abstraction that hides the complexity under the hood.
+* Simple and nice abstraction that cut down the complexity.
 * Generic enough to add and customize lighter weight custom protocols.
 * Practical level of support in HTTP handler.
 * Flexible hook supports on both Method hook and Gradual way.
