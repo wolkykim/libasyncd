@@ -79,6 +79,7 @@ wolkykim@arena:/home/wolkykim/ws/libasyncd $ src/main_example
 ## Super simple "Hello World" server example.
 ```
 int my_bypass_handler(short event, void *conn, void *userdata) {
+    ad_bypass_t *req = conn;
     evbuffer_add(req->out, "Hello World.");
     return AD_CLOSE;
 }
