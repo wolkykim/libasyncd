@@ -87,7 +87,7 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
 int main(int argc, char **argv) {
     ad_server_t *server = ad_server_new();
     ad_server_set_option(server, "server.port", "2222");
-    ad_server_register_hook(server, 0, my_bypass_handler, userdata);
+    ad_server_register_hook(server, 0, my_bypass_handler, NULL);
     return ad_server_start(server);
 }
 ```
