@@ -15,7 +15,7 @@ I couldn't pick my favorite at the end and here's my insight.
 * libevent provides one - good choice for light use but doesn't provide a way
   of fine controls over large data.
 * mongoose - nice API, good abstraction, but since it uses select() and realloc
-  based i/o buffer, not that much promosing solution for serious users.
+  based i/o buffer, wouldn't be a promising solution for serious users.
   Also its dual lisencing is restricting.
 * libevhtp - fine but doesn't provide a way to hook on METHOD(Verb, a command
   on the 1st line)
