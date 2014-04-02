@@ -106,12 +106,16 @@ struct my_cdata {
  * User callback example.
  *
  * This is a simple echo handler.
- * It response on input line up to 3 times then close connection.
+ * It responses on input line up to 3 times then close connection.
  *
- * @param event event type. see ad_server.h for details
- * @param conn  connection object. type is vary based on
+ * @param event event type. see ad_server.h for details.
+ * @param conn  connection object. actual type is vary based on
  *              "server.protocol_handler" option.
- * @userdata    given user-data registered at the
+ * @userdata    given shared user-data.
+ *
+ * @return one of AD_OK | AD_DONE | AD_CLOSE | AD_TAKEOVER
+ *
+ * @note Please refer ad_server.h for more details.
  */
 int my_bypass_handler(short event, void *conn, void *userdata) {
     DEBUG("my_bypass_callback: %x", event);
