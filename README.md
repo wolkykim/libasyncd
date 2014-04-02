@@ -210,8 +210,8 @@ int main(int argc, char **argv) {
     //
     // Set server options.
     //
-    // Usually you need to override a few default options and that's it
-    // but it's lengthy here for a demonstration purpose.
+    // Usually you only need to override a few default options and
+    // that's it but it's lengthy here for a demonstration purpose.
     //
     ad_server_set_option(server, "server.port", "2222");
     ad_server_set_option(server, "server.addr", "0.0.0.0");
