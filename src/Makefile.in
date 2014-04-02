@@ -1,0 +1,114 @@
+################################################################################
+## libasyncd
+##
+## Copyright (c) 2014 Seungyoung Kim.
+## All rights reserved.
+##
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are met:
+##
+## 1. Redistributions of source code must retain the above copyright notice,
+##    this list of conditions and the following disclaimer.
+## 2. Redistributions in binary form must reproduce the above copyright notice,
+##    this list of conditions and the following disclaimer in the documentation
+##    and/or other materials provided with the distribution.
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+## AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+## IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+## ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+## LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+## CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+## SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+## INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+## CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+## ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+## POSSIBILITY OF SUCH DAMAGE.
+################################################################################
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+
+## Utilities
+AR		= @AR@
+ARFLAGS		= -rc
+CHMOD		= @CHMOD@
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+LN_S		= @LN_S@
+MKDIR_P		= @MKDIR_P@
+RMDIR		= rmdir
+RANLIB		= @RANLIB@
+RM		= @RM@
+
+## Install directories
+INST_INCDIR	= @includedir@
+INST_LIBDIR	= @libdir@
+
+## qlibc definitions
+QLIBC_INCDIR		= ../lib/qlibc/include/qlibc
+QLIBC_LIB		= ../lib/qlibc/lib/libqlibc.a
+QLIBCEXT_LIB		= ../lib/qlibc/lib/libqlibcext.a
+
+## Which compiler & options for release
+CC		= gcc -std=gnu99
+CFLAGS		= -Wall -Wstrict-prototypes -fPIC -g -O2
+CPPFLAGS	=  -I/usr/include -I/usr/local/include -I$(INCDIR) -I$(QLIBC_INCDIR) \
+		   -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DBUILD_DEBUG 
+LIBS		= $(QLIBC_LIB) @DEPLIBS@
+
+## libasyncd related.
+INCDIR	= ../include/asyncd
+OBJS	= ad_server.o ad_bypass_handler.o
+LIBNAME = libasyncd.a
+SLIBNAME = libasyncd.so.1
+SLIBNAME_LINK = libasyncd.so
+
+BINOBJS	= main_example.o
+BINNAME = main_example
+
+## Make Library
+all: $(LIBNAME) $(BINNAME)
+
+$(LIBNAME): $(OBJS)
+	$(AR) $(ARFLAGS) $(LIBNAME) $(OBJS)
+	$(RANLIB) $(LIBNAME)
+	$(CC) -shared -Wl,-soname,$(SLIBNAME) -o $(SLIBNAME) $(OBJS)
+	$(LN_S) -f $(SLIBNAME) $(SLIBNAME_LINK)
+
+$(BINNAME): $(BINOBJS)
+	$(CC) $(LDFLAGS) -o $@ $(BINOBJS) $(LIBNAME) $(LIBS) 
+
+install: install-libasyncd
+
+install-libasyncd: libasyncd
+	$(MKDIR_P) $(INST_INCDIR)/qlibc
+	$(INSTALL_DATA) $(QLIBC_INCDIR)/qlibc.h $(INST_INCDIR)/qlibc/qlibc.h
+	$(MKDIR_P) $(INST_LIBDIR)
+	$(INSTALL_DATA) $(QLIBC_LIBDIR)/$(QLIBC_LIBNAME) $(INST_LIBDIR)/$(QLIBC_LIBNAME)
+	$(INSTALL_DATA) $(QLIBC_LIBDIR)/$(QLIBC_SLIBREALNAME) $(INST_LIBDIR)/$(QLIBC_SLIBREALNAME)
+	( cd $(INST_LIBDIR); $(LN_S) -f $(QLIBC_SLIBREALNAME) $(QLIBC_SLIBNAME) )
+
+uninstall-libasyncd:
+	$(RM) -f $(INST_INCDIR)/qlibc/qlibc.h
+	$(RM) -f $(INST_LIBDIR)/$(QLIBC_LIBNAME)
+	$(RM) -f $(INST_LIBDIR)/$(QLIBC_SLIBREALNAME)
+	$(RM) -f $(INST_LIBDIR)/$(QLIBC_SLIBNAME)
+
+deinstall: uninstall
+uninstall: uninstall-libasyncd
+	$(RMDIR) $(INST_INCDIR)/asyncd
+
+clean:
+	$(RM) -f $(OBJS) $(LIBNAME) $(SLIBNAME) $(SLIBNAME_LINK)
+	$(RM) -f $(BINOBJS) $(BINNAME)
+
+doc:
+	doxygen doxygen-libasyncd.conf
+
+cleandoc:
+	$(RM) -rf ../doc/html
+
+## Compile
+.c.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
