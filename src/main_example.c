@@ -133,9 +133,9 @@ int main(int argc, char **argv) {
     //   - http   : Use HTTP handler. Request message will be parsed by
     //              the handler. You can put your hooks on method name or
     //              on each phase of parsing process like "AFTER_HEADER".
-    //   - euca   : Use EUCA handler. This handler is for Eucalyptus's
-    //              underlying light weight messaging protocol designed
-    //              for blasting fast data exchange.
+    //   - euca   : Use EUCA handler. This handler is for EUCA message.
+    //              light weight messaging protocol designed for the
+    //              blasting fast performance in data exchange.
     ad_server_set_option(server, "server.protocol_handler", "bypass");
 
     // Register custom hooks. When there are multiple hooks, it will be
