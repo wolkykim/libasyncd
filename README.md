@@ -45,7 +45,7 @@ $ ./configure
 $ make
 $ src/main_example
 
-## "Hello World" example.
+## Super simple "Hello World" server example.
 ```
 int my_bypass_handler(short event, void *conn, void *userdata) {
     evbuffer_add(req->out, "Hello World.");
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 }
 ```
 
-## Echo server example with more controls.
+## Looking for more controls? Echo server example here.
 
 ```
 /**
