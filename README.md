@@ -8,36 +8,49 @@ Embeddable Event-based Asynchronous Message/HTTP Server library in C.
 Libasyncd is an embeddable fully event-driven asynchronous message server in C
 which is in flexible architecture to add/support multiple different protocols.
 
-Libasyncd project was started from a need of embeddable HTTP server. There are
-a couple of choices out there:
+Libasyncd project was started from my need of embeddable HTTP server. There is
+a couple of choices there, I tried all of them. Each has pros and cons.
+I couldn't pick my favorite at the end and here's my insight.
 
-* libevent provides one - built as an example use case, not really for fine tunes.
-* mongoose - nice in API wise, but it uses select() and their lisence sucks.
-* libevhtp - good but doesn't provide a way to hook on METHOD(Verb name in custom protocol).
+* libevent provides one - good choice for light use but doesn't provide a way
+  of fine controls over large data.
+* mongoose - nice API, good abstraction, but since it uses select() and realloc
+  based i/o buffer, not that much promosing solution for serious users.
+  Also its dual lisencing is restricting.
+* libevhtp - fine but doesn't provide a way to hook on METHOD(Verb, a command
+  on the 1st line)
 * GNU's libmicrohttpd - good feature set but little too complicated to use.
 
-I wanted to have a very simple event-driven message framework in C which I can
-run HTTP server as well as my customer light weight protocol on different port.
-Also switchble SSL feature is needed.
+What I was looking for was.
 
-More importantly, asynchronous programming is way hard and buggy. It's same as
-thread, thread is your best and worst friend. Async is a sibling. So I wanted to
-build a sort of general framwork in event-driven passion that I can more write
-code with relatively much lesser thinking about the complexity.
+* Must be easily embeddable.
+* Simple and nice abstraction that hides the complexity under the hood.
+* Generic enough to add and customize lighter weight custom protocols.
+* Practical level of support in HTTP handler.
+* Flexible hook supports on both Method hook and Gradual way.
+* Snap-on SSL feature.
+* I don't want to duplicate same code base for the framing 
 
-So here's my try. It's early stage and still in-dev mode. If you happen to find
-this project would be useful, then let's do this together.
+So with these feature set, applications can expose RESTful API as customer facing
+interface and also use more lighter weight protocols for inter communication
+without doing integration work between this modules and that modules.
+
+Asynchronous way of programming can easily go quite complicated as more things
+you handle in nonblocking passion. So the goal of Libasyncd project is to make
+a flexible and fast event-based message server base with good abstraction.
+
+Hope you find libasyncd is useful and help us to make a fast event server
+without thinking much about the underneath complexity.
 
 ## Why libasyncd?
 
-
+* Stands as a generic event-based server library, not only for HTTP server.
 * Embeddable library module - you write main().
-* Simple to use, No more copy of whole bunch of same code for each app.
-* Support HTTP handler. (coming soon)
-* Support BYPASS handler for your own protocol implementation.
-* Support multiple hooks on METHOD(Verb) and section level(such as AFTER_HEADER).
-* Supports SSL - You set it on, 1 line, your application fully supports SSL (in progress)
-* Flexible list-based option structure.
+* Simple to use.
+* Support HTTP(coming soon) and BYPASS handler.
+* Support of multiple hooks.
+* Find control - Provides gradual hooks as well as method hooks.
+* Supports SSL - Just flip the switch on.
 
 ## Installation
 
