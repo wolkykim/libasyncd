@@ -54,11 +54,28 @@ without thinking much about the underneath complexity.
 * Find control - Provides gradual hooks as well as method hooks.
 * Supports SSL - Just flip the switch on.
 
-## Installation
-
+## Compile & Install.
+```
+$ git clone git clone https://github.com/wolkykim/libasyncd
+$ cd libasyncd
+$ (cd lib; run2init-submodules.sh; cd qlibc; ./configure; make) 
 $ ./configure
 $ make
 $ src/main_example
+wolkykim@arena:/home/wolkykim/ws/libasyncd $ src/main_example
+[DEBUG] Created a server object. [ad_server_new(),ad_server.c:53]
+[DEBUG] Starting a server. [ad_server_start(),ad_server.c:62]
+[DEBUG] server.port=2222 [ad_server_start(),ad_server.c:70]
+[DEBUG] server.addr=0.0.0.0 [ad_server_start(),ad_server.c:70]
+[DEBUG] server.backlog=128 [ad_server_start(),ad_server.c:70]
+[DEBUG] server.timeout=5 [ad_server_start(),ad_server.c:70]
+[DEBUG] server.enable_ssl=0 [ad_server_start(),ad_server.c:70]
+[DEBUG] server.ssl_cert=/usr/local/etc/ad_server/ad_server.cert [ad_server_start(),ad_server.c:70]
+[DEBUG] server.protocol_handler=bypass [ad_server_start(),ad_server.c:70]
+[DEBUG] server.start_detached=0 [ad_server_start(),ad_server.c:70]
+[DEBUG] server.free_on_stop=1 [ad_server_start(),ad_server.c:70]
+[DEBUG] Listening on 0.0.0.0:2222 [ad_server_start(),ad_server.c:131]
+```
 
 ## Super simple "Hello World" server example.
 ```
