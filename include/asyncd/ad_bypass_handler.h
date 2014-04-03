@@ -55,18 +55,11 @@ typedef struct ad_bypass_s ad_bypass_t;
  * Bypass-handler structure.
  */
 struct ad_bypass_s {
-    //
-    // Status & Internal data
-    //
     ad_server_t *server;        /*!< reference pointer to server */
     struct bufferevent *buffer; /*!< reference pointer to buffer */
     struct evbuffer *in;        /*!< in buffer */
     struct evbuffer *out;       /*!< out buffer */
-    int status;                 /*!< last status from hooks */
-
-    //
-    // User Data
-    //
+    int status;                 /*!< hook status such as AD_OK */
     void *userdata;         /*!< user data */
 };
 
@@ -80,7 +73,7 @@ extern void *ad_bypass_get_userdata(ad_bypass_t *conn);
 |                             INTERNAL USE ONLY                               |
 \*---------------------------------------------------------------------------*/
 #ifndef _DOXYGEN_SKIP
-extern ad_bypass_t *bypass_new(ad_server_t *server, struct bufferevent *buffer);
+extern void *bypass_new(ad_server_t *server, struct bufferevent *buffer);
 #endif /* _DOXYGEN_SKIP */
 
 #ifdef __cplusplus

@@ -14,18 +14,38 @@
 #include "macro.h"
 #include "qlibc.h"
 #include "ad_bypass_handler.h"
-#include "ad_http.h"
+#include "ad_http_handler.h"
 #include "ad_server.h"
 
 #ifndef _DOXYGEN_SKIP
+/*
+ * User callback hook container.
+ */
+typedef struct ad_conn_s ad_conn_t;
+struct ad_hook_s {
+    char *method;
+    ad_callback cb;
+    void *userdata;
+};
+
+
 /*
  * Local functions.
  */
 static void listener_cb(struct evconnlistener *listener,
                         evutil_socket_t evsocket, struct sockaddr *sockaddr,
                         int socklen, void *userdata);
+static ad_conn_t *conn_new(ad_server_t *server, struct bufferevent *buffer);
+static void conn_reset(ad_conn_t *conn);
+static void conn_free(ad_conn_t *conn);
+static void conn_read_cb(struct bufferevent *buffer, void *userdata) ;
+static void conn_write_cb(struct bufferevent *buffer, void *userdata);
+static void conn_event_cb(struct bufferevent *buffer, short what, void *userdata);
+static void conn_cb(ad_conn_t *conn, int event);
+static int call_hooks(short event, ad_conn_t *conn);
+
 /*
- * Local global variables.
+ * Local variables.
  */
 static bool initialized = false;
 #endif
@@ -195,19 +215,33 @@ qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key) {
     return server->stats;
 }
 
-void ad_server_register_hook(ad_server_t *server, int hooktype, ad_callback cb, void *userdata) {
-    ad_server_register_hook_on_method(server, NULL, hooktype, cb, userdata);
+void ad_server_register_hook(ad_server_t *server, ad_callback cb, void *userdata) {
+    ad_server_register_hook_on_method(server, NULL, cb, userdata);
 }
 
-void ad_server_register_hook_on_method(ad_server_t *server, const char *method, int hooktype, ad_callback cb, void *userdata) {
+void ad_server_register_hook_on_method(ad_server_t *server, const char *method, ad_callback cb, void *userdata) {
     ad_hook_t hook;
     bzero((void *)&hook, sizeof(ad_hook_t));
     hook.method = (method) ? strdup(method) : NULL;
     hook.cb = cb;
-    hook.type = hooktype;
     hook.userdata = userdata;
 
     server->hooks->addlast(server->hooks, (void *)&hook, sizeof(ad_hook_t));
+}
+
+/**
+ * Attach userdata into this connection.
+ *
+ * @return previous userdata;
+ */
+void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata) {
+    void *prev = conn->userdata;
+    conn->userdata = (void *)userdata;
+    return prev;
+}
+
+void *ad_conn_get_userdata(ad_conn_t *conn) {
+    return conn->userdata;
 }
 
 /******************************************************************************
@@ -231,22 +265,10 @@ static void listener_cb(struct evconnlistener *listener, evutil_socket_t socket,
         bufferevent_set_timeouts(buffer, &tm, NULL);
     }
 
-    char *handler = ad_server_get_option(server, "server.protocol_handler");
-    void *conn = NULL;
-    if (!strcmp(handler, "http")) {
-    /*
-    if (! http_new(server, socket)) {
-        DEBUG("Failed to create a connection container.");
-        server->errcode = errno;
-        event_base_loopbreak(server->evbase);
-        return;
-    }
-    */
-    } else {  // default bypass handler.
-        conn = bypass_new(server, buffer);
-    }
-
+    // Create a connection.
+    void *conn = conn_new(server, buffer);
     if (! conn) goto error;
+
     return;
 
   error:
@@ -256,13 +278,115 @@ static void listener_cb(struct evconnlistener *listener, evutil_socket_t socket,
     server->errcode = ENOMEM;
 }
 
-int call_hooks(short event, qlist_t *hooks, int hooktype, const char *method, void *conn) {
+static ad_conn_t *conn_new(ad_server_t *server, struct bufferevent *buffer) {
+    if (server == NULL || buffer == NULL) {
+        return NULL;
+    }
+
+    // Create a new connection container.
+    ad_conn_t *conn = NEW_STRUCT(ad_conn_t);
+    if (conn == NULL) return NULL;
+
+    // Initialize with default values.
+    conn->server = server;
+    conn->buffer = buffer;
+    conn->in = bufferevent_get_input(buffer);
+    conn->out = bufferevent_get_output(buffer);
+    conn_reset(conn);
+
+    // Bind callback
+    bufferevent_setcb(buffer, conn_read_cb, conn_write_cb, conn_event_cb, (void *)conn);
+    bufferevent_setwatermark(buffer, EV_WRITE, 0, 0);
+    bufferevent_enable(buffer, EV_WRITE);
+    bufferevent_enable(buffer, EV_READ);
+
+    // Run callbacks with AD_EVENT_INIT event.
+    conn->status = call_hooks(AD_EVENT_INIT, conn);
+
+    return conn;
+}
+
+static void conn_reset(ad_conn_t *conn) {
+    conn->status = AD_OK;
+}
+
+static void conn_free(ad_conn_t *conn) {
+    if (conn) {
+        if (conn->status != AD_CLOSE) {
+            call_hooks(AD_EVENT_CLOSE | AD_EVENT_SHUTDOWN , conn);
+        }
+        if (conn->buffer) {
+            bufferevent_free(conn->buffer);
+        }
+        if (conn->userdata) {
+            WARN("Found unreleased userdata.");
+        }
+        free(conn);
+    }
+}
+
+#define DRAIN_EVBUFFER(b) evbuffer_drain(b, evbuffer_get_length(b))
+static void conn_read_cb(struct bufferevent *buffer, void *userdata) {
+    DEBUG("read_cb");
+    ad_conn_t *conn = userdata;
+    conn_cb(conn, AD_EVENT_READ);
+}
+
+static void conn_write_cb(struct bufferevent *buffer, void *userdata) {
+    DEBUG("write_cb");
+    ad_conn_t *conn = userdata;
+    conn_cb(conn, AD_EVENT_WRITE);
+}
+
+static void conn_event_cb(struct bufferevent *buffer, short what, void *userdata) {
+    DEBUG("event_cb 0x%x", what);
+    ad_conn_t *conn = userdata;
+
+    if (what & BEV_EVENT_EOF || what & BEV_EVENT_ERROR || what & BEV_EVENT_TIMEOUT) {
+        conn->status = AD_CLOSE;
+        conn_cb(conn, AD_EVENT_CLOSE | ((what & BEV_EVENT_TIMEOUT) ? AD_EVENT_TIMEOUT : 0));
+    }
+}
+
+static void conn_cb(ad_conn_t *conn, int event) {
+    DEBUG("conn: status:0x%x, event:0x%x", conn->status, event)
+    if(conn->status == AD_OK || conn->status == AD_TAKEOVER) {
+        conn->status = call_hooks(event, conn);
+    }
+
+    if(conn->status == AD_DONE) {
+        if (ad_server_get_option_int(conn->server, "server.request_pipelining")) {
+            call_hooks(AD_EVENT_CLOSE , conn);
+            conn_reset(conn);
+            call_hooks(AD_EVENT_INIT , conn);
+        } else {
+            // Do nothing but drain input buffer.
+            if (event == AD_EVENT_READ) {
+                DEBUG("Draining in-buffer. %d", conn->status);
+                DRAIN_EVBUFFER(conn->in);
+            }
+        }
+        return;
+    } else if(conn->status == AD_CLOSE) {
+        if (evbuffer_get_length(conn->out) <= 0) {
+            int newevent = (event & AD_EVENT_CLOSE) ? event : AD_EVENT_CLOSE;
+            call_hooks(newevent, conn);
+            conn_free(conn);
+            DEBUG("Connection closed.");
+            return;
+        }
+    }
+}
+
+static int call_hooks(short event, ad_conn_t *conn) {
+    qlist_t *hooks = conn->server->hooks;
+
     qdlobj_t obj;
     bzero((void *)&obj, sizeof(qdlobj_t));
     while (hooks->getnext(hooks, &obj, false) == true) {
         ad_hook_t *hook = (ad_hook_t *)obj.data;
-        if (((hook->type == 0) || (hook->type & hooktype)) && hook->cb) {
-            if (hook->method && method && strcmp(hook->method, method)) {
+        if (hook->cb) {
+            if (hook->method && conn->method && strcmp(hook->method, conn->method)) {
                 continue;
             }
 
@@ -274,4 +398,3 @@ int call_hooks(short event, qlist_t *hooks, int hooktype, const char *method, vo
     }
     return AD_OK;
 }
-

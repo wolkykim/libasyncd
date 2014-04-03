@@ -30,9 +30,8 @@ struct my_cdata {
  *
  * @note Please refer ad_server.h for more details.
  */
-int my_bypass_handler(short event, void *conn, void *userdata) {
-    DEBUG("my_bypass_callback: %x", event);
-    ad_bypass_t *req = conn;
+int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
+    DEBUG("my_conn_callback: %x", event);
 
     /*
      * AD_EVENT_INIT event is like a constructor method.
@@ -47,7 +46,7 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
         struct my_cdata *cdata = (struct my_cdata *)calloc(1, sizeof(struct my_cdata));
 
         // Attach to this connection.
-        ad_bypass_set_userdata(conn, cdata);
+        ad_conn_set_userdata(conn, cdata);
     }
 
     /*
@@ -57,16 +56,16 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
         DEBUG("==> AD_EVENT_READ");
 
         // Get my per-connection data.
-        struct my_cdata *cdata = (struct my_cdata *)ad_bypass_get_userdata(conn);
+        struct my_cdata *cdata = (struct my_cdata *)ad_conn_get_userdata(conn);
 
         // Try to read one line.
-        char *data = evbuffer_readln(req->in, NULL,  EVBUFFER_EOL_ANY);
+        char *data = evbuffer_readln(conn->in, NULL,  EVBUFFER_EOL_ANY);
         if (data) {
             if (!strcmp(data, "SHUTDOWN")) {
                 //return AD_SHUTDOWN;
             }
             cdata->counter++;
-            evbuffer_add_printf(req->out, "%s, counter:%d, userdata:%s\n", data, cdata->counter, (char*)userdata);
+            evbuffer_add_printf(conn->out, "%s, counter:%d, userdata:%s\n", data, cdata->counter, (char*)userdata);
             free(data);
         }
 
@@ -102,7 +101,7 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
               event, event & AD_EVENT_TIMEOUT, event & AD_EVENT_SHUTDOWN);
         // Get per-connection data and set it to NULL, otherwise server will complain
         // about possible memory leak.
-        struct my_cdata *cdata = (struct my_cdata *)ad_bypass_set_userdata(conn, NULL);
+        struct my_cdata *cdata = (struct my_cdata *)ad_conn_set_userdata(conn, NULL);
         if (cdata) {
             free(cdata);
         }
@@ -140,11 +139,11 @@ int main(int argc, char **argv) {
     //   - euca   : Use EUCA handler. This handler is for EUCA message.
     //              light weight messaging protocol designed for the
     //              blasting fast performance in data exchange.
-    ad_server_set_option(server, "server.protocol_handler", "bypass");
+    ad_server_set_option(server, "server.protocol_handler", "http");
 
     // Register custom hooks. When there are multiple hooks, it will be
     // executed in the same order as it registered.
-    ad_server_register_hook(server, 0, my_bypass_handler, userdata);
+    ad_server_register_hook(server, my_conn_handler, userdata);
 
     // SSL options. - Not implemented yet.
     ad_server_set_option(server, "server.server.enable_ssl", "0");

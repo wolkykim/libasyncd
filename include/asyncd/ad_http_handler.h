@@ -32,8 +32,8 @@
  * @file ad_http.h
  */
 
-#ifndef _AD_HTTP_H
-#define _AD_HTTP_H
+#ifndef _AD_HTTP_HANDLER_H
+#define _AD_HTTP_HANDLER_H
 
 #include <event2/bufferevent.h>
 #include "qlibc.h"
@@ -64,13 +64,6 @@ typedef struct ad_http_s ad_http_t;
 
 #define DEFAULT_CONTENTTYPE "application/octet-stream"
 
-/* Public Types */
-
-/* Public Functions */
-extern ad_http_t *ad_http_new(qhashtbl_t *options);
-extern void ad_http_free(ad_http_t *http);
-extern int ad_http_handler(ad_http_t *http, struct bufferevent *buffer, qlist_t *hooks);
-
 enum ad_http_request_status_e {
     AD_HTTP_REQ_INIT = 0,        /*!< hasn't received the 1st byte yet */
     AD_HTTP_REQ_REQUESTLINE_DONE,/*!< hasn't received the 1st byte yet */
@@ -82,61 +75,65 @@ enum ad_http_request_status_e {
 };
 
 enum ad_http_response_status_e {
-    RES_INIT = 0,       /*!< hasn't sent out any data yet */
-    RES_SENDING,        /*!< still sending data in out-buffer */
-    RES_SENT,           /*!< out-buffer is empty, waiting to be filled in */
-    RES_DONE,           /*!< out-buffer is closed. no more data is expected. */
+    AD_HTTP_RES_INIT = 0,       /*!< hasn't sent out any data yet */
+    AD_HTTP_RES_SENDING,        /*!< still sending data in out-buffer */
+    AD_HTTP_RES_SENT,           /*!< out-buffer is empty, waiting to be filled in */
+    AD_HTTP_RES_DONE,           /*!< out-buffer is closed. no more data is expected. */
 };
 
+/*----------------------------------------------------------------------------*\
+|                             PUBLIC FUNCTIONS                                 |
+\*----------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------*\
+|                            DATA STRUCTURES                                  |
+\*---------------------------------------------------------------------------*/
 struct ad_http_s {
-    //
     // Status & Internal data
-    //
     ad_server_t *server;        /*!< reference pointer to server */
     struct bufferevent *buffer; /*!< reference pointer to buffer */
     struct evbuffer *in;        /*!< in buffer */
     struct evbuffer *out;       /*!< out buffer */
+    int status;                 /*!< hook status such as AD_OK */
+    void *userdata;             /*!< user data */
 
-    enum ad_http_request_status_e req_status;  /*!< request status. */
-    enum ad_http_response_status_e res_status;  /*!< response status. */
-
-    //
-    // User Data
-    //
-    void *userdata;         /*!< user data */
-
-    //
     // HTTP Request
-    //
+    struct {
+        enum ad_http_request_status_e status;  /*!< request status. */
 
-    // request line - available on REQ_REQUESTLINE_DONE.
-    char *req_method;   /*!< request method ex) GET */
-    char *req_uri;      /*!< url+query ex) /data%20path?query=the%20value */
-    char *req_httpver;  /*!< version ex) HTTP/1.1 */
-    char *req_path;     /*!< decoded path ex) /data path */
-    char *req_query;    /*!< query string ex) query=the%20value */
+        // request line - available on REQ_REQUESTLINE_DONE.
+        char *method;   /*!< request method ex) GET */
+        char *uri;      /*!< url+query ex) /data%20path?query=the%20value */
+        char *httpver;  /*!< version ex) HTTP/1.1 */
+        char *path;     /*!< decoded path ex) /data path */
+        char *query;    /*!< query string ex) query=the%20value */
 
-    // request header - available on REQ_HEADER_DONE.
-    qlisttbl_t *req_headers;  /*!< parsed request header entries */
-    char *req_host;     /*!< host ex) www.domain.com or www.domain.com:8080 */
-    char *req_domain;   /*!< domain name ex) www.domain.com (no port number) */
-    size_t req_contentlength;  /*!< value of Content-Length header. -1 if not set */
+        // request header - available on REQ_HEADER_DONE.
+        qlisttbl_t *headers;  /*!< parsed request header entries */
+        char *host;           /*!< host ex) www.domain.com or www.domain.com:8080 */
+        char *domain;         /*!< domain name ex) www.domain.com (no port number) */
+        size_t contentlength; /*!< value of Content-Length header. -1 if not set */
+    } request;
 
-    // request body
-    char   *req_data;   /*!< request body */
-    size_t req_datalen; /*!< bytes stored so far (different with content-length) */
-
-    //
     // HTTP Response
-    //
+    struct {
+        enum ad_http_response_status_e status;  /*!< response status. */
 
-    // response headers
-    int res_code;               /*!< response code */
-    qlisttbl_t *res_headers;    /*!< response header entries */
+        // response headers
+        int code;               /*!< response code */
+        qlisttbl_t *headers;    /*!< response header entries */
+    } response;
 };
+
+/*---------------------------------------------------------------------------*\
+|                             INTERNAL USE ONLY                               |
+\*---------------------------------------------------------------------------*/
+#ifndef _DOXYGEN_SKIP
+extern void *http_new(ad_server_t *server, struct bufferevent *buffer);
+#endif /* _DOXYGEN_SKIP */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /*_AD_HTTP_H */
+#endif /*_AD_HTTP_HANDLER_H */

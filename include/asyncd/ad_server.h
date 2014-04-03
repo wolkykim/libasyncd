@@ -46,8 +46,9 @@ extern "C" {
 /*---------------------------------------------------------------------------*\
 |                                 TYPEDEFS                                    |
 \*---------------------------------------------------------------------------*/
-typedef enum ad_cb_return_e ad_cb_return_t;
 typedef struct ad_server_s ad_server_t;
+typedef struct ad_conn_s ad_conn_t;
+typedef enum ad_cb_return_e ad_cb_return_t;
 typedef struct ad_hook_s ad_hook_t;
 
 /*---------------------------------------------------------------------------*\
@@ -75,6 +76,9 @@ typedef struct ad_hook_s ad_hook_t;
         /* Set protocol handler */                                          \
         { "server.protocol_handler", "bypass" },                            \
                                                                             \
+        /* Enable or disable request pipelining, this change AD_DONE's behavior */ \
+        { "server.request_pipelining", "1" },                               \
+                                                                            \
         /* Run server in a separate thread */                               \
         { "server.start_detached", "0" },                                   \
                                                                             \
@@ -92,7 +96,7 @@ typedef struct ad_hook_s ad_hook_t;
 /**
  * User callback(hook) prototype.
  */
-typedef int (*ad_callback)(short event, void *conn, void *userdata);
+typedef int (*ad_callback)(short event, ad_conn_t *conn, void *userdata);
 
 /**
  * Return values of user callback.
@@ -135,6 +139,22 @@ struct ad_server_s {
     struct event_base *evbase; /*!< event base */
 };
 
+/**
+ * Connection structure.
+ */
+struct ad_conn_s {
+    ad_server_t *server;        /*!< reference pointer to server */
+    struct bufferevent *buffer; /*!< reference pointer to buffer */
+    struct evbuffer *in;        /*!< in buffer */
+    struct evbuffer *out;       /*!< out buffer */
+    int status;                 /*!< hook status such as AD_OK */
+
+    void *userdata;             /*!< user data for end user */
+
+    char *method;               /*!< request method. set by protocol handler */
+    void *extra;                /*!< special user data for protocol handler */
+};
+
 /*----------------------------------------------------------------------------*\
 |                             PUBLIC FUNCTIONS                                 |
 \*----------------------------------------------------------------------------*/
@@ -148,30 +168,17 @@ extern char *ad_server_get_option(ad_server_t *server, const char *key);
 extern int ad_server_get_option_int(ad_server_t *server, const char *key);
 extern qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key);
 
-extern void ad_server_register_hook(ad_server_t *server, int hooktype,
-                                    ad_callback cb, void *userdata);
-extern void ad_server_register_hook_on_method(ad_server_t *server,
-                                              const char *method, int hooktype,
+extern void ad_server_register_hook(ad_server_t *server, ad_callback cb, void *userdata);
+extern void ad_server_register_hook_on_method(ad_server_t *server, const char *method,
                                               ad_callback cb, void *userdata);
+
+extern void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata);
+extern void *ad_conn_get_userdata(ad_conn_t *conn);
 
 /*---------------------------------------------------------------------------*\
 |                             INTERNAL USE ONLY                               |
 \*---------------------------------------------------------------------------*/
 #ifndef _DOXYGEN_SKIP
-
-/**
- * User callback hook container.
- */
-struct ad_hook_s {
-    char *method;
-    ad_callback cb;
-    int type;
-    void *userdata;
-};
-
-extern int call_hooks(short event, qlist_t *hooks, int hooktype,
-                      const char *method, void *conn);
-
 #endif /* _DOXYGEN_SKIP */
 
 #ifdef __cplusplus
