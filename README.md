@@ -48,7 +48,7 @@ without thinking much about the underneath complexity.
   as a Message transforming layer...
 * Embeddable library module - you write main().
 * Simple to use.
-* Support HTTP(coming soon) and BYPASS handler.
+* Pluggable protocols. HTTP protocol handler is included.
 * Support of multiple hooks.
 * Support request pipelining.
 * Support SSL - Just flip the switch on.
