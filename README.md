@@ -103,7 +103,7 @@ int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
 int main(int argc, char **argv) {
     ad_server_t *server = ad_server_new();
     ad_server_set_option(server, "server.port", "8080");
-    ad_server_register_hook(server, 0, ad_http_handler, NULL); // HTTP Parser
+    ad_server_register_hook(server, ad_http_handler, NULL); // HTTP Parser
     ad_server_register_hook_on_method(server, "GET", my_bypass_handler, NULL); // Put yours after parser.
     return ad_server_start(server);
 }
