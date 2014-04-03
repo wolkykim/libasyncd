@@ -75,7 +75,7 @@ $ src/main_example
 [DEBUG] Listening on 0.0.0.0:2222 [ad_server_start(),ad_server.c:131]
 ```
 
-## "Hello World", Simple Asynchronous Socket Server example.
+## "Hello World", Asynchronous Socket Server example.
 ```
 int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
     evbuffer_add(conn->out, "Hello World.");
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
 }
 ```
 
-## "Hello World", Simple Asynchronous HTTP Server example.
+## "Hello World", Asynchronous HTTP Server example.
 ```
 int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
     if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
