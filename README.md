@@ -50,8 +50,8 @@ without thinking much about the underneath complexity.
 * Simple to use.
 * Support HTTP(coming soon) and BYPASS handler.
 * Support of multiple hooks.
-* Fine control - Provides gradual hooks as well as method hooks.
-* Supports SSL - Just flip the switch on.
+* Support request pipelining.
+* Support SSL - Just flip the switch on.
 
 ## Compile & Install.
 ```
