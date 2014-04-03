@@ -36,7 +36,6 @@
 #define _ASYNCHTTPD_H
 
 #include "ad_server.h"
-#include "ad_bypass_handler.h"
 #include "ad_http_handler.h"
 
 #ifdef __cplusplus

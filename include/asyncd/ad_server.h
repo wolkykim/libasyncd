@@ -73,9 +73,6 @@ typedef struct ad_hook_s ad_hook_t;
         { "server.enable_ssl", "0" },                                       \
         { "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert" },   \
                                                                             \
-        /* Set protocol handler */                                          \
-        { "server.protocol_handler", "bypass" },                            \
-                                                                            \
         /* Enable or disable request pipelining, this change AD_DONE's behavior */ \
         { "server.request_pipelining", "1" },                               \
                                                                             \
@@ -97,6 +94,7 @@ typedef struct ad_hook_s ad_hook_t;
  * User callback(hook) prototype.
  */
 typedef int (*ad_callback)(short event, ad_conn_t *conn, void *userdata);
+typedef void (*ad_userdata_free_cb)(ad_conn_t *conn, void *userdata);
 
 /**
  * Return values of user callback.
@@ -121,6 +119,11 @@ enum ad_cb_return_e {
 #define AD_EVENT_CLOSE    (1 << 3)   /*!< Call before closing. */
 #define AD_EVENT_TIMEOUT  (1 << 4)   /*!< Timeout indicator, this flag will be set with AD_EVENT_CLOSE. */
 #define AD_EVENT_SHUTDOWN (1 << 5)   /*!< Shutdown indicator, this flag will be set with AD_EVENT_CLOSE. */
+
+/**
+ * Defaults
+ */
+#define AD_NUM_USERDATA (2)  /*!< Number of userdata. Currently 0 is for userdata, 1 is for extra. */
 
 /*---------------------------------------------------------------------------*\
 |                            DATA STRUCTURES                                  |
@@ -149,10 +152,9 @@ struct ad_conn_s {
     struct evbuffer *out;       /*!< out buffer */
     int status;                 /*!< hook status such as AD_OK */
 
-    void *userdata;             /*!< user data for end user */
-
+    void *userdata[2];             /*!< userdata[0] for end user, userdata[1] for extra */
+    ad_userdata_free_cb userdata_free_cb[2];  /*!< callback to release user data */
     char *method;               /*!< request method. set by protocol handler */
-    void *extra;                /*!< special user data for protocol handler */
 };
 
 /*----------------------------------------------------------------------------*\
@@ -172,8 +174,11 @@ extern void ad_server_register_hook(ad_server_t *server, ad_callback cb, void *u
 extern void ad_server_register_hook_on_method(ad_server_t *server, const char *method,
                                               ad_callback cb, void *userdata);
 
-extern void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata);
+extern void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata, ad_userdata_free_cb free_cb);
 extern void *ad_conn_get_userdata(ad_conn_t *conn);
+extern void *ad_conn_set_extra(ad_conn_t *conn, const void *extra, ad_userdata_free_cb free_cb);
+extern void *ad_conn_get_extra(ad_conn_t *conn);
+extern char *ad_conn_set_method(ad_conn_t *conn, char *method);
 
 /*---------------------------------------------------------------------------*\
 |                             INTERNAL USE ONLY                               |

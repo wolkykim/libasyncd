@@ -13,8 +13,6 @@
 #include <event2/listener.h>
 #include "macro.h"
 #include "qlibc.h"
-#include "ad_bypass_handler.h"
-#include "ad_http_handler.h"
 #include "ad_server.h"
 
 #ifndef _DOXYGEN_SKIP
@@ -27,7 +25,6 @@ struct ad_hook_s {
     ad_callback cb;
     void *userdata;
 };
-
 
 /*
  * Local functions.
@@ -43,6 +40,8 @@ static void conn_write_cb(struct bufferevent *buffer, void *userdata);
 static void conn_event_cb(struct bufferevent *buffer, short what, void *userdata);
 static void conn_cb(ad_conn_t *conn, int event);
 static int call_hooks(short event, ad_conn_t *conn);
+static void *set_userdata(ad_conn_t *conn, int index, const void *userdata, ad_userdata_free_cb free_cb);
+static void *get_userdata(ad_conn_t *conn, int index);
 
 /*
  * Local variables.
@@ -234,14 +233,29 @@ void ad_server_register_hook_on_method(ad_server_t *server, const char *method, 
  *
  * @return previous userdata;
  */
-void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata) {
-    void *prev = conn->userdata;
-    conn->userdata = (void *)userdata;
-    return prev;
+void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata, ad_userdata_free_cb free_cb) {
+    return set_userdata(conn, 0, userdata, free_cb);
 }
 
 void *ad_conn_get_userdata(ad_conn_t *conn) {
-    return conn->userdata;
+    return get_userdata(conn, 0);
+}
+
+void *ad_conn_set_extra(ad_conn_t *conn, const void *extra, ad_userdata_free_cb free_cb) {
+    return set_userdata(conn, 1, extra, free_cb);
+}
+
+void *ad_conn_get_extra(ad_conn_t *conn) {
+    return get_userdata(conn, 1);
+}
+
+char *ad_conn_set_method(ad_conn_t *conn, char *method) {
+    char *prev = conn->method;
+    if (conn->method) {
+        free(conn->method);
+    }
+    conn->method = strdup(method);
+    return prev;
 }
 
 /******************************************************************************
@@ -308,6 +322,22 @@ static ad_conn_t *conn_new(ad_server_t *server, struct bufferevent *buffer) {
 
 static void conn_reset(ad_conn_t *conn) {
     conn->status = AD_OK;
+
+    for(int i = 0; i < AD_NUM_USERDATA; i++) {
+        if (conn->userdata[i]) {
+            if (conn->userdata_free_cb[i] != NULL) {
+                conn->userdata_free_cb[i](conn, conn->userdata[i]);
+            } else {
+                WARN("Found unreleased userdata.");
+            }
+            conn->userdata[i] = NULL;
+        }
+    }
+
+    if (conn->method) {
+        free(conn->method);
+        conn->method = NULL;
+    }
 }
 
 static void conn_free(ad_conn_t *conn) {
@@ -315,11 +345,9 @@ static void conn_free(ad_conn_t *conn) {
         if (conn->status != AD_CLOSE) {
             call_hooks(AD_EVENT_CLOSE | AD_EVENT_SHUTDOWN , conn);
         }
+        conn_reset(conn);
         if (conn->buffer) {
             bufferevent_free(conn->buffer);
-        }
-        if (conn->userdata) {
-            WARN("Found unreleased userdata.");
         }
         free(conn);
     }
@@ -398,3 +426,15 @@ static int call_hooks(short event, ad_conn_t *conn) {
     }
     return AD_OK;
 }
+
+static void *set_userdata(ad_conn_t *conn, int index, const void *userdata, ad_userdata_free_cb free_cb) {
+    void *prev = conn->userdata;
+    conn->userdata[index] = (void *)userdata;
+    conn->userdata_free_cb[index] = free_cb;
+    return prev;
+}
+
+static void *get_userdata(ad_conn_t *conn, int index) {
+    return conn->userdata[index];
+}
+

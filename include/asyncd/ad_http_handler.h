@@ -35,9 +35,7 @@
 #ifndef _AD_HTTP_HANDLER_H
 #define _AD_HTTP_HANDLER_H
 
-#include <event2/bufferevent.h>
 #include "qlibc.h"
-#include "ad_server.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,19 +82,12 @@ enum ad_http_response_status_e {
 /*----------------------------------------------------------------------------*\
 |                             PUBLIC FUNCTIONS                                 |
 \*----------------------------------------------------------------------------*/
+extern int ad_http_handler(short event, ad_conn_t *conn, void *userdata);
 
 /*---------------------------------------------------------------------------*\
 |                            DATA STRUCTURES                                  |
 \*---------------------------------------------------------------------------*/
 struct ad_http_s {
-    // Status & Internal data
-    ad_server_t *server;        /*!< reference pointer to server */
-    struct bufferevent *buffer; /*!< reference pointer to buffer */
-    struct evbuffer *in;        /*!< in buffer */
-    struct evbuffer *out;       /*!< out buffer */
-    int status;                 /*!< hook status such as AD_OK */
-    void *userdata;             /*!< user data */
-
     // HTTP Request
     struct {
         enum ad_http_request_status_e status;  /*!< request status. */
@@ -129,7 +120,6 @@ struct ad_http_s {
 |                             INTERNAL USE ONLY                               |
 \*---------------------------------------------------------------------------*/
 #ifndef _DOXYGEN_SKIP
-extern void *http_new(ad_server_t *server, struct bufferevent *buffer);
 #endif /* _DOXYGEN_SKIP */
 
 #ifdef __cplusplus

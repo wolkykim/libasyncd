@@ -15,6 +15,10 @@ struct my_cdata {
     int counter;
 };
 
+/**
+ * This callback will be called before closing or resetting connection for
+ * pipelining.
+ */ 
 void my_userdata_free_cb(ad_conn_t *conn, void *userdata) {
     free(userdata);
 }
@@ -63,7 +67,6 @@ int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
         struct my_cdata *cdata = (struct my_cdata *)ad_conn_get_userdata(conn);
 
         // Try to read one line.
-        /*
         char *data = evbuffer_readln(conn->in, NULL,  EVBUFFER_EOL_ANY);
         if (data) {
             if (!strcmp(data, "SHUTDOWN")) {
@@ -73,11 +76,9 @@ int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
             evbuffer_add_printf(conn->out, "%s, counter:%d, userdata:%s\n", data, cdata->counter, (char*)userdata);
             free(data);
         }
-        */
 
         // Close connection after 3 echos.
-        //return (cdata->counter < 3) ? AD_OK : AD_CLOSE;
-        return AD_OK;
+        return (cdata->counter < 3) ? AD_OK : AD_CLOSE;
     }
 
     /*
@@ -131,7 +132,7 @@ int main(int argc, char **argv) {
     //
     ad_server_set_option(server, "server.port", "2222");
     ad_server_set_option(server, "server.addr", "0.0.0.0");
-    ad_server_set_option(server, "server.timeout", "60");
+    ad_server_set_option(server, "server.timeout", "5");
 
     // Set protocol handler.
     //   - bypass : Use bypass handler. This is a transparent handler for
@@ -146,7 +147,6 @@ int main(int argc, char **argv) {
 
     // Register custom hooks. When there are multiple hooks, it will be
     // executed in the same order as it registered.
-    ad_server_register_hook(server, ad_http_handler, userdata);
     ad_server_register_hook(server, my_conn_handler, userdata);
 
     // SSL options. - Not implemented yet.

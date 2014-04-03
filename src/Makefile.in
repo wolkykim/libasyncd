@@ -59,7 +59,7 @@ LIBS		= $(QLIBC_LIB) @DEPLIBS@
 
 ## libasyncd related.
 INCDIR	= ../include/asyncd
-OBJS	= ad_server.o
+OBJS	= ad_server.o ad_http_handler.o
 LIBNAME = libasyncd.a
 SLIBNAME = libasyncd.so.1
 SLIBNAME_LINK = libasyncd.so
