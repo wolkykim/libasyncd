@@ -48,10 +48,10 @@ without thinking much about the underneath complexity.
   as a Message transforming layer...
 * Embeddable library module - you write main().
 * Simple to use.
-* Support HTTP(coming soon) and BYPASS handler.
+* Pluggable protocols. HTTP protocol handler is included.
 * Support of multiple hooks.
-* Fine control - Provides gradual hooks as well as method hooks.
-* Supports SSL - Just flip the switch on.
+* Support request pipelining.
+* Support SSL - Just flip the switch on.
 
 ## Compile & Install.
 ```
@@ -60,33 +60,38 @@ $ cd libasyncd
 $ (cd lib; run2init-submodules.sh; cd qlibc; ./configure; make) 
 $ ./configure
 $ make
-$ src/main_example
-[DEBUG] Created a server object. [ad_server_new(),ad_server.c:53]
-[DEBUG] Starting a server. [ad_server_start(),ad_server.c:62]
-[DEBUG] server.port=2222 [ad_server_start(),ad_server.c:70]
-[DEBUG] server.addr=0.0.0.0 [ad_server_start(),ad_server.c:70]
-[DEBUG] server.backlog=128 [ad_server_start(),ad_server.c:70]
-[DEBUG] server.timeout=5 [ad_server_start(),ad_server.c:70]
-[DEBUG] server.enable_ssl=0 [ad_server_start(),ad_server.c:70]
-[DEBUG] server.ssl_cert=/usr/local/etc/ad_server/ad_server.cert [ad_server_start(),ad_server.c:70]
-[DEBUG] server.protocol_handler=bypass [ad_server_start(),ad_server.c:70]
-[DEBUG] server.start_detached=0 [ad_server_start(),ad_server.c:70]
-[DEBUG] server.free_on_stop=1 [ad_server_start(),ad_server.c:70]
-[DEBUG] Listening on 0.0.0.0:2222 [ad_server_start(),ad_server.c:131]
 ```
 
-## Super simple "Hello World" server example.
+## "Hello World", Asynchronous Socket Server example.
 ```
-int my_bypass_handler(short event, void *conn, void *userdata) {
-    ad_bypass_t *req = conn;
-    evbuffer_add(req->out, "Hello World.");
+int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
+    evbuffer_add(conn->out, "Hello World.");
     return AD_CLOSE;
 }
 
 int main(int argc, char **argv) {
     ad_server_t *server = ad_server_new();
     ad_server_set_option(server, "server.port", "2222");
-    ad_server_register_hook(server, 0, my_bypass_handler, NULL);
+    ad_server_register_hook(server, my_bypass_handler, NULL);
+    return ad_server_start(server);
+}
+```
+
+## "Hello World", Asynchronous HTTP Server example.
+```
+int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
+    if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
+        ad_http_response(conn, 200, "text/html", "Hello World", 11);
+        return AD_DONE;
+    }
+    return AD_OK;
+}
+
+int main(int argc, char **argv) {
+    ad_server_t *server = ad_server_new();
+    ad_server_set_option(server, "server.port", "8080");
+    ad_server_register_hook(server, ad_http_handler, NULL); // HTTP Parser is also a hook.
+    ad_server_register_hook_on_method(server, "GET", my_bypass_handler, NULL); // Put yours after parser.
     return ad_server_start(server);
 }
 ```
@@ -102,13 +107,21 @@ struct my_cdata {
 };
 
 /**
+ * This callback will be called before closing or resetting connection for
+ * pipelining.
+ */ 
+void my_userdata_free_cb(ad_conn_t *conn, void *userdata) {
+    free(userdata);
+}
+
+/**
  * User callback example.
  *
  * This is a simple echo handler.
- * It responses on input line up to 3 times then close connection.
+ * It response on input line up to 3 times then close connection.
  *
  * @param event event type. see ad_server.h for details.
- * @param conn  connection object. actual type is vary based on
+ * @param conn  connection object. type is vary based on
  *              "server.protocol_handler" option.
  * @userdata    given shared user-data.
  *
@@ -116,9 +129,8 @@ struct my_cdata {
  *
  * @note Please refer ad_server.h for more details.
  */
-int my_bypass_handler(short event, void *conn, void *userdata) {
-    DEBUG("my_bypass_callback: %x", event);
-    ad_bypass_t *req = conn;
+int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
+    DEBUG("my_conn_callback: %x", event);
 
     /*
      * AD_EVENT_INIT event is like a constructor method.
@@ -133,7 +145,7 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
         struct my_cdata *cdata = (struct my_cdata *)calloc(1, sizeof(struct my_cdata));
 
         // Attach to this connection.
-        ad_bypass_set_userdata(conn, cdata);
+        ad_conn_set_userdata(conn, cdata, my_userdata_free_cb);
     }
 
     /*
@@ -143,16 +155,16 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
         DEBUG("==> AD_EVENT_READ");
 
         // Get my per-connection data.
-        struct my_cdata *cdata = (struct my_cdata *)ad_bypass_get_userdata(conn);
+        struct my_cdata *cdata = (struct my_cdata *)ad_conn_get_userdata(conn);
 
         // Try to read one line.
-        char *data = evbuffer_readln(req->in, NULL,  EVBUFFER_EOL_ANY);
+        char *data = evbuffer_readln(conn->in, NULL,  EVBUFFER_EOL_ANY);
         if (data) {
             if (!strcmp(data, "SHUTDOWN")) {
                 //return AD_SHUTDOWN;
             }
             cdata->counter++;
-            evbuffer_add_printf(req->out, "%s, counter:%d, userdata:%s\n", data, cdata->counter, (char*)userdata);
+            evbuffer_add_printf(conn->out, "%s, counter:%d, userdata:%s\n", data, cdata->counter, (char*)userdata);
             free(data);
         }
 
@@ -186,12 +198,8 @@ int my_bypass_handler(short event, void *conn, void *userdata) {
     else if (event & AD_EVENT_CLOSE) {
         DEBUG("==> AD_EVENT_CLOSE=%x (TIMEOUT=%d, SHUTDOWN=%d)",
               event, event & AD_EVENT_TIMEOUT, event & AD_EVENT_SHUTDOWN);
-        // Get per-connection data and set it to NULL, otherwise server will complain
-        // about possible memory leak.
-        struct my_cdata *cdata = (struct my_cdata *)ad_bypass_set_userdata(conn, NULL);
-        if (cdata) {
-            free(cdata);
-        }
+        // You can release your user data explicitly here if you haven't
+        // set the callback that release your user data.
     }
 
     // Return AD_OK will let the hook loop to continue.
@@ -226,15 +234,18 @@ int main(int argc, char **argv) {
     //   - euca   : Use EUCA handler. This handler is for EUCA message.
     //              light weight messaging protocol designed for the
     //              blasting fast performance in data exchange.
-    ad_server_set_option(server, "server.protocol_handler", "bypass");
+    ad_server_set_option(server, "server.protocol_handler", "http");
 
     // Register custom hooks. When there are multiple hooks, it will be
     // executed in the same order as it registered.
-    ad_server_register_hook(server, 0, my_bypass_handler, userdata);
+    ad_server_register_hook(server, my_conn_handler, userdata);
 
     // SSL options. - Not implemented yet.
     ad_server_set_option(server, "server.server.enable_ssl", "0");
     ad_server_set_option(server, "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert");
+
+    // Enable request pipelining, this change AD_DONE's behavior.
+    ad_server_set_option(server, "server.request_pipelining", "1");
 
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this
