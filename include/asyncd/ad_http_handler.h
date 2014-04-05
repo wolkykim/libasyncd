@@ -42,8 +42,44 @@ extern "C" {
 #endif
 
 /*----------------------------------------------------------------------------*\
+|                           HTTP PROTOCOL SPECIFICS                            |
+\*----------------------------------------------------------------------------*/
+
+/* HTTP PROTOCOL CODES */
+#define HTTP_PROTOCOL_09    "HTTP/0.9"
+#define HTTP_PROTOCOL_10    "HTTP/1.0"
+#define HTTP_PROTOCOL_11    "HTTP/1.1"
+
+/* HTTP RESPONSE CODES */
+#define HTTP_NO_RESPONSE                (0)
+#define HTTP_CODE_CONTINUE              (100)
+#define HTTP_CODE_OK                    (200)
+#define HTTP_CODE_CREATED               (201)
+#define HTTP_CODE_NO_CONTENT            (204)
+#define HTTP_CODE_PARTIAL_CONTENT       (206)
+#define HTTP_CODE_MULTI_STATUS          (207)
+#define HTTP_CODE_MOVED_TEMPORARILY     (302)
+#define HTTP_CODE_NOT_MODIFIED          (304)
+#define HTTP_CODE_BAD_REQUEST           (400)
+#define HTTP_CODE_UNAUTHORIZED          (401)
+#define HTTP_CODE_FORBIDDEN             (403)
+#define HTTP_CODE_NOT_FOUND             (404)
+#define HTTP_CODE_METHOD_NOT_ALLOWED    (405)
+#define HTTP_CODE_REQUEST_TIME_OUT      (408)
+#define HTTP_CODE_GONE                  (410)
+#define HTTP_CODE_REQUEST_URI_TOO_LONG  (414)
+#define HTTP_CODE_LOCKED                (423)
+#define HTTP_CODE_INTERNAL_SERVER_ERROR (500)
+#define HTTP_CODE_NOT_IMPLEMENTED       (501)
+#define HTTP_CODE_SERVICE_UNAVAILABLE   (503)
+
+/* DEFAULT BEHAVIORS */
+#define HTTP_CRLF "\r\n"
+#define HTTP_DEF_CONTENTTYPE "application/octet-stream"
+
+/*----------------------------------------------------------------------------*\
 |                                 TYPEDEFS                                     |
- \*----------------------------------------------------------------------------*/
+\*----------------------------------------------------------------------------*/
 typedef struct ad_http_s ad_http_t;
 
 /*!< Hook type */
@@ -55,21 +91,13 @@ typedef struct ad_http_s ad_http_t;
 #define AD_HOOK_ON_REQUEST        (1 << 5)    /*!< call with complete request */
 #define AD_HOOK_ON_CLOSE          (1 << 6)    /*!< call right before closing or next request */
 
-/* HTTP PROTOCOL CODES */
-#define HTTP_PROTOCOL_09    "HTTP/0.9"
-#define HTTP_PROTOCOL_10    "HTTP/1.0"
-#define HTTP_PROTOCOL_11    "HTTP/1.1"
-
-#define DEFAULT_CONTENTTYPE "application/octet-stream"
-
 enum ad_http_request_status_e {
     AD_HTTP_REQ_INIT = 0,        /*!< hasn't received the 1st byte yet */
     AD_HTTP_REQ_REQUESTLINE_DONE,/*!< hasn't received the 1st byte yet */
     AD_HTTP_REQ_HEADER_DONE,     /*!< received headers completely */
-    AD_HTTP_REQ_READING_BODY,    /*!< receiving body */
     AD_HTTP_REQ_DONE,            /*!< received body completely. no more data expected */
 
-    AD_HTTP_REQ_ERROR,           /*!< unrecoverable error found. */
+    AD_HTTP_ERROR,               /*!< unrecoverable error found. */
 };
 
 enum ad_http_response_status_e {
@@ -84,6 +112,25 @@ enum ad_http_response_status_e {
 \*----------------------------------------------------------------------------*/
 extern int ad_http_handler(short event, ad_conn_t *conn, void *userdata);
 
+extern enum ad_http_request_status_e ad_http_get_status(ad_conn_t *conn);
+extern struct evbuffer *ad_http_get_inbuf(ad_conn_t *conn);
+extern struct evbuffer *ad_http_get_outbuf(ad_conn_t *conn);
+
+extern const char *ad_http_get_request_header(ad_conn_t *conn, const char *name);
+extern off_t ad_http_get_content_length(ad_conn_t *conn);
+extern void *ad_http_get_content(ad_conn_t *conn, size_t maxsize, size_t *storedsize);
+
+extern int ad_http_add_response_header(ad_conn_t *conn, const char *name, const char *value);
+extern int ad_http_set_response_code(ad_conn_t *conn, int code, const char *reason);
+extern int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, size_t size);
+
+extern size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, const void *data, size_t size);
+extern size_t ad_http_send_header(ad_conn_t *conn);
+extern size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size);
+extern size_t ad_http_send_chunk(ad_conn_t *conn, const void *data, size_t size);
+
+extern const char *ad_http_get_reason(int code);
+
 /*---------------------------------------------------------------------------*\
 |                            DATA STRUCTURES                                  |
 \*---------------------------------------------------------------------------*/
@@ -91,6 +138,7 @@ struct ad_http_s {
     // HTTP Request
     struct {
         enum ad_http_request_status_e status;  /*!< request status. */
+        struct evbuffer *inbuf;  /*!< input data buffer. */
 
         // request line - available on REQ_REQUESTLINE_DONE.
         char *method;   /*!< request method ex) GET */
@@ -103,16 +151,22 @@ struct ad_http_s {
         qlisttbl_t *headers;  /*!< parsed request header entries */
         char *host;           /*!< host ex) www.domain.com or www.domain.com:8080 */
         char *domain;         /*!< domain name ex) www.domain.com (no port number) */
-        size_t contentlength; /*!< value of Content-Length header. -1 if not set */
+        off_t contentlength;  /*!< value of Content-Length header.*/
+        size_t bodyin;        /*!< bytes moved to in-buff */
     } request;
 
     // HTTP Response
     struct {
         enum ad_http_response_status_e status;  /*!< response status. */
+        struct evbuffer *outbuf;  /*!< output data buffer. */
+        bool frozen_header;       /*!< indicator whether we sent header out or not */
 
         // response headers
-        int code;               /*!< response code */
+        int code;               /*!< response status-code */
+        char *reason;           /*!< reason-phrase */
         qlisttbl_t *headers;    /*!< response header entries */
+        off_t contentlength;    /*!< content length in response */
+        size_t bodyout;         /*!< bytes added to out-buffer */
     } response;
 };
 

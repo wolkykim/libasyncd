@@ -54,7 +54,7 @@ QLIBCEXT_LIB		= ../lib/qlibc/lib/libqlibcext.a
 CC		= gcc -std=gnu99
 CFLAGS		= -Wall -Wstrict-prototypes -fPIC -g -O2
 CPPFLAGS	=  -I/usr/include -I/usr/local/include -I$(INCDIR) -I$(QLIBC_INCDIR) \
-		   -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DBUILD_DEBUG 
+		   -D_GNU_SOURCE -DBUILD_DEBUG 
 LIBS		= $(QLIBC_LIB) @DEPLIBS@
 
 ## libasyncd related.

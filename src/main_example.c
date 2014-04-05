@@ -58,25 +58,20 @@ int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
      */
     else if (event & AD_EVENT_READ) {
         DEBUG("==> AD_EVENT_READ");
+        if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
+            // Get my per-connection data.
+            struct my_cdata *cdata = (struct my_cdata *)ad_conn_get_userdata(conn);
 
-        // Get my per-connection data.
-        struct my_cdata *cdata = (struct my_cdata *)ad_conn_get_userdata(conn);
+            size_t size = 0;
+            void *data = ad_http_get_content(conn, 0, &size);
+            ad_http_response(conn, 200, "text/plain", data, size);
 
-        // Try to read one line.
-        /*
-        char *data = evbuffer_readln(conn->in, NULL,  EVBUFFER_EOL_ANY);
-        if (data) {
-            if (!strcmp(data, "SHUTDOWN")) {
-                //return AD_SHUTDOWN;
-            }
             cdata->counter++;
-            evbuffer_add_printf(conn->out, "%s, counter:%d, userdata:%s\n", data, cdata->counter, (char*)userdata);
-            free(data);
+            if (cdata->counter > 3) {
+                return AD_CLOSE;
+            }
         }
-        */
 
-        // Close connection after 3 echos.
-        //return (cdata->counter < 3) ? AD_OK : AD_CLOSE;
         return AD_OK;
     }
 

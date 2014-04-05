@@ -153,6 +153,9 @@ int main(int argc, char **argv) {
     ad_server_set_option(server, "server.server.enable_ssl", "0");
     ad_server_set_option(server, "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert");
 
+    // Enable request pipelining, this change AD_DONE's behavior.
+    ad_server_set_option(server, "server.request_pipelining", "1");
+
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this
     // is the option.
