@@ -122,9 +122,9 @@ extern void *ad_http_get_content(ad_conn_t *conn, size_t maxsize, size_t *stored
 
 extern int ad_http_add_response_header(ad_conn_t *conn, const char *name, const char *value);
 extern int ad_http_set_response_code(ad_conn_t *conn, int code, const char *reason);
-extern int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, size_t size);
+extern int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, off_t size);
 
-extern size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, const void *data, size_t size);
+extern size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, const void *data, off_t size);
 extern size_t ad_http_send_header(ad_conn_t *conn);
 extern size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size);
 extern size_t ad_http_send_chunk(ad_conn_t *conn, const void *data, size_t size);

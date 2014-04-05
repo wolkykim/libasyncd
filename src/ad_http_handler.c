@@ -134,23 +134,22 @@ int ad_http_set_response_code(ad_conn_t *conn, int code, const char *reason) {
  * @param size content size. -1 for chunked transfer encoding.
  * @return 0 on success, -1 if we already sent it out.
  */
-int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, size_t size) {
+int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, off_t size) {
     ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
-    DEBUG("ddddddd %d", http->response.frozen_header);
     if (http->response.frozen_header) {
         return -1;
     }
 
     // Set Content-Type header.
-    if (size > 0) {
+    ad_http_add_response_header(conn, "Content-Type", (contenttype) ? contenttype : HTTP_DEF_CONTENTTYPE);
+    if (size >= 0) {
         char clenval[20+1];
-        sprintf(clenval, "%zu", size);
-        ad_http_add_response_header(conn, "Content-Type", (contenttype) ? contenttype : HTTP_DEF_CONTENTTYPE);
+        sprintf(clenval, "%jd", size);
         ad_http_add_response_header(conn, "Content-Length", clenval);
         http->response.contentlength = size;
-    } else if (contenttype != NULL) {
+    } else {
         ad_http_add_response_header(conn, "Transfer-Encoding", "chunked");
-        http->response.contentlength = 0;
+        http->response.contentlength = -1;
     }
 
     return 0;
@@ -159,7 +158,7 @@ int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, size_
 /**
  * @return total bytes sent, 0 on error.
  */
-size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, const void *data, size_t size) {
+size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, const void *data, off_t size) {
     ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
     if (http->response.frozen_header) {
         return 0;
@@ -207,8 +206,8 @@ size_t ad_http_send_header(ad_conn_t *conn) {
 size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size) {
     ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
 
-    if (http->response.contentlength <= 0) {
-        WARN("Content-Length is not set.  Invalid usage.");
+    if (http->response.contentlength < 0) {
+        WARN("Content-Length is not set. Invalid usage.");
         return 0;
     }
 
@@ -222,8 +221,8 @@ size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size) {
         ad_http_send_header(conn);
     }
 
-    if (evbuffer_add(http->response.outbuf, data, size)) {
-        return 0;
+    if (data != NULL && size > 0) {
+        if (evbuffer_add(http->response.outbuf, data, size)) return 0;
     }
 
     http->response.bodyout += size;
