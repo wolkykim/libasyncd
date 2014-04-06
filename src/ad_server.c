@@ -1,12 +1,13 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <sys/un.h>
 #include <errno.h>
 #include <assert.h>
+#include <sys/un.h>
+#include <sys/socket.h>
+#include <sys/eventfd.h>
 #include <event2/event.h>
 #include <event2/bufferevent.h>
 #include <event2/bufferevent_ssl.h>
@@ -35,6 +36,10 @@ struct ad_hook_s {
 /*
  * Local functions.
  */
+static int notify_loopexit(ad_server_t *server);
+static void notify_cb(struct bufferevent *buffer, void *userdata);
+static void *server_loop(void *instance);
+static void close_server(ad_server_t *server);
 static void libevent_log_cb(int severity, const char *msg);
 static int set_undefined_options(ad_server_t *server);
 static SSL_CTX *init_ssl(const char *cert_path, const char *pkey_path);
@@ -88,10 +93,10 @@ enum ad_log_e ad_log_level(enum ad_log_e log_level) {
 ad_server_t *ad_server_new(void) {
     if (initialized) {
         initialized = true;
-        evthread_use_pthreads();
+        //evthread_use_pthreads();
     }
 
-    ad_server_t *server = NEW_STRUCT(ad_server_t);
+    ad_server_t *server = NEW_OBJECT(ad_server_t);
     if (server == NULL) {
         return NULL;
     }
@@ -184,6 +189,11 @@ int ad_server_start(ad_server_t *server) {
         }
     }
 
+    // Create a eventfd for notification channel.
+    int notifyfd = eventfd(0, 0);
+    server->notify_buffer = bufferevent_socket_new(server->evbase, notifyfd, BEV_OPT_CLOSE_ON_FREE);
+    bufferevent_setcb(server->notify_buffer, NULL, notify_cb, NULL, server);
+
     if (! server->listener) {
         server->listener = evconnlistener_new_bind(
                 server->evbase, listener_cb, (void *)server,
@@ -198,61 +208,77 @@ int ad_server_start(ad_server_t *server) {
 
     // Listen
     INFO("Listening on %s:%d%s", addr, port, ((server->sslctx) ? " (SSL)" : ""));
-    event_base_loop(server->evbase, 0);
-    int exitstatus = (event_base_got_break(server->evbase)) ? -1 : 0;
 
-    if (ad_server_get_option_int(server, "server.free_on_stop")) {
-        ad_server_free(server);
+    int exitstatus = 0;
+    if (ad_server_get_option_int(server, "server.daemon")) {
+        DEBUG("Launching server as a thread.")
+        server->thread = NEW_OBJECT(pthread_t);
+        pthread_create(server->thread, NULL, &server_loop, (void *)server);
+        //pthread_detach(server->thread);
+    } else {
+        int *retval = server_loop(server);
+        exitstatus = *retval;
+        free(retval);
+
+        close_server(server);
+        if (ad_server_get_option_int(server, "server.free_on_stop")) {
+            ad_server_free(server);
+        }
     }
 
     return exitstatus;
 }
 
 void ad_server_stop(ad_server_t *server) {
-    if (server->listener) {
-            evconnlistener_free(server->listener);
-            server->listener = NULL;
-    }
+    DEBUG("Send loopexit notification.");
+    notify_loopexit(server);
+    sleep(1);
 
-    event_base_loopbreak(server->evbase);
-    INFO("Stopping server.");
+    if (ad_server_get_option_int(server, "server.daemon")) {
+        close_server(server);
+        if (ad_server_get_option_int(server, "server.free_on_stop")) {
+            ad_server_free(server);
+        }
+    }
 }
 
 void ad_server_free(ad_server_t *server) {
-    if (server) {
-        ad_server_stop(server);
+    if (server == NULL) return;
 
-        if (server->evbase) {
-            event_base_free(server->evbase);
-        }
-
-        if (server->sslctx) {
-            SSL_CTX_free(server->sslctx);
-            ERR_remove_state(0);
-            // We don't clean up some of global memory created by
-            // OpenSSL library since that may affect on other servers.
-            // But this is safe because it's not a memory leak but
-            // more of memory in use.
-        }
-
-        if (server->options) {
-            server->options->free(server->options);
-        }
-        if (server->stats) {
-            server->stats->free(server->stats);
-        }
-        if (server->hooks) {
-            qlist_t *tbl = server->hooks;
-            ad_hook_t *hook;
-            while ((hook = tbl->popfirst(tbl, NULL))) {
-                if (hook->method) free(hook->method);
-                free(hook);
-            }
-            server->hooks->free(server->hooks);
-        }
-        free(server);
+    int daemon = ad_server_get_option_int(server, "server.daemon");
+    if (daemon && server->thread) {
+        notify_loopexit(server);
+        sleep(1);
+        close_server(server);
     }
-    DEBUG("Released all the resources successfully.");
+
+    if (server->evbase) {
+        event_base_free(server->evbase);
+    }
+
+    if (server->sslctx) {
+        SSL_CTX_free(server->sslctx);
+        ERR_clear_error();
+        ERR_remove_state(0);
+    }
+
+    if (server->options) {
+        server->options->free(server->options);
+    }
+    if (server->stats) {
+        server->stats->free(server->stats);
+    }
+    if (server->hooks) {
+        qlist_t *tbl = server->hooks;
+        ad_hook_t *hook;
+        while ((hook = tbl->popfirst(tbl, NULL))) {
+            if (hook->method) free(hook->method);
+            free(hook);
+        }
+        server->hooks->free(server->hooks);
+    }
+    free(server);
+    DEBUG("Server terminated.");
 }
 
 /**
@@ -362,6 +388,59 @@ char *ad_conn_set_method(ad_conn_t *conn, char *method) {
 /******************************************************************************
  * Private internal functions.
  *****************************************************************************/
+
+/**
+ * If there's no event, loopbreak or loopexit call won't work until one more
+ * event arrived. So we use eventfd as a internal notification channel to let
+ * server get out of the loop without waiting for an event.
+ */
+static int notify_loopexit(ad_server_t *server) {
+    uint64_t x = 0;
+    return bufferevent_write(server->notify_buffer, &x, sizeof(uint64_t));
+}
+
+static void notify_cb(struct bufferevent *buffer, void *userdata) {
+    ad_server_t *server = (ad_server_t *)userdata;
+    event_base_loopexit(server->evbase, NULL);
+    DEBUG("Existing loop.");
+}
+
+static void *server_loop(void *instance) {
+    ad_server_t *server = (ad_server_t *)instance;
+
+    int *retval = NEW_OBJECT(int);
+    DEBUG("Loop start");
+    event_base_loop(server->evbase, 0);
+    DEBUG("Loop finished");
+    *retval = (event_base_got_break(server->evbase)) ? -1 : 0;
+
+    return retval;
+}
+
+static void close_server(ad_server_t *server) {
+    DEBUG("Closing server.");
+
+    if (server->notify_buffer) {
+        bufferevent_free(server->notify_buffer);
+        server->notify_buffer = NULL;
+    }
+
+    if (server->listener) {
+            evconnlistener_free(server->listener);
+            server->listener = NULL;
+    }
+
+    if (server->thread) {
+        void *retval = NULL;
+        DEBUG("Waiting server's last loop to finish.");
+        pthread_join(*(server->thread), &retval);
+        free(retval);
+        free(server->thread);
+        server->thread = NULL;
+    }
+    INFO("Server closed.");
+}
+
 static void libevent_log_cb(int severity, const char *msg) {
     switch(severity) {
         case _EVENT_LOG_MSG : {
@@ -457,7 +536,7 @@ static ad_conn_t *conn_new(ad_server_t *server, struct bufferevent *buffer) {
     }
 
     // Create a new connection container.
-    ad_conn_t *conn = NEW_STRUCT(ad_conn_t);
+    ad_conn_t *conn = NEW_OBJECT(ad_conn_t);
     if (conn == NULL) return NULL;
 
     // Initialize with default values.

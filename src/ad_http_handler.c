@@ -295,7 +295,7 @@ const char *ad_http_get_reason(int code) {
  *****************************************************************************/
 static ad_http_t *http_new(struct evbuffer *out) {
     // Create a new connection container.
-    ad_http_t *http = NEW_STRUCT(ad_http_t);
+    ad_http_t *http = NEW_OBJECT(ad_http_t);
     if (http == NULL) return NULL;
 
     // Allocate additional resources.

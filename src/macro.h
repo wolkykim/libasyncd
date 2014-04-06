@@ -10,7 +10,7 @@
 #define IS_EMPTY_STR(s)     ((*s == '\0') ? true : false)
 #define IS_EQUAL_STR(s1,s2) (!strcmp(s1,s2))
 #define ENDING_CHAR(s)      (*(s + strlen(s) - 1))
-#define NEW_STRUCT(s)       ((s *)calloc(1, sizeof(s)))
+#define NEW_OBJECT(t)       ((t *)calloc(1, sizeof(t)))
 
 #define DYNAMIC_VSPRINTF(s, f) do {                                     \
         size_t _strsize;                                                \

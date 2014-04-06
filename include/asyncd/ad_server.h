@@ -37,6 +37,7 @@
 
 #include <event2/event.h>
 #include <event2/buffer.h>
+#include <event2/bufferevent.h>
 #include <openssl/ssl.h>
 #include "qlibc.h"
 
@@ -52,6 +53,9 @@ typedef struct ad_conn_s ad_conn_t;
 typedef enum ad_cb_return_e ad_cb_return_t;
 typedef struct ad_hook_s ad_hook_t;
 
+/**
+ * These flags are used for ad_log_level();
+ */
 enum ad_log_e{
     AD_LOG_DISABLE = 0,
     AD_LOG_ERROR,
@@ -88,10 +92,10 @@ enum ad_log_e{
         { "server.request_pipelining", "1" },                               \
                                                                             \
         /* Run server in a separate thread */                               \
-        { "server.start_detached", "0" },                                   \
+        { "server.daemon", "0" },                                           \
                                                                             \
         /* Collect resources after stop */                                  \
-        { "server.free_on_stop", "0" },                                     \
+        { "server.free_on_stop", "1" },                                     \
                                                                             \
         /* End of array marker. Do not remove */                            \
         { "", "_END_" }                                                     \
@@ -144,7 +148,8 @@ enum ad_cb_return_e {
  * Server info container.
  */
 struct ad_server_s {
-    int errcode;  // 0 for normal exit, non zero for error.
+    int errcode;            /*!< exit status. 0 for normal exit, non zero for error. */
+    pthread_t *thread;      /*!< thread object. not null if server runs as a thread */
 
     qhashtbl_t *options;            /*!< server options */
     qhashtbl_t *stats;              /*!< internal statistics */
@@ -152,6 +157,8 @@ struct ad_server_s {
     struct evconnlistener *listener; /*!< listener */
     struct event_base *evbase;      /*!< event base */
     SSL_CTX *sslctx;                /*!< SSL connection support */
+
+    struct bufferevent *notify_buffer; /*!< internal notification channel */
 };
 
 /**

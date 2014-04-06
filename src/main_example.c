@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
     //
     // Create a server.
     //
-    ad_log_level(AD_LOG_DEBUG2);
+    ad_log_level(AD_LOG_DEBUG);
     ad_server_t *server = ad_server_new();
 
     //
@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this
     // is the option.
-    ad_server_set_option(server, "server.start_detached", "0");
+    ad_server_set_option(server, "server.daemon", "1");
 
     // Call ad_server_free() internally when server is shutting down.
     ad_server_set_option(server, "server.free_on_stop", "1");
@@ -163,7 +163,18 @@ int main(int argc, char **argv) {
     //
     int retstatus = ad_server_start(server);
 
+    // Let's spend some time.
+    int i = 0;
+    for (i = 0; i < 300; i++) {
+        sleep(1);
+    }
+
+    // Stop server.
+    ad_server_stop(server);
+
+    // Make valgrind happy.
     ad_server_global_free();
+
     //
     // That is it!!!
     //
