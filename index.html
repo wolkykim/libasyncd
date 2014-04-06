@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Libasyncd by wolkykim</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Libasyncd</h1>
+        <h2>Embeddable Event-based Asynchronous Message/HTTP Server library in C</h2>
+        <a href="https://github.com/wolkykim/libasyncd" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="libasyncd" class="anchor" href="#libasyncd"><span class="octicon octicon-link"></span></a>libasyncd</h1>
+
+<p>Embeddable Event-based Asynchronous Message/HTTP Server library in C.</p>
+
+<h2>
+<a name="what-is-libasyncd" class="anchor" href="#what-is-libasyncd"><span class="octicon octicon-link"></span></a>What is libasyncd?</h2>
+
+<p>Libasyncd is an embeddable fully event-driven asynchronous message server in C
+which is in flexible architecture to add/support multiple different protocols.</p>
+
+<p>Libasyncd project was started from my need of embeddable HTTP server. There is
+a couple of choices there, I tried all of them. Each has pros and cons.
+I couldn't pick my favorite at the end and here's my insight.</p>
+
+<ul>
+<li>libevent provides one - good choice for light use but doesn't provide a way
+of fine controls over large data.</li>
+<li>mongoose - nice API, good abstraction, but since it uses select() and realloc
+based i/o buffer, wouldn't be a promising solution for serious users.
+Also its dual lisencing is restricting.</li>
+<li>libevhtp - fine but doesn't provide a way to hook on METHOD(Verb, a command
+on the 1st line)</li>
+<li>GNU's libmicrohttpd - good feature set but little too complicated to use.</li>
+</ul><p>What I was looking for was.</p>
+
+<ul>
+<li>Must be easily embeddable.</li>
+<li>Simple and nice abstraction that cut down the complexity.</li>
+<li>Generic enough to add and customize lighter weight custom protocols.</li>
+<li>Practical level of support in HTTP handler.</li>
+<li>Flexible hook supports on both Method hook and Gradual way.</li>
+<li>Snap-on SSL feature.</li>
+</ul><p>So with these feature set, applications can expose RESTful API as customer facing
+interface and also use more lighter weight protocols for inter communication
+without doing integration work between this modules and that modules.</p>
+
+<p>Asynchronous way of programming can easily go quite complicated as more things
+you handle in nonblocking passion. So the goal of Libasyncd project is to make
+a flexible and fast event-based message server base with good abstraction.</p>
+
+<p>Hope you find libasyncd is useful and help us to make a fast event server
+without thinking much about the underneath complexity.</p>
+
+<h2>
+<a name="why-libasyncd" class="anchor" href="#why-libasyncd"><span class="octicon octicon-link"></span></a>Why libasyncd?</h2>
+
+<ul>
+<li>Stands as a generic event-based server library.</li>
+<li>Not only for HTTP server but also as a RPC server, as a Protocol Buffer channel,
+as a Message transforming layer...</li>
+<li>Embeddable library module - you write main().</li>
+<li>Simple to use.</li>
+<li>Pluggable protocols. HTTP protocol handler is included.</li>
+<li>Support of multiple hooks.</li>
+<li>Support request pipelining.</li>
+<li>Support SSL - Just flip the switch on.</li>
+</ul><h2>
+<a name="compile--install" class="anchor" href="#compile--install"><span class="octicon octicon-link"></span></a>Compile &amp; Install.</h2>
+
+<pre><code>$ git clone git clone https://github.com/wolkykim/libasyncd
+$ cd libasyncd
+$ (cd lib; run2init-submodules.sh; cd qlibc; ./configure; make) 
+$ ./configure
+$ make
+</code></pre>
+
+<h2>
+<a name="hello-world-asynchronous-socket-server-example" class="anchor" href="#hello-world-asynchronous-socket-server-example"><span class="octicon octicon-link"></span></a>"Hello World", Asynchronous Socket Server example.</h2>
+
+<pre><code>int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
+    evbuffer_add(conn-&gt;out, "Hello World.");
+    return AD_CLOSE;
+}
+
+int main(int argc, char **argv) {
+    ad_server_t *server = ad_server_new();
+    ad_server_set_option(server, "server.port", "2222");
+    ad_server_register_hook(server, my_bypass_handler, NULL);
+    return ad_server_start(server);
+}
+</code></pre>
+
+<h2>
+<a name="hello-world-asynchronous-http-server-example" class="anchor" href="#hello-world-asynchronous-http-server-example"><span class="octicon octicon-link"></span></a>"Hello World", Asynchronous HTTP Server example.</h2>
+
+<pre><code>int my_bypass_handler(short event, ad_conn_t *conn, void *userdata) {
+    if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
+        ad_http_response(conn, 200, "text/html", "Hello World", 11);
+        return AD_DONE;
+    }
+    return AD_OK;
+}
+
+int main(int argc, char **argv) {
+    ad_server_t *server = ad_server_new();
+    ad_server_set_option(server, "server.port", "8080");
+    ad_server_register_hook(server, ad_http_handler, NULL); // HTTP Parser is also a hook.
+    ad_server_register_hook_on_method(server, "GET", my_bypass_handler, NULL); // Put yours after parser.
+    return ad_server_start(server);
+}
+</code></pre>
+
+<h2>
+<a name="looking-for-more-controls-echo-server-example-here" class="anchor" href="#looking-for-more-controls-echo-server-example-here"><span class="octicon octicon-link"></span></a>Looking for more controls? Echo server example here.</h2>
+
+<pre><code>/**
+ * User data for per-connection custom information for non-blocking operation.
+ */
+struct my_cdata {
+    int counter;
+};
+
+/**
+ * This callback will be called before closing or resetting connection for
+ * pipelining.
+ */ 
+void my_userdata_free_cb(ad_conn_t *conn, void *userdata) {
+    free(userdata);
+}
+
+/**
+ * User callback example.
+ *
+ * This is a simple echo handler.
+ * It response on input line up to 3 times then close connection.
+ *
+ * @param event event type. see ad_server.h for details.
+ * @param conn  connection object. type is vary based on
+ *              "server.protocol_handler" option.
+ * @userdata    given shared user-data.
+ *
+ * @return one of AD_OK | AD_DONE | AD_CLOSE | AD_TAKEOVER
+ *
+ * @note Please refer ad_server.h for more details.
+ */
+int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
+    DEBUG("my_conn_callback: %x", event);
+
+    /*
+     * AD_EVENT_INIT event is like a constructor method.
+     * It happens only once at the beginning of connection.
+     * This is a good place to create a per-connection base
+     * resources. You can attach it into this connection to
+     * use at the next callback cycle.
+     */
+    if (event &amp; AD_EVENT_INIT) {
+        DEBUG("==&gt; AD_EVENT_READ");
+        // Allocate a counter container for this connection.
+        struct my_cdata *cdata = (struct my_cdata *)calloc(1, sizeof(struct my_cdata));
+
+        // Attach to this connection.
+        ad_conn_set_userdata(conn, cdata, my_userdata_free_cb);
+    }
+
+    /*
+     * AD_EVENT_READ event happens whenever data comes in.
+     */
+    else if (event &amp; AD_EVENT_READ) {
+        DEBUG("==&gt; AD_EVENT_READ");
+
+        // Get my per-connection data.
+        struct my_cdata *cdata = (struct my_cdata *)ad_conn_get_userdata(conn);
+
+        // Try to read one line.
+        char *data = evbuffer_readln(conn-&gt;in, NULL,  EVBUFFER_EOL_ANY);
+        if (data) {
+            if (!strcmp(data, "SHUTDOWN")) {
+                //return AD_SHUTDOWN;
+            }
+            cdata-&gt;counter++;
+            evbuffer_add_printf(conn-&gt;out, "%s, counter:%d, userdata:%s\n", data, cdata-&gt;counter, (char*)userdata);
+            free(data);
+        }
+
+        // Close connection after 3 echos.
+        return (cdata-&gt;counter &lt; 3) ? AD_OK : AD_CLOSE;
+    }
+
+    /*
+     * AD_EVENT_WRITE event happens whenever out-buffer has lesser than certain
+     * amount of data.
+     *
+     * Default watermark is 0 meaning this will happens when out-buffer is empty.
+     * For reasonable size of message, you can send it all at once but for a large
+     * amount of data, you need to send it out through out multiple callbacks.
+     *
+     * To maximize the performance, you will also want to set higher watermark
+     * so whenever the level goes below the watermark you will be called for the
+     * refill work before the buffer gets empty. So it's just faster if you can
+     * fill up gas while you're driving without a stop.
+     */
+    else if (event &amp; AD_EVENT_WRITE) {
+        DEBUG("==&gt; AD_EVENT_WRITE");
+        // We've sent all the data in out-buffer.
+    }
+
+    /*
+     * AD_EVENT_CLOSE event happens right before closing connection.
+     * This will be the last callback for this connection.
+     * So if you have created per-connection data then release the resource.
+     */
+    else if (event &amp; AD_EVENT_CLOSE) {
+        DEBUG("==&gt; AD_EVENT_CLOSE=%x (TIMEOUT=%d, SHUTDOWN=%d)",
+              event, event &amp; AD_EVENT_TIMEOUT, event &amp; AD_EVENT_SHUTDOWN);
+        // You can release your user data explicitly here if you haven't
+        // set the callback that release your user data.
+    }
+
+    // Return AD_OK will let the hook loop to continue.
+    return AD_OK;
+}
+
+int main(int argc, char **argv) {
+    // Example shared user data.
+    char *userdata = "SHARED-USERDATA";
+
+    //
+    // Create a server.
+    //
+    ad_server_t *server = ad_server_new();
+
+    //
+    // Set server options.
+    //
+    // Usually you only need to override a few default options and
+    // that's it but it's lengthy here for a demonstration purpose.
+    //
+    ad_server_set_option(server, "server.port", "2222");
+    ad_server_set_option(server, "server.addr", "0.0.0.0");
+    ad_server_set_option(server, "server.timeout", "5");
+
+    // Set protocol handler.
+    //   - bypass : Use bypass handler. This is a transparent handler for
+    //              build an custom protocols.
+    //   - http   : Use HTTP handler. Request message will be parsed by
+    //              the handler. You can put your hooks on method name or
+    //              on each phase of parsing process like "AFTER_HEADER".
+    //   - euca   : Use EUCA handler. This handler is for EUCA message.
+    //              light weight messaging protocol designed for the
+    //              blasting fast performance in data exchange.
+    ad_server_set_option(server, "server.protocol_handler", "http");
+
+    // Register custom hooks. When there are multiple hooks, it will be
+    // executed in the same order as it registered.
+    ad_server_register_hook(server, my_conn_handler, userdata);
+
+    // SSL options. - Not implemented yet.
+    ad_server_set_option(server, "server.server.enable_ssl", "0");
+    ad_server_set_option(server, "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert");
+
+    // Enable request pipelining, this change AD_DONE's behavior.
+    ad_server_set_option(server, "server.request_pipelining", "1");
+
+    // Run server in a separate thread. If you want to run multiple
+    // server instances or if you want to run it in background, this
+    // is the option.
+    ad_server_set_option(server, "server.start_detached", "0");
+
+    // Call ad_server_free() internally when server is shutting down.
+    ad_server_set_option(server, "server.free_on_stop", "1");
+
+    //
+    // Start server.
+    //
+    int retstatus = ad_server_start(server);
+
+    //
+    // That is it!!!
+    //
+    return retstatus;
+}
+</code></pre>
+
+<h2>
+<a name="references" class="anchor" href="#references"><span class="octicon octicon-link"></span></a>References</h2>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/C10k_problem">C10K problem</a></li>
+<li><a href="http://libevent.org/">libevent library - an event notification library</a></li>
+<li><a href="http://wolkykim.github.io/qlibc/">qLibc library - a STL like C library</a></li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/wolkykim/libasyncd/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/wolkykim/libasyncd/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/wolkykim/libasyncd"></a> is maintained by <a href="https://github.com/wolkykim">wolkykim</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
