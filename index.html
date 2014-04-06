@@ -275,9 +275,10 @@ int main(int argc, char **argv) {
     // executed in the same order as it registered.
     ad_server_register_hook(server, my_conn_handler, userdata);
 
-    // SSL options. - Not implemented yet.
+    // SSL options.
     ad_server_set_option(server, "server.server.enable_ssl", "0");
     ad_server_set_option(server, "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert");
+    ad_server_set_option(server, "server.ssl_pkey", "/usr/local/etc/ad_server/ad_server.pkey");
 
     // Enable request pipelining, this change AD_DONE's behavior.
     ad_server_set_option(server, "server.request_pipelining", "1");
@@ -285,7 +286,7 @@ int main(int argc, char **argv) {
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this
     // is the option.
-    ad_server_set_option(server, "server.start_detached", "0");
+    ad_server_set_option(server, "server.daemon", "0");
 
     // Call ad_server_free() internally when server is shutting down.
     ad_server_set_option(server, "server.free_on_stop", "1");
