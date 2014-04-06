@@ -14,6 +14,8 @@
 #include <event2/listener.h>
 #include <openssl/ssl.h>
 #include <openssl/rand.h>
+#include <openssl/conf.h>
+#include <openssl/engine.h>
 #include <openssl/err.h>
 #include "macro.h"
 #include "qlibc.h"
@@ -56,6 +58,33 @@ static void *get_userdata(ad_conn_t *conn, int index);
 static bool initialized = false;
 #endif
 
+/*
+ * Global variables.
+ */
+int _ad_log_level = AD_LOG_WARN;
+
+/**
+ * Set debug output level.
+ *
+ * @param debug_level debug output level. 0 to disable.
+ *
+ * @return previous debug level.
+ *
+ * @note
+ *  debug_level:
+ *    AD_LOG_DISABLE
+ *    AD_LOG_ERROR
+ *    AD_LOG_WARN (default)
+ *    AD_LOG_INFO
+ *    AD_LOG_DEBUG
+ *    AD_LOG_DEBUG2
+ */
+enum ad_log_e ad_log_level(enum ad_log_e log_level) {
+    int prev = _ad_log_level;
+    _ad_log_level = log_level;
+    return prev;
+}
+
 ad_server_t *ad_server_new(void) {
     if (initialized) {
         initialized = true;
@@ -80,19 +109,22 @@ ad_server_t *ad_server_new(void) {
     return server;
 }
 
-
 /**
  * @return 0 if successful, otherwise -1.
  */
 int ad_server_start(ad_server_t *server) {
     DEBUG("Starting a server.");
 
-    // Hookup libevent's log message.
-    event_set_log_callback(libevent_log_cb);
-    //event_enable_debug_logging(0xffffffffu);
-
     // Set default options that were not set by user..
     set_undefined_options(server);
+
+    // Hookup libevent's log message.
+    if (_ad_log_level >= AD_LOG_DEBUG) {
+        event_set_log_callback(libevent_log_cb);
+        if (_ad_log_level >= AD_LOG_DEBUG2) {
+            event_enable_debug_mode();
+        }
+    }
 
     // Parse addr
     int port = ad_server_get_option_int(server, "server.port");
@@ -147,7 +179,7 @@ int ad_server_start(ad_server_t *server) {
     if (! server->evbase) {
         server->evbase = event_base_new();
         if (! server->evbase) {
-            DEBUG("Failed to create a new event base.");
+            ERROR("Failed to create a new event base.");
             return -1;
         }
     }
@@ -159,13 +191,13 @@ int ad_server_start(ad_server_t *server) {
                 ad_server_get_option_int(server, "server.backlog"),
                 sockaddr, sockaddr_len);
         if (! server->listener) {
-            DEBUG("Failed to bind on %s:%d", addr, port);
+            ERROR("Failed to bind on %s:%d", addr, port);
             return -1;
         }
     }
 
     // Listen
-    DEBUG("Listening on %s:%d%s", addr, port, ((server->sslctx) ? " (SSL)" : ""));
+    INFO("Listening on %s:%d%s", addr, port, ((server->sslctx) ? " (SSL)" : ""));
     event_base_loop(server->evbase, 0);
     int exitstatus = (event_base_got_break(server->evbase)) ? -1 : 0;
 
@@ -183,7 +215,7 @@ void ad_server_stop(ad_server_t *server) {
     }
 
     event_base_loopbreak(server->evbase);
-    DEBUG("Stopping server.");
+    INFO("Stopping server.");
 }
 
 void ad_server_free(ad_server_t *server) {
@@ -195,7 +227,12 @@ void ad_server_free(ad_server_t *server) {
         }
 
         if (server->sslctx) {
-            SSL_CTL_free(server->sslctx);
+            SSL_CTX_free(server->sslctx);
+            ERR_remove_state(0);
+            // We don't clean up some of global memory created by
+            // OpenSSL library since that may affect on other servers.
+            // But this is safe because it's not a memory leak but
+            // more of memory in use.
         }
 
         if (server->options) {
@@ -216,6 +253,28 @@ void ad_server_free(ad_server_t *server) {
         free(server);
     }
     DEBUG("Released all the resources successfully.");
+}
+
+/**
+ * Clean up all the global objects.
+ *
+ * There are globally shared resources in libevent and openssl and
+ * it's usually not a problem since they don't grow but having these
+ * can confuse some debugging tools into thinking as memory leak.
+ * If you need to make sure that libasyncd has released all internal
+ * library-global data structures, call this.
+ */
+void ad_server_global_free(void) {
+    // Libevent related.
+    //libevent_global_shutdown(); // From libevent v2.1
+
+    // OpenSSL related.
+    ENGINE_cleanup();
+    CONF_modules_free();
+    ERR_free_strings();
+    EVP_cleanup();
+    CRYPTO_cleanup_all_ex_data();
+    sk_SSL_COMP_free(SSL_COMP_get_compression_methods());
 }
 
 void ad_server_set_option(ad_server_t *server, const char *key, const char *value) {
@@ -305,6 +364,10 @@ char *ad_conn_set_method(ad_conn_t *conn, char *method) {
  *****************************************************************************/
 static void libevent_log_cb(int severity, const char *msg) {
     switch(severity) {
+        case _EVENT_LOG_MSG : {
+            INFO("%s", msg);
+            break;
+        }
         case _EVENT_LOG_WARN : {
             WARN("%s", msg);
             break;
@@ -357,7 +420,6 @@ static void listener_cb(struct evconnlistener *listener, evutil_socket_t socket,
     // Create a new buffer.
     struct bufferevent *buffer = NULL;
     if (server->sslctx) {
-        DEBUG("======================");
         buffer = bufferevent_openssl_socket_new(server->evbase, socket,
                                                 SSL_new(server->sslctx),
                                                 BUFFEREVENT_SSL_ACCEPTING,
@@ -384,7 +446,7 @@ static void listener_cb(struct evconnlistener *listener, evutil_socket_t socket,
 
   error:
     if (buffer) bufferevent_free(buffer);
-    DEBUG("Failed to create a connection handler.");
+    ERROR("Failed to create a connection handler.");
     event_base_loopbreak(server->evbase);
     server->errcode = ENOMEM;
 }
@@ -449,7 +511,7 @@ static void conn_free(ad_conn_t *conn) {
                 if (sslerr) {
                     char errmsg[256];
                     ERR_error_string_n(sslerr, errmsg, sizeof(errmsg));
-                    ERROR("%s", errmsg);
+                    ERROR("SSL %s (err:%d)", errmsg, sslerr);
                 }
             }
             bufferevent_free(conn->buffer);

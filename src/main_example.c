@@ -116,6 +116,7 @@ int main(int argc, char **argv) {
     //
     // Create a server.
     //
+    ad_log_level(AD_LOG_DEBUG2);
     ad_server_t *server = ad_server_new();
 
     //
@@ -162,6 +163,7 @@ int main(int argc, char **argv) {
     //
     int retstatus = ad_server_start(server);
 
+    ad_server_global_free();
     //
     // That is it!!!
     //

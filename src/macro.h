@@ -32,18 +32,27 @@
 /*
  * Error message
  */
+extern int _ad_log_level;
 #define ERROROUT    (stderr)
-#define ERROR(fmt, args...) fprintf(ERROROUT, "[ERROR] " fmt "\n", ##args);
-#define WARN(fmt, args...) fprintf(ERROROUT, "[WARN] " fmt "\n", ##args);
-#define INFO(fmt, args...) fprintf(ERROROUT, "[WARN] " fmt "\n", ##args);
+#define ERROR(fmt, args...) if (_ad_log_level > 0) {                    \
+        fprintf(ERROROUT, "[ERROR] " fmt "\n", ##args);                 \
+    }
+#define WARN(fmt, args...) if (_ad_log_level >= 2) {                    \
+        fprintf(ERROROUT, "[WARN] " fmt "\n", ##args);                  \
+    }
+#define INFO(fmt, args...) if (_ad_log_level >= 3) {                    \
+        fprintf(ERROROUT, "[INFO] " fmt "\n", ##args);                  \
+    }
 
 /*
  * Debug Macros
  */
-#define DEBUGOUT    (stdout)
 #ifdef BUILD_DEBUG
-#define DEBUG(fmt, args...) fprintf(DEBUGOUT, "[DEBUG] " fmt " [%s(),%s:%d]\n", \
-                                    ##args, __func__, __FILE__, __LINE__);
+#define DEBUGOUT    (stdout)
+#define DEBUG(fmt, args...) if (_ad_log_level >= 4) {                   \
+        fprintf(DEBUGOUT, "[DEBUG] " fmt " [%s(),%s:%d]\n",             \
+                ##args, __func__, __FILE__, __LINE__);                  \
+    }
 #else
 #define DEBUG(fms, args...)
 #endif  /* BUILD_DEBUG */

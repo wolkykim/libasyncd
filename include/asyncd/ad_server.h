@@ -52,6 +52,15 @@ typedef struct ad_conn_s ad_conn_t;
 typedef enum ad_cb_return_e ad_cb_return_t;
 typedef struct ad_hook_s ad_hook_t;
 
+enum ad_log_e{
+    AD_LOG_DISABLE = 0,
+    AD_LOG_ERROR,
+    AD_LOG_WARN,
+    AD_LOG_INFO,
+    AD_LOG_DEBUG,
+    AD_LOG_DEBUG2,
+};
+
 /*---------------------------------------------------------------------------*\
 |                              SERVER OPTIONS                                 |
 \*---------------------------------------------------------------------------*/
@@ -163,10 +172,13 @@ struct ad_conn_s {
 /*----------------------------------------------------------------------------*\
 |                             PUBLIC FUNCTIONS                                 |
 \*----------------------------------------------------------------------------*/
+enum ad_log_e ad_log_level(enum ad_log_e log_level);
+
 extern ad_server_t *ad_server_new(void);
 extern int ad_server_start(ad_server_t *server);
 extern void ad_server_stop(ad_server_t *server);
 extern void ad_server_free(ad_server_t *server);
+extern void ad_server_global_free(void);
 
 extern void ad_server_set_option(ad_server_t *server, const char *key, const char *value);
 extern char *ad_server_get_option(ad_server_t *server, const char *key);
