@@ -37,6 +37,7 @@
 
 #include <event2/event.h>
 #include <event2/buffer.h>
+#include <openssl/ssl.h>
 #include "qlibc.h"
 
 #ifdef __cplusplus
@@ -71,7 +72,8 @@ typedef struct ad_hook_s ad_hook_t;
                                                                             \
         /* SSL options */                                                   \
         { "server.enable_ssl", "0" },                                       \
-        { "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert" },   \
+        { "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.crt" },    \
+        { "server.ssl_pkey", "/usr/local/etc/ad_server/ad_server.key" },    \
                                                                             \
         /* Enable or disable request pipelining, this change AD_DONE's behavior */ \
         { "server.request_pipelining", "1" },                               \
@@ -135,11 +137,12 @@ enum ad_cb_return_e {
 struct ad_server_s {
     int errcode;  // 0 for normal exit, non zero for error.
 
-    qhashtbl_t *options; /*!< server options */
-    qhashtbl_t *stats; /*!< internal statistics */
-    qlist_t *hooks; /*!< list of registered hooks */
+    qhashtbl_t *options;            /*!< server options */
+    qhashtbl_t *stats;              /*!< internal statistics */
+    qlist_t *hooks;                 /*!< list of registered hooks */
     struct evconnlistener *listener; /*!< listener */
-    struct event_base *evbase; /*!< event base */
+    struct event_base *evbase;      /*!< event base */
+    SSL_CTX *sslctx;                /*!< SSL connection support */
 };
 
 /**
@@ -168,6 +171,7 @@ extern void ad_server_free(ad_server_t *server);
 extern void ad_server_set_option(ad_server_t *server, const char *key, const char *value);
 extern char *ad_server_get_option(ad_server_t *server, const char *key);
 extern int ad_server_get_option_int(ad_server_t *server, const char *key);
+extern SSL_CTX *ad_server_get_ssl_ctx(ad_server_t *server);
 extern qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key);
 
 extern void ad_server_register_hook(ad_server_t *server, ad_callback cb, void *userdata);

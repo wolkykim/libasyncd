@@ -145,8 +145,9 @@ int main(int argc, char **argv) {
     ad_server_register_hook(server, my_conn_handler, userdata);
 
     // SSL options. - Not implemented yet.
-    ad_server_set_option(server, "server.server.enable_ssl", "0");
-    ad_server_set_option(server, "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert");
+    ad_server_set_option(server, "server.enable_ssl", "1");
+    ad_server_set_option(server, "server.ssl_cert", "/tmp/cert");
+    ad_server_set_option(server, "server.ssl_pkey", "/tmp/pkey");
 
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this

@@ -154,6 +154,9 @@ AC_SUBST(DEPLIBS, ["$DEPLIBS -levent_openssl"])
 AC_CHECK_LIB([ssl], [main], [], AC_MSG_ERROR([Cannot find openssl library.]))
 AC_SUBST(DEPLIBS, ["$DEPLIBS -lssl"])
 
+AC_CHECK_LIB([crypto], [main], [], AC_MSG_ERROR([Cannot find crypto library.]))
+AC_SUBST(DEPLIBS, ["$DEPLIBS -lcrypto"])
+
 ##
 ## --enable section
 ##

@@ -9,8 +9,12 @@
 #include <assert.h>
 #include <event2/event.h>
 #include <event2/bufferevent.h>
+#include <event2/bufferevent_ssl.h>
 #include <event2/thread.h>
 #include <event2/listener.h>
+#include <openssl/ssl.h>
+#include <openssl/rand.h>
+#include <openssl/err.h>
 #include "macro.h"
 #include "qlibc.h"
 #include "ad_server.h"
@@ -29,6 +33,9 @@ struct ad_hook_s {
 /*
  * Local functions.
  */
+static void libevent_log_cb(int severity, const char *msg);
+static int set_undefined_options(ad_server_t *server);
+static SSL_CTX *init_ssl(const char *cert_path, const char *pkey_path);
 static void listener_cb(struct evconnlistener *listener,
                         evutil_socket_t evsocket, struct sockaddr *sockaddr,
                         int socklen, void *userdata);
@@ -80,14 +87,12 @@ ad_server_t *ad_server_new(void) {
 int ad_server_start(ad_server_t *server) {
     DEBUG("Starting a server.");
 
+    // Hookup libevent's log message.
+    event_set_log_callback(libevent_log_cb);
+    //event_enable_debug_logging(0xffffffffu);
+
     // Set default options that were not set by user..
-    char *default_options[][2] = AD_SERVER_OPTIONS;
-    for (int i = 0; ! IS_EMPTY_STR(default_options[i][0]); i++) {
-        if (! ad_server_get_option(server, default_options[i][0])) {
-            ad_server_set_option(server, default_options[i][0], default_options[i][1]);
-        }
-        DEBUG("%s=%s", default_options[i][0], ad_server_get_option(server, default_options[i][0]));
-    }
+    set_undefined_options(server);
 
     // Parse addr
     int port = ad_server_get_option_int(server, "server.port");
@@ -125,6 +130,19 @@ int ad_server_start(ad_server_t *server) {
         sockaddr_len = sizeof(ipv4addr);
     }
 
+    // SSL
+    if (ad_server_get_option_int(server, "server.enable_ssl")) {
+        char *cert_path = ad_server_get_option(server, "server.ssl_cert");
+        char *pkey_path = ad_server_get_option(server, "server.ssl_pkey");
+        server->sslctx = init_ssl(cert_path, pkey_path);
+        if (server->sslctx == NULL) {
+            ERROR("Couldn't load certificate file(%s) or private key file(%s).",
+                  cert_path, pkey_path);
+            return -1;
+        }
+        DEBUG("SSL Initialized.");
+    }
+
     // Bind
     if (! server->evbase) {
         server->evbase = event_base_new();
@@ -147,7 +165,7 @@ int ad_server_start(ad_server_t *server) {
     }
 
     // Listen
-    DEBUG("Listening on %s:%d", addr, port);
+    DEBUG("Listening on %s:%d%s", addr, port, ((server->sslctx) ? " (SSL)" : ""));
     event_base_loop(server->evbase, 0);
     int exitstatus = (event_base_got_break(server->evbase)) ? -1 : 0;
 
@@ -176,7 +194,10 @@ void ad_server_free(ad_server_t *server) {
             event_base_free(server->evbase);
         }
 
-        // Release resources.
+        if (server->sslctx) {
+            SSL_CTL_free(server->sslctx);
+        }
+
         if (server->options) {
             server->options->free(server->options);
         }
@@ -208,6 +229,27 @@ char *ad_server_get_option(ad_server_t *server, const char *key) {
 int ad_server_get_option_int(ad_server_t *server, const char *key) {
     char *value = ad_server_get_option(server, key);
     return (value) ? atoi(value) : 0;
+}
+
+/**
+ * Get OpenSSL SSL_CTX object.
+ *
+ * @return SSL_CTX object, NULL if not enabled.
+ *
+ * @note
+ * Libasyncd initializes SSL_CTX with minimum default with
+ * "SSLv23_server_method" which will make the server understand
+ * SSLv2, SSLv3, and TLSv1 protocol. Use returned SSL_CTX object
+ * to set any custom options before starting the server.
+ *
+ * @code
+ *  SSL_CTX *sslctx = ad_server_get_ssl_ctx(server);
+ *  SSL_CTX_set_options(sslctx, SSL_OP_NO_SSLv2);
+ *  SSL_CTX_set_session_cache_mode(sslctx, SSL_SESS_CACHE_SERVER);
+ *  ad_server_start(server);
+ */
+SSL_CTX *ad_server_get_ssl_ctx(ad_server_t *server) {
+    return server->sslctx;
 }
 
 qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key) {
@@ -261,13 +303,68 @@ char *ad_conn_set_method(ad_conn_t *conn, char *method) {
 /******************************************************************************
  * Private internal functions.
  *****************************************************************************/
+static void libevent_log_cb(int severity, const char *msg) {
+    switch(severity) {
+        case _EVENT_LOG_WARN : {
+            WARN("%s", msg);
+            break;
+        }
+        case _EVENT_LOG_ERR : {
+            ERROR("%s", msg);
+            break;
+        }
+        default : {
+            DEBUG("%s", msg);
+            break;
+        }
+    }
+}
+
+// Set default options that were not set by user..
+static int set_undefined_options(ad_server_t *server) {
+    int newentries = 0;
+    char *default_options[][2] = AD_SERVER_OPTIONS;
+    for (int i = 0; ! IS_EMPTY_STR(default_options[i][0]); i++) {
+        if (! ad_server_get_option(server, default_options[i][0])) {
+            ad_server_set_option(server, default_options[i][0], default_options[i][1]);
+            newentries++;
+        }
+        DEBUG("%s=%s", default_options[i][0], ad_server_get_option(server, default_options[i][0]));
+    }
+    return newentries;
+}
+
+static SSL_CTX *init_ssl(const char *cert_path, const char *pkey_path) {
+    // Initialize OpenSSL library.
+    SSL_load_error_strings();
+    SSL_library_init();
+    RAND_poll();
+
+    SSL_CTX *sslctx = SSL_CTX_new(SSLv23_server_method());
+    if (! SSL_CTX_use_certificate_file(sslctx, cert_path, SSL_FILETYPE_PEM) ||
+        ! SSL_CTX_use_PrivateKey_file(sslctx, pkey_path, SSL_FILETYPE_PEM)) {
+        return NULL;
+    }
+
+    return sslctx;
+}
+
 static void listener_cb(struct evconnlistener *listener, evutil_socket_t socket,
                         struct sockaddr *sockaddr, int socklen, void *userdata) {
     DEBUG("New connection.");
     ad_server_t *server = (ad_server_t *)userdata;
 
     // Create a new buffer.
-    struct bufferevent *buffer = bufferevent_socket_new(server->evbase, socket, BEV_OPT_CLOSE_ON_FREE);
+    struct bufferevent *buffer = NULL;
+    if (server->sslctx) {
+        DEBUG("======================");
+        buffer = bufferevent_openssl_socket_new(server->evbase, socket,
+                                                SSL_new(server->sslctx),
+                                                BUFFEREVENT_SSL_ACCEPTING,
+                                                BEV_OPT_CLOSE_ON_FREE);
+    } else {
+        buffer = bufferevent_socket_new(server->evbase, socket, BEV_OPT_CLOSE_ON_FREE);
+    }
     if (buffer == NULL) goto error;
 
     // Set read timeout.
@@ -347,6 +444,14 @@ static void conn_free(ad_conn_t *conn) {
         }
         conn_reset(conn);
         if (conn->buffer) {
+            if (conn->server->sslctx) {
+                int sslerr = bufferevent_get_openssl_error(conn->buffer);
+                if (sslerr) {
+                    char errmsg[256];
+                    ERR_error_string_n(sslerr, errmsg, sizeof(errmsg));
+                    ERROR("%s", errmsg);
+                }
+            }
             bufferevent_free(conn->buffer);
         }
         free(conn);
