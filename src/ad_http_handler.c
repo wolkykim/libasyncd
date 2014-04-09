@@ -22,9 +22,13 @@ static int http_parser(ad_http_t *http, struct evbuffer *in);
 static int parse_requestline(ad_http_t *http, char *line);
 static int parse_headers(ad_http_t *http, struct evbuffer *in);
 static int parse_body(ad_http_t *http, struct evbuffer *in);
+static ssize_t parse_chunked_body(ad_http_t *http, struct evbuffer *in);
 
 static bool isValidPathname(const char *path);
 static void correctPathname(char *path);
+static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style);
+static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style);
+
 #endif
 
 int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
@@ -310,7 +314,6 @@ static ad_http_t *http_new(struct evbuffer *out) {
     // Initialize structure.
     http->request.status = AD_HTTP_REQ_INIT;
     http->request.contentlength = -1;
-    http->response.status = AD_HTTP_RES_INIT;
     http->response.contentlength = -1;
     http->response.outbuf = out;
 
@@ -506,14 +509,59 @@ static int parse_body(ad_http_t *http, struct evbuffer *in) {
     } else {
         // Check if Transfer-Encoding is chunked.
         const char *tranenc = http->request.headers->getstr(http->request.headers, "Transfer-Encoding", false);
-        if (tranenc != NULL && !strcmp("chunked", tranenc)) {
+        if (tranenc != NULL && !strcmp(tranenc, "chunked")) {
             // TODO: handle chunked encoding
+            for(;;) {
+                ssize_t chunksize = parse_chunked_body(http, in);
+                if (chunksize > 0) {
+                    continue;
+                } else if (chunksize == 0) {
+                    return AD_HTTP_REQ_DONE;
+                } else if (chunksize == -1) {
+                    return http->request.status;
+                } else {
+                    return AD_HTTP_ERROR;
+                }
+            }
         } else {
             return AD_HTTP_REQ_DONE;
         }
     }
 
     return http->request.status;
+}
+
+/**
+ * Parse chunked body and append it to inbuf.
+ *
+ * @return number of bytes in a chunk. so 0 for the ending chunk. -1 for not enough data, -2 format error.
+ */
+static ssize_t parse_chunked_body(ad_http_t *http, struct evbuffer *in) {
+    // Peek chunk size.
+    size_t crlf_len = 0;
+    char *line = evbuffer_peekln(in, &crlf_len, EVBUFFER_EOL_CRLF);
+    if (line == NULL) return -1;  // not enough data.
+    size_t linelen = strlen(line);
+
+    // Parse chunk size
+    int chunksize = -1;
+    sscanf(line, "%x", &chunksize);
+    free(line);
+    if (chunksize < 0) return -2;  // format error
+
+    // Check if we've received whole data of this chunk.
+    size_t datalen = linelen + crlf_len + chunksize + crlf_len;
+    size_t inbuflen = evbuffer_get_length(in);
+    if (inbuflen < datalen) {
+        return -1;  // not enough data.
+    }
+
+    // Copy chunk body
+    evbuffer_drainln(in, NULL, EVBUFFER_EOL_CRLF);
+    http_add_inbuf(in, http, chunksize);
+    evbuffer_drainln(in, NULL, EVBUFFER_EOL_CRLF);
+
+    return chunksize;
 }
 
 /******************************************************************************
@@ -568,3 +616,30 @@ static void correctPathname(char *path) {
     if (path[len - 1] == '/') path[len - 1] = '\0';
 }
 
+static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style) {
+    // Check if first line has arrived.
+    struct evbuffer_ptr ptr = evbuffer_search_eol(buffer, NULL, n_read_out, eol_style);
+    if (ptr.pos == -1) return NULL;
+
+    char *line = (char *)malloc(ptr.pos + 1);
+    if (line == NULL) return NULL;
+
+    // Linearizes buffer
+    if (ptr.pos > 0) {
+        char *bufferptr = (char *)evbuffer_pullup(buffer, ptr.pos);
+        ASSERT(bufferptr != NULL);
+        strncpy(line, bufferptr, ptr.pos);
+    }
+    line[ptr.pos] = '\0';
+
+    return line;
+}
+
+static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style) {
+    char *line = evbuffer_readln(buffer, n_read_out, eol_style);
+    if (line == NULL) return -1;
+
+    size_t linelen = strlen(line);
+    free(line);
+    return linelen;
+}

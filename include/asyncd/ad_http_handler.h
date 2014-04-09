@@ -100,13 +100,6 @@ enum ad_http_request_status_e {
     AD_HTTP_ERROR,               /*!< unrecoverable error found. */
 };
 
-enum ad_http_response_status_e {
-    AD_HTTP_RES_INIT = 0,       /*!< hasn't sent out any data yet */
-    AD_HTTP_RES_SENDING,        /*!< still sending data in out-buffer */
-    AD_HTTP_RES_SENT,           /*!< out-buffer is empty, waiting to be filled in */
-    AD_HTTP_RES_DONE,           /*!< out-buffer is closed. no more data is expected. */
-};
-
 /*----------------------------------------------------------------------------*\
 |                             PUBLIC FUNCTIONS                                 |
 \*----------------------------------------------------------------------------*/
@@ -157,7 +150,6 @@ struct ad_http_s {
 
     // HTTP Response
     struct {
-        enum ad_http_response_status_e status;  /*!< response status. */
         struct evbuffer *outbuf;  /*!< output data buffer. */
         bool frozen_header;       /*!< indicator whether we sent header out or not */
 
