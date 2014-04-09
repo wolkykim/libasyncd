@@ -5,41 +5,14 @@ Embeddable Event-based Asynchronous Message/HTTP Server library in C.
 
 ## What is libasyncd?
 
-Libasyncd is an embeddable fully event-driven asynchronous message server in C
-which is in flexible architecture to add/support multiple different protocols.
+Libasyncd is an embeddable event-driven asynchronous message server for C/C++.
+It supports HTTP protocol by default and you can add your own protocol handler(hook)
+to build your own high performance server.
 
-Libasyncd project was started from my need of embeddable HTTP server. There is
-a couple of choices there, I tried all of them. Each has pros and cons.
-I couldn't pick my favorite at the end and here's my insight.
-
-* libevent provides one - good choice for light use but doesn't provide a way
-  of fine controls over large data.
-* mongoose - nice API, good abstraction, but since it uses select() and realloc
-  based i/o buffer, wouldn't be a promising solution for serious users.
-  Also its dual lisencing is restricting.
-* libevhtp - fine but doesn't provide a way to hook on METHOD(Verb, a command
-  on the 1st line)
-* GNU's libmicrohttpd - good feature set but little too complicated to use.
-
-What I was looking for was.
-
-* Must be easily embeddable.
-* Simple and nice abstraction that cut down the complexity.
-* Generic enough to add and customize lighter weight custom protocols.
-* Practical level of support in HTTP handler.
-* Flexible hook supports on both Method hook and Gradual way.
-* Snap-on SSL feature.
-
-So with these feature set, applications can expose RESTful API as customer facing
-interface and also use more lighter weight protocols for inter communication
-without doing integration work between this modules and that modules.
-
-Asynchronous way of programming can easily go quite complicated as more things
-you handle in nonblocking passion. So the goal of Libasyncd project is to make
-a flexible and fast event-based message server base with good abstraction.
-
-Hope you find libasyncd is useful and help us to make a fast event server
-without thinking much about the underneath complexity.
+Asynchronous way of programming can easily go quite complicated since you need to
+handle every possible things in nonblocking way. So the goal of Libasyncd project is
+to make a flexible and fast asynchronous server framwork with nice abstraction that
+can cut down the complexity.
 
 ## Why libasyncd?
 
