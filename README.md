@@ -1,7 +1,7 @@
 libasyncd
 =========
 
-Embeddable Event-based Asynchronous Message/HTTP Server library in C.
+Embeddable Event-based Asynchronous Message/HTTP Server library for C/C++.
 
 ## What is libasyncd?
 
