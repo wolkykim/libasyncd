@@ -11,7 +11,7 @@ to build your own high performance server.
 
 Asynchronous way of programming can easily go quite complicated since you need to
 handle every possible things in non-blocking way. So the goal of Libasyncd project is
-to make a flexible and fast asynchronous server framwork with nice abstraction that
+to make a flexible and fast asynchronous server framework with nice abstraction that
 can cut down the complexity.
 
 ## Why libasyncd?
