@@ -41,13 +41,13 @@ RMDIR		= rmdir
 RANLIB		= @RANLIB@
 RM		= @RM@
 
-## qlibc related.
-CPPFLAGS        += -I../lib/qlibc/include
-LIBS            += ../lib/qlibc/lib/libqlibc.a
-
 ## libasyncd related.
 CPPFLAGS        += -I../include -I../src
 LIBS            += ../src/libasyncd.a
+
+## qlibc related.
+CPPFLAGS        += -I../lib/qlibc/include
+LIBS            += ../lib/qlibc/lib/libqlibc.a
 
 ## Which compiler & options for release
 CC		= gcc -std=gnu99
@@ -57,10 +57,10 @@ CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
 LIBS		+= @DEPLIBS@
 
 ## Make Library
-all: pingpong_server_example
+all: echo_tcp_server
 
-pingpong_server_example: pingpong_server_example.o
-	$(CC) $(LDFLAGS) -o $@ pingpong_server_example.o $(LIBS) 
+echo_tcp_server: echo_tcp_server.o
+	$(CC) $(LDFLAGS) -o $@ echo_tcp_server.o $(LIBS) 
 
 clean:
 	$(RM) -f *.o
