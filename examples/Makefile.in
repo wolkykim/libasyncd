@@ -56,17 +56,30 @@ CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
 		   -D_GNU_SOURCE -DBUILD_DEBUG 
 LIBS		+= @DEPLIBS@
 
+
+TARGETS		= helloworld_tcp_server helloworld_http_server helloworld_ssl_server \
+		  echo_tcp_server echo_http_server
+
 ## Make Library
-all: echo_tcp_server echo_http_server
+all: $(TARGETS)
+
+helloworld_tcp_server: helloworld_tcp_server.o
+	$(CC) $(LDFLAGS) -o $@ helloworld_tcp_server.o $(LIBS) 
+
+helloworld_http_server: helloworld_http_server.o
+	$(CC) $(LDFLAGS) -o $@ helloworld_http_server.o $(LIBS) 
+
+helloworld_ssl_server: helloworld_ssl_server.o
+	$(CC) $(LDFLAGS) -o $@ helloworld_ssl_server.o $(LIBS) 
 
 echo_tcp_server: echo_tcp_server.o
 	$(CC) $(LDFLAGS) -o $@ echo_tcp_server.o $(LIBS) 
 
 echo_http_server: echo_http_server.o
 	$(CC) $(LDFLAGS) -o $@ echo_http_server.o $(LIBS) 
+
 clean:
-	$(RM) -f *.o
-	$(RM) -f echo_tcp_server echo_http_server
+	$(RM) -f *.o $(TARGETS)
 
 ## Compile
 .c.o:
