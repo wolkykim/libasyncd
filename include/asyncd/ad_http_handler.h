@@ -35,7 +35,7 @@
 #ifndef _AD_HTTP_HANDLER_H
 #define _AD_HTTP_HANDLER_H
 
-#include "qlibc.h"
+#include "qlibc/qlibc.h"
 
 #ifdef __cplusplus
 extern "C" {

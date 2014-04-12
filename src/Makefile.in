@@ -45,30 +45,27 @@ RM		= @RM@
 INST_INCDIR	= @includedir@
 INST_LIBDIR	= @libdir@
 
-## qlibc definitions
-QLIBC_INCDIR		= ../lib/qlibc/include/qlibc
-QLIBC_LIB		= ../lib/qlibc/lib/libqlibc.a
-QLIBCEXT_LIB		= ../lib/qlibc/lib/libqlibcext.a
+## qlibc related.
+CPPFLAGS	+= -I../lib/qlibc/include
+LIBS		+= ../lib/qlibc/lib/libqlibc.a
+
+## libasyncd related.
+HEADERDIR	= ../include/asyncd
+CPPFLAGS	+= -I$(HEADERDIR)
+OBJS		= ad_server.o ad_http_handler.o
+LIBNAME		= libasyncd.a
+SLIBNAME	= libasyncd.so.1
+SLIBNAME_LINK	= libasyncd.so
 
 ## Which compiler & options for release
 CC		= gcc -std=gnu99
 CFLAGS		= -Wall -Wstrict-prototypes -fPIC -g -O2
-CPPFLAGS	=  -I/usr/include -I/usr/local/include -I$(INCDIR) -I$(QLIBC_INCDIR) \
+CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
 		   -D_GNU_SOURCE -DBUILD_DEBUG 
-LIBS		= $(QLIBC_LIB) @DEPLIBS@
-
-## libasyncd related.
-INCDIR	= ../include/asyncd
-OBJS	= ad_server.o ad_http_handler.o
-LIBNAME = libasyncd.a
-SLIBNAME = libasyncd.so.1
-SLIBNAME_LINK = libasyncd.so
-
-BINOBJS	= main_example.o
-BINNAME = main_example
+LIBS		+= @DEPLIBS@
 
 ## Make Library
-all: $(LIBNAME) $(BINNAME)
+all: $(LIBNAME)
 
 $(LIBNAME): $(OBJS)
 	$(AR) $(ARFLAGS) $(LIBNAME) $(OBJS)
@@ -76,24 +73,23 @@ $(LIBNAME): $(OBJS)
 	$(CC) -shared -Wl,-soname,$(SLIBNAME) -o $(SLIBNAME) $(OBJS)
 	$(LN_S) -f $(SLIBNAME) $(SLIBNAME_LINK)
 
-$(BINNAME): $(BINOBJS)
-	$(CC) $(LDFLAGS) -o $@ $(BINOBJS) $(LIBNAME) $(LIBS) 
-
 install: install-libasyncd
 
-install-libasyncd: libasyncd
-	$(MKDIR_P) $(INST_INCDIR)/qlibc
-	$(INSTALL_DATA) $(QLIBC_INCDIR)/qlibc.h $(INST_INCDIR)/qlibc/qlibc.h
+install-libasyncd: $(LIBNAME)
+	$(MKDIR_P) $(INST_INCDIR)/asyncd
+	$(INSTALL_DATA) $(HEADERDIR)/asyncd.h $(INST_INCDIR)/asyncd/asyncd.h
+	$(INSTALL_DATA) $(HEADERDIR)/ad_server.h $(INST_INCDIR)/asyncd/ad_server.h
+	$(INSTALL_DATA) $(HEADERDIR)/ad_http_handler.h $(INST_INCDIR)/asyncd/ad_http_handler.h
 	$(MKDIR_P) $(INST_LIBDIR)
-	$(INSTALL_DATA) $(QLIBC_LIBDIR)/$(QLIBC_LIBNAME) $(INST_LIBDIR)/$(QLIBC_LIBNAME)
-	$(INSTALL_DATA) $(QLIBC_LIBDIR)/$(QLIBC_SLIBREALNAME) $(INST_LIBDIR)/$(QLIBC_SLIBREALNAME)
-	( cd $(INST_LIBDIR); $(LN_S) -f $(QLIBC_SLIBREALNAME) $(QLIBC_SLIBNAME) )
+	$(INSTALL_DATA) $(LIBNAME) $(INST_LIBDIR)/$(LIBNAME)
+	$(INSTALL_DATA) $(SLIBNAME) $(INST_LIBDIR)/$(SLIBNAME)
+	( cd $(INST_LIBDIR); $(LN_S) -f $(SLIBNAME) $(SLIBNAME_LINK) )
 
 uninstall-libasyncd:
-	$(RM) -f $(INST_INCDIR)/qlibc/qlibc.h
-	$(RM) -f $(INST_LIBDIR)/$(QLIBC_LIBNAME)
-	$(RM) -f $(INST_LIBDIR)/$(QLIBC_SLIBREALNAME)
-	$(RM) -f $(INST_LIBDIR)/$(QLIBC_SLIBNAME)
+	$(RM) -rf $(INST_INCDIR)/asyncd
+	$(RM) -f $(INST_LIBDIR)/$(LIBNAME)
+	$(RM) -f $(INST_LIBDIR)/$(SLIBNAME)
+	$(RM) -f $(INST_LIBDIR)/$(SLIBNAME_LINK)
 
 deinstall: uninstall
 uninstall: uninstall-libasyncd
@@ -101,7 +97,6 @@ uninstall: uninstall-libasyncd
 
 clean:
 	$(RM) -f $(OBJS) $(LIBNAME) $(SLIBNAME) $(SLIBNAME_LINK)
-	$(RM) -f $(BINOBJS) $(BINNAME)
 
 doc:
 	doxygen doxygen-libasyncd.conf

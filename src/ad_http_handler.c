@@ -7,10 +7,10 @@
 #include <assert.h>
 #include <errno.h>
 #include <event2/buffer.h>
-#include "macro.h"
-#include "qlibc.h"
+#include "qlibc/qlibc.h"
 #include "ad_server.h"
 #include "ad_http_handler.h"
+#include "macro.h"
 
 #ifndef _DOXYGEN_SKIP
 static ad_http_t *http_new(struct evbuffer *out);

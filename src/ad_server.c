@@ -19,7 +19,7 @@
 #include <openssl/engine.h>
 #include <openssl/err.h>
 #include "macro.h"
-#include "qlibc.h"
+#include "qlibc/qlibc.h"
 #include "ad_server.h"
 
 #ifndef _DOXYGEN_SKIP
