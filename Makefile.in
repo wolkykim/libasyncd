@@ -43,16 +43,16 @@ uninstall:
 	(cd src/; make deinstall)
 
 clean:
-	@for DIR in src; do					\
+	@for DIR in src examples; do				\
 		echo "===> $${DIR}";				\
 		(cd $${DIR}; make clean);			\
 		echo "<=== $${DIR}";				\
 	done
 
 distclean: clean
-	@for DIR in src; do				\
+	@for DIR in src examples; do				\
 		echo "===> $${DIR}";				\
-		(cd $${DIR}; make clean; ${RM} -f Makefile);	\
+		(cd $${DIR}; ${RM} -f Makefile);		\
 		echo "<=== $${DIR}";				\
 	done
 	${RM} -rf autom4te.cache
