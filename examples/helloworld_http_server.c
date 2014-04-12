@@ -14,7 +14,7 @@ int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
 
 int my_http_default_handler(short event, ad_conn_t *conn, void *userdata) {
     if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
-        ad_http_response(conn, 200, "text/html", "hello world", 11);
+        ad_http_response(conn, 501, "text/html", "Not implemented", 15);
         return AD_CLOSE; // Close connection.
     }
     return AD_OK;

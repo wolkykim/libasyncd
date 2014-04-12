@@ -40,7 +40,12 @@ int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
         return AD_OK;
     } else if (event & AD_EVENT_READ) {
         DEBUG("==> HTTP READ");
-        return http_parser((ad_http_t *)ad_conn_get_extra(conn), conn->in);
+        ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+        int status = http_parser(http, conn->in);
+        if (conn->method == NULL && http->request.method != NULL) {
+            ad_conn_set_method(conn, http->request.method);
+        }
+        return status;
     } else if (event & AD_EVENT_WRITE) {
         DEBUG("==> HTTP WRITE");
         return AD_OK;
