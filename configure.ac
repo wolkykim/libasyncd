@@ -77,7 +77,7 @@ AC_DEFUN([Q_ARG_DISABLE], [
 AC_INIT([libasyncd], [1 RELEASE], [https://github.com/wolkykim/libasyncd])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile examples/Makefile])
 AC_SUBST(DEPLIBS, [""])
 
 ## Set path

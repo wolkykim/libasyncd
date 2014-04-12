@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "asyncd/asyncd.h"
 #include "macro.h"
-#include "asyncd.h"
 
 /*---------------------------------------------------------------------------*\
 |                          THIS IS AN EXAMPLEIN                               |
@@ -116,6 +116,8 @@ int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
 }
 
 int main(int argc, char **argv) {
+    ad_log_level(AD_LOG_DEBUG);
+
     // Example shared user data.
     char *userdata = "SHARED-USERDATA";
 
@@ -134,24 +136,9 @@ int main(int argc, char **argv) {
     ad_server_set_option(server, "server.addr", "0.0.0.0");
     ad_server_set_option(server, "server.timeout", "5");
 
-    // Set protocol handler.
-    //   - bypass : Use bypass handler. This is a transparent handler for
-    //              build an custom protocols.
-    //   - http   : Use HTTP handler. Request message will be parsed by
-    //              the handler. You can put your hooks on method name or
-    //              on each phase of parsing process like "AFTER_HEADER".
-    //   - euca   : Use EUCA handler. This handler is for EUCA message.
-    //              light weight messaging protocol designed for the
-    //              blasting fast performance in data exchange.
-    ad_server_set_option(server, "server.protocol_handler", "http");
-
     // Register custom hooks. When there are multiple hooks, it will be
-    // executed in the same order as it registered.
+    // executed in the same order as they registered.
     ad_server_register_hook(server, my_conn_handler, userdata);
-
-    // SSL options. - Not implemented yet.
-    ad_server_set_option(server, "server.server.enable_ssl", "0");
-    ad_server_set_option(server, "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.cert");
 
     // Enable request pipelining, this change AD_DONE's behavior.
     ad_server_set_option(server, "server.request_pipelining", "1");
@@ -159,7 +146,7 @@ int main(int argc, char **argv) {
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this
     // is the option.
-    ad_server_set_option(server, "server.start_detached", "0");
+    ad_server_set_option(server, "server.daemon", "0");
 
     // Call ad_server_free() internally when server is shutting down.
     ad_server_set_option(server, "server.free_on_stop", "1");
