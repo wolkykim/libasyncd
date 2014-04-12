@@ -117,12 +117,12 @@ typedef void (*ad_userdata_free_cb)(ad_conn_t *conn, void *userdata);
 enum ad_cb_return_e {
     /*!< I'm done with this request. Escalate to other hooks. */
     AD_OK = 0,
+    /*!< I'll handle the buffer directly this time, skip next hook */
+    AD_TAKEOVER,
     /*!< We're done with this request but keep the connection open. */
     AD_DONE,
     /*!< We're done with this request. Close as soon as we sent all data out. */
     AD_CLOSE,
-    /*!< I'll handle the buffer directly. Skip protocol handler */
-    AD_TAKEOVER,
 };
 
 /**

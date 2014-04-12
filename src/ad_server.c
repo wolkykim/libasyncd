@@ -553,7 +553,7 @@ static ad_conn_t *conn_new(ad_server_t *server, struct bufferevent *buffer) {
     bufferevent_enable(buffer, EV_READ);
 
     // Run callbacks with AD_EVENT_INIT event.
-    conn->status = call_hooks(AD_EVENT_INIT, conn);
+    conn->status = call_hooks(AD_EVENT_INIT | AD_EVENT_WRITE, conn);
 
     return conn;
 }
@@ -623,9 +623,13 @@ static void conn_event_cb(struct bufferevent *buffer, short what, void *userdata
 }
 
 static void conn_cb(ad_conn_t *conn, int event) {
-    DEBUG("conn: status:0x%x, event:0x%x", conn->status, event)
+    DEBUG("conn_cb: status:0x%x, event:0x%x", conn->status, event)
     if(conn->status == AD_OK || conn->status == AD_TAKEOVER) {
-        conn->status = call_hooks(event, conn);
+        int status = call_hooks(event, conn);
+        // Update status only when it's higher then before.
+        if (! (conn->status == AD_CLOSE || (conn->status == AD_DONE && conn->status >= status))) {
+            conn->status = status;
+        }
     }
 
     if(conn->status == AD_DONE) {
@@ -653,6 +657,7 @@ static void conn_cb(ad_conn_t *conn, int event) {
 }
 
 static int call_hooks(short event, ad_conn_t *conn) {
+    DEBUG("call_hooks: event 0x%x", event);
     qlist_t *hooks = conn->server->hooks;
 
     qdlobj_t obj;
@@ -663,7 +668,6 @@ static int call_hooks(short event, ad_conn_t *conn) {
             if (hook->method && conn->method && strcmp(hook->method, conn->method)) {
                 continue;
             }
-
             int status = hook->cb(event, conn, hook->userdata);
             if (status != AD_OK) {
                 return status;

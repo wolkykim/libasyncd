@@ -7,7 +7,7 @@
 int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
     if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
         ad_http_response(conn, 200, "text/html", "Hello World", 11);
-        return AD_DONE;
+        return AD_DONE; // Keep connection alive.
     }
     return AD_OK;
 }
@@ -15,7 +15,7 @@ int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
 int my_http_default_handler(short event, ad_conn_t *conn, void *userdata) {
     if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
         ad_http_response(conn, 200, "text/html", "hello world", 11);
-        return AD_DONE;
+        return AD_CLOSE; // Close connection.
     }
     return AD_OK;
 }

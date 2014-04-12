@@ -6,8 +6,11 @@
 \*---------------------------------------------------------------------------*/
 
 int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
-    evbuffer_add_printf(conn->out, "Hello World.");
-    return AD_CLOSE;
+    if (event & AD_EVENT_WRITE) {
+        evbuffer_add_printf(conn->out, "Hello World.");
+        return AD_CLOSE;
+    }
+    return AD_OK;
 }
 
 int main(int argc, char **argv) {
