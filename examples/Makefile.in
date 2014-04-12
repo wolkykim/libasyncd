@@ -57,14 +57,16 @@ CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
 LIBS		+= @DEPLIBS@
 
 ## Make Library
-all: echo_tcp_server
+all: echo_tcp_server echo_http_server
 
 echo_tcp_server: echo_tcp_server.o
 	$(CC) $(LDFLAGS) -o $@ echo_tcp_server.o $(LIBS) 
 
+echo_http_server: echo_http_server.o
+	$(CC) $(LDFLAGS) -o $@ echo_http_server.o $(LIBS) 
 clean:
 	$(RM) -f *.o
-	$(RM) -f pingpong_server_example
+	$(RM) -f echo_tcp_server echo_http_server
 
 ## Compile
 .c.o:
