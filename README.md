@@ -38,7 +38,7 @@ $ make
 
 ## API Reference
 
-* [libasyncd API reference](http://wolkykim.github.io/libasyncd/doc/html/files.html)
+* [libasyncd API reference](http://wolkykim.github.io/libasyncd/doc/html/)
 
 ## "Hello World", Asynchronous Socket Server example.
 ```
