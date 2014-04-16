@@ -87,7 +87,7 @@ typedef struct ad_hook_s ad_hook_t;
  * Server option names and default values.
  */
 #define AD_SERVER_OPTIONS {  \
-        { "server.port",        "8080" },                                   \
+        { "server.port",        "8888" },                                   \
                                                                             \
         /* Addr format IPv4="1.2.3.4", IPv6="1:2:3:4:5:6", Unix="/path" */  \
         { "server.addr",        "0.0.0.0" },                                \
