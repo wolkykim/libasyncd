@@ -36,6 +36,10 @@ $ ./configure
 $ make
 ```
 
+## API Reference
+
+* [libasyncd API reference](http://wolkykim.github.io/libasyncd/doc/html/files.html)
+
 ## "Hello World", Asynchronous Socket Server example.
 ```
 int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
