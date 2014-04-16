@@ -48,11 +48,6 @@ extern "C" {
 /*---------------------------------------------------------------------------*\
 |                                 TYPEDEFS                                    |
 \*---------------------------------------------------------------------------*/
-typedef struct ad_server_s ad_server_t;
-typedef struct ad_conn_s ad_conn_t;
-typedef enum ad_cb_return_e ad_cb_return_t;
-typedef struct ad_hook_s ad_hook_t;
-
 /**
  * These flags are used for ad_log_level();
  */
@@ -64,6 +59,25 @@ enum ad_log_e{
     AD_LOG_DEBUG,
     AD_LOG_DEBUG2,
 };
+
+/**
+ * Return values of user callback.
+ */
+enum ad_cb_return_e {
+    /*!< I'm done with this request. Escalate to other hooks. */
+    AD_OK = 0,
+    /*!< I'll handle the buffer directly this time, skip next hook */
+    AD_TAKEOVER,
+    /*!< We're done with this request but keep the connection open. */
+    AD_DONE,
+    /*!< We're done with this request. Close as soon as we sent all data out. */
+    AD_CLOSE,
+};
+
+typedef struct ad_server_s ad_server_t;
+typedef struct ad_conn_s ad_conn_t;
+typedef enum ad_cb_return_e ad_cb_return_t;
+typedef struct ad_hook_s ad_hook_t;
 
 /*---------------------------------------------------------------------------*\
 |                              SERVER OPTIONS                                 |
@@ -110,20 +124,6 @@ enum ad_log_e{
  */
 typedef int (*ad_callback)(short event, ad_conn_t *conn, void *userdata);
 typedef void (*ad_userdata_free_cb)(ad_conn_t *conn, void *userdata);
-
-/**
- * Return values of user callback.
- */
-enum ad_cb_return_e {
-    /*!< I'm done with this request. Escalate to other hooks. */
-    AD_OK = 0,
-    /*!< I'll handle the buffer directly this time, skip next hook */
-    AD_TAKEOVER,
-    /*!< We're done with this request but keep the connection open. */
-    AD_DONE,
-    /*!< We're done with this request. Close as soon as we sent all data out. */
-    AD_CLOSE,
-};
 
 /**
  * Event types
