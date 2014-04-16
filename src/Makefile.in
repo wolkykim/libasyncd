@@ -48,7 +48,7 @@ INST_LIBDIR	= @libdir@
 ## qlibc related.
 QLIBC_DIR	= ../lib/qlibc
 QLIBC_LIB	= $(QLIBC_DIR)/lib/libqlibc.a
-CPPFLAGS	+= -I../lib/qlibc/include
+CPPFLAGS	+= -I$(QLIBC_DIR)/include
 LIBS		+= $(QLIBC_LIB)
 
 ## libasyncd related.
