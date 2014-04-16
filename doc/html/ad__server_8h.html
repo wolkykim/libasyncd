@@ -109,44 +109,38 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:aa7eb49058c165b0fa6cf9df9f8580d73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7eb49058c165b0fa6cf9df9f8580d73"></a>
-typedef struct <a class="el" href="structad__server__s.html">ad_server_s</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_t</b></td></tr>
+<tr class="memitem:aa7eb49058c165b0fa6cf9df9f8580d73"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structad__server__s.html">ad_server_s</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a></td></tr>
 <tr class="separator:aa7eb49058c165b0fa6cf9df9f8580d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13ab8ad0b151e6b08c548bb36daef631"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13ab8ad0b151e6b08c548bb36daef631"></a>
-typedef struct <a class="el" href="structad__conn__s.html">ad_conn_s</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_t</b></td></tr>
+<tr class="memitem:a13ab8ad0b151e6b08c548bb36daef631"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structad__conn__s.html">ad_conn_s</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a></td></tr>
 <tr class="separator:a13ab8ad0b151e6b08c548bb36daef631"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49e6abe968529248786ca9f354066fa1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49e6abe968529248786ca9f354066fa1"></a>
-typedef enum <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ad_cb_return_t</b></td></tr>
+<tr class="memitem:a49e6abe968529248786ca9f354066fa1"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a49e6abe968529248786ca9f354066fa1">ad_cb_return_t</a></td></tr>
 <tr class="separator:a49e6abe968529248786ca9f354066fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb25c416269f7ead984e63aa21cd6cd7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb25c416269f7ead984e63aa21cd6cd7"></a>
-typedef struct ad_hook_s&#160;</td><td class="memItemRight" valign="bottom"><b>ad_hook_t</b></td></tr>
+<tr class="memitem:aeb25c416269f7ead984e63aa21cd6cd7"><td class="memItemLeft" align="right" valign="top">typedef struct ad_hook_s&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#aeb25c416269f7ead984e63aa21cd6cd7">ad_hook_t</a></td></tr>
 <tr class="separator:aeb25c416269f7ead984e63aa21cd6cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a659a16c6e03fa96212bff528033efc84"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a659a16c6e03fa96212bff528033efc84"></a>
-typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> )(short event, <a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn, void *userdata)</td></tr>
-<tr class="memdesc:a659a16c6e03fa96212bff528033efc84"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback(hook) prototype. <br/></td></tr>
+<tr class="memitem:a659a16c6e03fa96212bff528033efc84"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> )(short event, <a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, void *userdata)</td></tr>
+<tr class="memdesc:a659a16c6e03fa96212bff528033efc84"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback(hook) prototype.  <a href="#a659a16c6e03fa96212bff528033efc84"></a><br/></td></tr>
 <tr class="separator:a659a16c6e03fa96212bff528033efc84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a483770c2534078a7ca37b2e6590329b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a483770c2534078a7ca37b2e6590329b8"></a>
-typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>ad_userdata_free_cb</b> )(<a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn, void *userdata)</td></tr>
+<tr class="memitem:a483770c2534078a7ca37b2e6590329b8"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a483770c2534078a7ca37b2e6590329b8">ad_userdata_free_cb</a> )(<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, void *userdata)</td></tr>
 <tr class="separator:a483770c2534078a7ca37b2e6590329b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a0fe91d344bc3f1610ea68bcec077b1c2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2">ad_log_e</a> { <br/>
-&#160;&#160;<b>AD_LOG_DISABLE</b> = 0, 
-<b>AD_LOG_ERROR</b>, 
-<b>AD_LOG_WARN</b>, 
-<b>AD_LOG_INFO</b>, 
+&#160;&#160;<a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a4822ba6b8a48d50ffab47e875a4eea85">AD_LOG_DISABLE</a> = 0, 
+<a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2aadef4e51861783de662b590668c733f5">AD_LOG_ERROR</a>, 
+<a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2ab705340dfe4deb52d8add04540e45b95">AD_LOG_WARN</a>, 
+<a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a854cafd75915f95a962aca0c189aebb4">AD_LOG_INFO</a>, 
 <br/>
-&#160;&#160;<b>AD_LOG_DEBUG</b>, 
-<b>AD_LOG_DEBUG2</b>
+&#160;&#160;<a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a8812ea0ff35c50043b69112e5988e906">AD_LOG_DEBUG</a>, 
+<a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a169716146eb4ebd68a9dfab24c9d018d">AD_LOG_DEBUG2</a>
 <br/>
  }</td></tr>
-<tr class="memdesc:a0fe91d344bc3f1610ea68bcec077b1c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">These flags are used for <a class="el" href="ad__server_8c.html#a1f407e2708a0c9a141d5cbeed190d73b" title="Set debug output level.">ad_log_level()</a>;. <br/></td></tr>
+<tr class="memdesc:a0fe91d344bc3f1610ea68bcec077b1c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">These flags are used for <a class="el" href="ad__server_8c.html#a1f407e2708a0c9a141d5cbeed190d73b" title="Set debug output level.">ad_log_level()</a>;.  <a href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2">More...</a><br/></td></tr>
 <tr class="separator:a0fe91d344bc3f1610ea68bcec077b1c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af99c58d249fc1e5652a6e009425185b4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a> { <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1b2a66d01151f104ff59e09d9b8d4b14">AD_OK</a> = 0, 
 <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1350a13249c3cbf4822cecbe74527f1d">AD_TAKEOVER</a>, 
 <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1488388e8af74d6c9be56f49e6693e12">AD_DONE</a>, 
-<b>AD_CLOSE</b>
+<a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4ac8f2532c059ebf487c12ed2a84df0b4f">AD_CLOSE</a>
  }</td></tr>
 <tr class="memdesc:af99c58d249fc1e5652a6e009425185b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return values of user callback.  <a href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">More...</a><br/></td></tr>
 <tr class="separator:af99c58d249fc1e5652a6e009425185b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,55 +150,56 @@ Functions</h2></td></tr>
 <tr class="memitem:a1f407e2708a0c9a141d5cbeed190d73b"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2">ad_log_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a1f407e2708a0c9a141d5cbeed190d73b">ad_log_level</a> (enum <a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2">ad_log_e</a> log_level)</td></tr>
 <tr class="memdesc:a1f407e2708a0c9a141d5cbeed190d73b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set debug output level.  <a href="#a1f407e2708a0c9a141d5cbeed190d73b"></a><br/></td></tr>
 <tr class="separator:a1f407e2708a0c9a141d5cbeed190d73b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a677263079eb999133e9a0be48dd2cba5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a677263079eb999133e9a0be48dd2cba5"></a>
-<a class="el" href="structad__server__s.html">ad_server_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_new</b> (void)</td></tr>
+<tr class="memitem:a677263079eb999133e9a0be48dd2cba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a677263079eb999133e9a0be48dd2cba5">ad_server_new</a> (void)</td></tr>
+<tr class="memdesc:a677263079eb999133e9a0be48dd2cba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a server object.  <a href="#a677263079eb999133e9a0be48dd2cba5"></a><br/></td></tr>
 <tr class="separator:a677263079eb999133e9a0be48dd2cba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75c74385ae98f9c9457534db0557d98e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a75c74385ae98f9c9457534db0557d98e">ad_server_start</a> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server)</td></tr>
+<tr class="memitem:a75c74385ae98f9c9457534db0557d98e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a75c74385ae98f9c9457534db0557d98e">ad_server_start</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server)</td></tr>
+<tr class="memdesc:a75c74385ae98f9c9457534db0557d98e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start server.  <a href="#a75c74385ae98f9c9457534db0557d98e"></a><br/></td></tr>
 <tr class="separator:a75c74385ae98f9c9457534db0557d98e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c8229a12c31ee8a75a8099bae6dcf81"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c8229a12c31ee8a75a8099bae6dcf81"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_stop</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server)</td></tr>
+<tr class="memitem:a7c8229a12c31ee8a75a8099bae6dcf81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a7c8229a12c31ee8a75a8099bae6dcf81">ad_server_stop</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server)</td></tr>
+<tr class="memdesc:a7c8229a12c31ee8a75a8099bae6dcf81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop server.  <a href="#a7c8229a12c31ee8a75a8099bae6dcf81"></a><br/></td></tr>
 <tr class="separator:a7c8229a12c31ee8a75a8099bae6dcf81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add3ea8aae949c0fa5a6bc9b0b0e1ec70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add3ea8aae949c0fa5a6bc9b0b0e1ec70"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_free</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server)</td></tr>
+<tr class="memitem:add3ea8aae949c0fa5a6bc9b0b0e1ec70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#add3ea8aae949c0fa5a6bc9b0b0e1ec70">ad_server_free</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server)</td></tr>
+<tr class="memdesc:add3ea8aae949c0fa5a6bc9b0b0e1ec70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release server object and all the resources.  <a href="#add3ea8aae949c0fa5a6bc9b0b0e1ec70"></a><br/></td></tr>
 <tr class="separator:add3ea8aae949c0fa5a6bc9b0b0e1ec70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac38aa4f50412ec4e3ed0e4f9b387e115"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#ac38aa4f50412ec4e3ed0e4f9b387e115">ad_server_global_free</a> (void)</td></tr>
 <tr class="memdesc:ac38aa4f50412ec4e3ed0e4f9b387e115"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean up all the global objects.  <a href="#ac38aa4f50412ec4e3ed0e4f9b387e115"></a><br/></td></tr>
 <tr class="separator:ac38aa4f50412ec4e3ed0e4f9b387e115"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15edb8d7e1f406085dbf8c5a5c671bda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a15edb8d7e1f406085dbf8c5a5c671bda"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_set_option</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server, const char *key, const char *value)</td></tr>
+<tr class="memitem:a15edb8d7e1f406085dbf8c5a5c671bda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a15edb8d7e1f406085dbf8c5a5c671bda">ad_server_set_option</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server, const char *key, const char *value)</td></tr>
+<tr class="memdesc:a15edb8d7e1f406085dbf8c5a5c671bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set server option.  <a href="#a15edb8d7e1f406085dbf8c5a5c671bda"></a><br/></td></tr>
 <tr class="separator:a15edb8d7e1f406085dbf8c5a5c671bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac67bad711ee893259d4c4dc3717596ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac67bad711ee893259d4c4dc3717596ab"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_get_option</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server, const char *key)</td></tr>
+<tr class="memitem:ac67bad711ee893259d4c4dc3717596ab"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#ac67bad711ee893259d4c4dc3717596ab">ad_server_get_option</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server, const char *key)</td></tr>
+<tr class="memdesc:ac67bad711ee893259d4c4dc3717596ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve server option.  <a href="#ac67bad711ee893259d4c4dc3717596ab"></a><br/></td></tr>
 <tr class="separator:ac67bad711ee893259d4c4dc3717596ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b2e3ec49198b4d35e29a95dc9f06dad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b2e3ec49198b4d35e29a95dc9f06dad"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_get_option_int</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server, const char *key)</td></tr>
+<tr class="memitem:a2b2e3ec49198b4d35e29a95dc9f06dad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a2b2e3ec49198b4d35e29a95dc9f06dad">ad_server_get_option_int</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server, const char *key)</td></tr>
+<tr class="memdesc:a2b2e3ec49198b4d35e29a95dc9f06dad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve server option in integer format.  <a href="#a2b2e3ec49198b4d35e29a95dc9f06dad"></a><br/></td></tr>
 <tr class="separator:a2b2e3ec49198b4d35e29a95dc9f06dad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addb05a5f42de5b20975a92fa69b52895"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="addb05a5f42de5b20975a92fa69b52895"></a>
-SSL_CTX *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_get_ssl_ctx</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server)</td></tr>
+<tr class="memitem:addb05a5f42de5b20975a92fa69b52895"><td class="memItemLeft" align="right" valign="top">SSL_CTX *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#addb05a5f42de5b20975a92fa69b52895">ad_server_get_ssl_ctx</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server)</td></tr>
+<tr class="memdesc:addb05a5f42de5b20975a92fa69b52895"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get OpenSSL SSL_CTX object.  <a href="#addb05a5f42de5b20975a92fa69b52895"></a><br/></td></tr>
 <tr class="separator:addb05a5f42de5b20975a92fa69b52895"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fa3e3215415c9f7173f11ea1d276b8e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7fa3e3215415c9f7173f11ea1d276b8e"></a>
-qhashtbl_t *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_get_stats</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server, const char *key)</td></tr>
+<tr class="memitem:a7fa3e3215415c9f7173f11ea1d276b8e"><td class="memItemLeft" align="right" valign="top">qhashtbl_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a7fa3e3215415c9f7173f11ea1d276b8e">ad_server_get_stats</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server, const char *key)</td></tr>
+<tr class="memdesc:a7fa3e3215415c9f7173f11ea1d276b8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return internal statistic counter map.  <a href="#a7fa3e3215415c9f7173f11ea1d276b8e"></a><br/></td></tr>
 <tr class="separator:a7fa3e3215415c9f7173f11ea1d276b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb61485fd4f4e2f13c93871558b58025"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb61485fd4f4e2f13c93871558b58025"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_register_hook</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server, <a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> cb, void *userdata)</td></tr>
+<tr class="memitem:aeb61485fd4f4e2f13c93871558b58025"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#aeb61485fd4f4e2f13c93871558b58025">ad_server_register_hook</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server, <a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> cb, void *userdata)</td></tr>
+<tr class="memdesc:aeb61485fd4f4e2f13c93871558b58025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register user hook.  <a href="#aeb61485fd4f4e2f13c93871558b58025"></a><br/></td></tr>
 <tr class="separator:aeb61485fd4f4e2f13c93871558b58025"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c319c4143b999a1c5e4b6d17415a500"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c319c4143b999a1c5e4b6d17415a500"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ad_server_register_hook_on_method</b> (<a class="el" href="structad__server__s.html">ad_server_t</a> *server, const char *method, <a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> cb, void *userdata)</td></tr>
+<tr class="memitem:a4c319c4143b999a1c5e4b6d17415a500"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a4c319c4143b999a1c5e4b6d17415a500">ad_server_register_hook_on_method</a> (<a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *server, const char *method, <a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> cb, void *userdata)</td></tr>
+<tr class="memdesc:a4c319c4143b999a1c5e4b6d17415a500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register user hook on method name.  <a href="#a4c319c4143b999a1c5e4b6d17415a500"></a><br/></td></tr>
 <tr class="separator:a4c319c4143b999a1c5e4b6d17415a500"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e2e8a73baf14dafa0842b76f31765df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e2e8a73baf14dafa0842b76f31765df"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_userdata</b> (<a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn, const void *userdata, ad_userdata_free_cb free_cb)</td></tr>
+<tr class="memitem:a6e2e8a73baf14dafa0842b76f31765df"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a6e2e8a73baf14dafa0842b76f31765df">ad_conn_set_userdata</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, const void *userdata, <a class="el" href="ad__server_8h.html#a483770c2534078a7ca37b2e6590329b8">ad_userdata_free_cb</a> free_cb)</td></tr>
+<tr class="memdesc:a6e2e8a73baf14dafa0842b76f31765df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attach userdata into the connection.  <a href="#a6e2e8a73baf14dafa0842b76f31765df"></a><br/></td></tr>
 <tr class="separator:a6e2e8a73baf14dafa0842b76f31765df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5630244c7bb627a0561439f3cd24aca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5630244c7bb627a0561439f3cd24aca"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_get_userdata</b> (<a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn)</td></tr>
+<tr class="memitem:ae5630244c7bb627a0561439f3cd24aca"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#ae5630244c7bb627a0561439f3cd24aca">ad_conn_get_userdata</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn)</td></tr>
+<tr class="memdesc:ae5630244c7bb627a0561439f3cd24aca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get userdata attached in the connection.  <a href="#ae5630244c7bb627a0561439f3cd24aca"></a><br/></td></tr>
 <tr class="separator:ae5630244c7bb627a0561439f3cd24aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ed8e931164315ca27568958a1d70316"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ed8e931164315ca27568958a1d70316"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_extra</b> (<a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn, const void *extra, ad_userdata_free_cb free_cb)</td></tr>
+<tr class="memitem:a5ed8e931164315ca27568958a1d70316"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a5ed8e931164315ca27568958a1d70316">ad_conn_set_extra</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, const void *extra, <a class="el" href="ad__server_8h.html#a483770c2534078a7ca37b2e6590329b8">ad_userdata_free_cb</a> free_cb)</td></tr>
+<tr class="memdesc:a5ed8e931164315ca27568958a1d70316"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set extra userdata into the connection.  <a href="#a5ed8e931164315ca27568958a1d70316"></a><br/></td></tr>
 <tr class="separator:a5ed8e931164315ca27568958a1d70316"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad6dd41a4169cd1fcbac17462fa6b5cf8"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_get_extra</b> (<a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn)</td></tr>
+<tr class="memitem:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#ad6dd41a4169cd1fcbac17462fa6b5cf8">ad_conn_get_extra</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn)</td></tr>
+<tr class="memdesc:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get extra userdata attached in this connection.  <a href="#ad6dd41a4169cd1fcbac17462fa6b5cf8"></a><br/></td></tr>
 <tr class="separator:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35241493c96c6bdf6305f4419fea1c21"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35241493c96c6bdf6305f4419fea1c21"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_method</b> (<a class="el" href="structad__conn__s.html">ad_conn_t</a> *conn, char *method)</td></tr>
+<tr class="memitem:a35241493c96c6bdf6305f4419fea1c21"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a35241493c96c6bdf6305f4419fea1c21">ad_conn_set_method</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, char *method)</td></tr>
+<tr class="memdesc:a35241493c96c6bdf6305f4419fea1c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set method name on this connection.  <a href="#a35241493c96c6bdf6305f4419fea1c21"></a><br/></td></tr>
 <tr class="separator:a35241493c96c6bdf6305f4419fea1c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -365,7 +360,126 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_method<
 
 </div>
 </div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="aa7eb49058c165b0fa6cf9df9f8580d73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structad__server__s.html">ad_server_s</a> <a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00051">51</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a13ab8ad0b151e6b08c548bb36daef631"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structad__conn__s.html">ad_conn_s</a> <a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00052">52</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a49e6abe968529248786ca9f354066fa1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef enum <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a> <a class="el" href="ad__server_8h.html#a49e6abe968529248786ca9f354066fa1">ad_cb_return_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00053">53</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb25c416269f7ead984e63aa21cd6cd7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct ad_hook_s <a class="el" href="ad__server_8h.html#aeb25c416269f7ead984e63aa21cd6cd7">ad_hook_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00054">54</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a659a16c6e03fa96212bff528033efc84"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* ad_callback)(short event, <a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, void *userdata)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>User callback(hook) prototype. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00111">111</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a483770c2534078a7ca37b2e6590329b8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* ad_userdata_free_cb)(<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, void *userdata)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00112">112</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2">ad_log_e</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>These flags are used for <a class="el" href="ad__server_8c.html#a1f407e2708a0c9a141d5cbeed190d73b" title="Set debug output level.">ad_log_level()</a>;. </p>
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2a4822ba6b8a48d50ffab47e875a4eea85"></a>AD_LOG_DISABLE</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2aadef4e51861783de662b590668c733f5"></a>AD_LOG_ERROR</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2ab705340dfe4deb52d8add04540e45b95"></a>AD_LOG_WARN</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2a854cafd75915f95a962aca0c189aebb4"></a>AD_LOG_INFO</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2a8812ea0ff35c50043b69112e5988e906"></a>AD_LOG_DEBUG</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2a169716146eb4ebd68a9dfab24c9d018d"></a>AD_LOG_DEBUG2</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00059">59</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af99c58d249fc1e5652a6e009425185b4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -386,6 +500,8 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_method<
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="af99c58d249fc1e5652a6e009425185b4a1488388e8af74d6c9be56f49e6693e12"></a>AD_DONE</em>&nbsp;</td><td>
 <p>We're done with this request. Close as soon as we sent all data out. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="af99c58d249fc1e5652a6e009425185b4ac8f2532c059ebf487c12ed2a84df0b4f"></a>AD_CLOSE</em>&nbsp;</td><td>
 </td></tr>
 </table>
 </dd>
@@ -424,6 +540,26 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_method<
 
 </div>
 </div>
+<a class="anchor" id="a677263079eb999133e9a0be48dd2cba5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a>* ad_server_new </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a server object. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00102">102</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a75c74385ae98f9c9457534db0557d98e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -431,15 +567,59 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_method<
         <tr>
           <td class="memname">int ad_server_start </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structad__server__s.html">ad_server_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
           <td class="paramname"><em>server</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Start server. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00126">126</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00131">131</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7c8229a12c31ee8a75a8099bae6dcf81"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ad_server_stop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stop server. </p>
+<p>This call is be used to stop a server from different thread.</p>
+<dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00250">250</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="add3ea8aae949c0fa5a6bc9b0b0e1ec70"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ad_server_free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Release server object and all the resources. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00266">266</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -458,9 +638,388 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>ad_conn_set_method<
 </div><div class="memdoc">
 
 <p>Clean up all the global objects. </p>
-<p>There are globally shared resources in libevent and openssl and it's usually not a problem since they don't grow but having these can confuse some debugging tools into thinking as memory leak. If you need to make sure that libasyncd has released all internal library-global data structures, call this. </p>
+<p>This will make memory-leak checkers happy. There are globally shared resources in libevent and openssl and it's usually not a problem since they don't grow but having these can confuse some debugging tools into thinking as memory leak. If you need to make sure that libasyncd has released all internal library-global data structures, call this. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00299">299</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00315">315</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a15edb8d7e1f406085dbf8c5a5c671bda"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ad_server_set_option </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set server option. </p>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8h.html#adc215edc66db6333bb058fb84ed332ca" title="Server option names and default values.">AD_SERVER_OPTIONS</a> </dd></dl>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00333">333</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac67bad711ee893259d4c4dc3717596ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* ad_server_get_option </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve server option. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00340">340</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2b2e3ec49198b4d35e29a95dc9f06dad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ad_server_get_option_int </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve server option in integer format. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00347">347</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="addb05a5f42de5b20975a92fa69b52895"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SSL_CTX* ad_server_get_ssl_ctx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get OpenSSL SSL_CTX object. </p>
+<dl class="section return"><dt>Returns</dt><dd>SSL_CTX object, NULL if not enabled.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Libasyncd initializes SSL_CTX with minimum default with "SSLv23_server_method" which will make the server understand SSLv2, SSLv3, and TLSv1 protocol. Use returned SSL_CTX object to set any custom options before starting the server.</dd></dl>
+<div class="fragment"><div class="line">SSL_CTX *sslctx = <a class="code" href="ad__server_8c.html#addb05a5f42de5b20975a92fa69b52895" title="Get OpenSSL SSL_CTX object.">ad_server_get_ssl_ctx</a>(server);</div>
+<div class="line">SSL_CTX_set_options(sslctx, SSL_OP_NO_SSLv2);</div>
+<div class="line">SSL_CTX_set_session_cache_mode(sslctx, SSL_SESS_CACHE_SERVER);</div>
+<div class="line"><a class="code" href="ad__server_8c.html#a75c74385ae98f9c9457534db0557d98e" title="Start server.">ad_server_start</a>(server);</div>
+</div><!-- fragment --> 
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00370">370</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7fa3e3215415c9f7173f11ea1d276b8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">qhashtbl_t* ad_server_get_stats </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return internal statistic counter map. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00377">377</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb61485fd4f4e2f13c93871558b58025"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ad_server_register_hook </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a>&#160;</td>
+          <td class="paramname"><em>cb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userdata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Register user hook. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00384">384</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4c319c4143b999a1c5e4b6d17415a500"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ad_server_register_hook_on_method </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73">ad_server_t</a> *&#160;</td>
+          <td class="paramname"><em>server</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a>&#160;</td>
+          <td class="paramname"><em>cb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userdata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Register user hook on method name. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00391">391</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6e2e8a73baf14dafa0842b76f31765df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* ad_conn_set_userdata </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>userdata</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a483770c2534078a7ca37b2e6590329b8">ad_userdata_free_cb</a>&#160;</td>
+          <td class="paramname"><em>free_cb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attach userdata into the connection. </p>
+<dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00406">406</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae5630244c7bb627a0561439f3cd24aca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* ad_conn_get_userdata </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get userdata attached in the connection. </p>
+<dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00415">415</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5ed8e931164315ca27568958a1d70316"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* ad_conn_set_extra </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>extra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a483770c2534078a7ca37b2e6590329b8">ad_userdata_free_cb</a>&#160;</td>
+          <td class="paramname"><em>free_cb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set extra userdata into the connection. </p>
+<dl class="section return"><dt>Returns</dt><dd>previous userdata;</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Extra userdata is for default protocol handler such as ad_http_handler to provide higher abstraction. End users should always use only <a class="el" href="ad__server_8c.html#a6e2e8a73baf14dafa0842b76f31765df" title="Attach userdata into the connection.">ad_conn_set_userdata()</a> to avoid any conflict with default handlers. </dd></dl>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00429">429</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad6dd41a4169cd1fcbac17462fa6b5cf8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* ad_conn_get_extra </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get extra userdata attached in this connection. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00436">436</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a35241493c96c6bdf6305f4419fea1c21"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* ad_conn_set_method </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>method</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set method name on this connection. </p>
+<p>Once the method name is set, hooks registered by <a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name.">ad_server_register_hook_on_method()</a> will be called if method name is matching as registered.</p>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name.">ad_server_register_hook_on_method()</a> </dd></dl>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00448">448</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
