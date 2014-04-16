@@ -22,6 +22,12 @@
 #include "qlibc/qlibc.h"
 #include "ad_server.h"
 
+/**
+ * Main core logic of the server implementation.
+ *
+ * @file ad_server.c
+ */
+
 #ifndef _DOXYGEN_SKIP
 /*
  * User callback hook container.
@@ -90,6 +96,9 @@ enum ad_log_e ad_log_level(enum ad_log_e log_level) {
     return prev;
 }
 
+/**
+ * Create a server object.
+ */
 ad_server_t *ad_server_new(void) {
     if (initialized) {
         initialized = true;
@@ -115,6 +124,8 @@ ad_server_t *ad_server_new(void) {
 }
 
 /**
+ * Start server.
+ *
  * @return 0 if successful, otherwise -1.
  */
 int ad_server_start(ad_server_t *server) {
@@ -229,6 +240,13 @@ int ad_server_start(ad_server_t *server) {
     return exitstatus;
 }
 
+/**
+ * Stop server.
+ *
+ * This call is be used to stop a server from different thread.
+ *
+ * @return 0 if successful, otherwise -1.
+ */
 void ad_server_stop(ad_server_t *server) {
     DEBUG("Send loopexit notification.");
     notify_loopexit(server);
@@ -242,6 +260,9 @@ void ad_server_stop(ad_server_t *server) {
     }
 }
 
+/**
+ * Release server object and all the resources.
+ */
 void ad_server_free(ad_server_t *server) {
     if (server == NULL) return;
 
@@ -284,6 +305,7 @@ void ad_server_free(ad_server_t *server) {
 /**
  * Clean up all the global objects.
  *
+ * This will make memory-leak checkers happy.
  * There are globally shared resources in libevent and openssl and
  * it's usually not a problem since they don't grow but having these
  * can confuse some debugging tools into thinking as memory leak.
@@ -303,14 +325,25 @@ void ad_server_global_free(void) {
     sk_SSL_COMP_free(SSL_COMP_get_compression_methods());
 }
 
+/**
+ * Set server option.
+ *
+ * @see AD_SERVER_OPTIONS
+ */
 void ad_server_set_option(ad_server_t *server, const char *key, const char *value) {
     server->options->putstr(server->options, key, value);
 }
 
+/**
+ * Retrieve server option.
+ */
 char *ad_server_get_option(ad_server_t *server, const char *key) {
     return server->options->getstr(server->options, key, false);
 }
 
+/**
+ * Retrieve server option in integer format.
+ */
 int ad_server_get_option_int(ad_server_t *server, const char *key) {
     char *value = ad_server_get_option(server, key);
     return (value) ? atoi(value) : 0;
@@ -332,19 +365,29 @@ int ad_server_get_option_int(ad_server_t *server, const char *key) {
  *  SSL_CTX_set_options(sslctx, SSL_OP_NO_SSLv2);
  *  SSL_CTX_set_session_cache_mode(sslctx, SSL_SESS_CACHE_SERVER);
  *  ad_server_start(server);
+ * @endcode
  */
 SSL_CTX *ad_server_get_ssl_ctx(ad_server_t *server) {
     return server->sslctx;
 }
 
+/**
+ * Return internal statistic counter map.
+ */
 qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key) {
     return server->stats;
 }
 
+/**
+ * Register user hook.
+ */
 void ad_server_register_hook(ad_server_t *server, ad_callback cb, void *userdata) {
     ad_server_register_hook_on_method(server, NULL, cb, userdata);
 }
 
+/**
+ * Register user hook on method name.
+ */
 void ad_server_register_hook_on_method(ad_server_t *server, const char *method, ad_callback cb, void *userdata) {
     ad_hook_t hook;
     bzero((void *)&hook, sizeof(ad_hook_t));
@@ -356,7 +399,7 @@ void ad_server_register_hook_on_method(ad_server_t *server, const char *method, 
 }
 
 /**
- * Attach userdata into this connection.
+ * Attach userdata into the connection.
  *
  * @return previous userdata;
  */
@@ -364,18 +407,44 @@ void *ad_conn_set_userdata(ad_conn_t *conn, const void *userdata, ad_userdata_fr
     return set_userdata(conn, 0, userdata, free_cb);
 }
 
+/**
+ * Get userdata attached in the connection.
+ *
+ * @return previous userdata;
+ */
 void *ad_conn_get_userdata(ad_conn_t *conn) {
     return get_userdata(conn, 0);
 }
 
+/**
+ * Set extra userdata into the connection.
+ *
+ * @return previous userdata;
+ *
+ * @note
+ *   Extra userdata is for default protocol handler such as ad_http_handler to
+ *   provide higher abstraction. End users should always use only ad_conn_set_userdata()
+ *   to avoid any conflict with default handlers.
+ */
 void *ad_conn_set_extra(ad_conn_t *conn, const void *extra, ad_userdata_free_cb free_cb) {
     return set_userdata(conn, 1, extra, free_cb);
 }
 
+/**
+ * Get extra userdata attached in this connection.
+ */
 void *ad_conn_get_extra(ad_conn_t *conn) {
     return get_userdata(conn, 1);
 }
 
+/**
+ * Set method name on this connection.
+ *
+ * Once the method name is set, hooks registered by ad_server_register_hook_on_method()
+ * will be called if method name is matching as registered.
+ *
+ * @see ad_server_register_hook_on_method()
+ */
 char *ad_conn_set_method(ad_conn_t *conn, char *method) {
     char *prev = conn->method;
     if (conn->method) {
@@ -388,6 +457,7 @@ char *ad_conn_set_method(ad_conn_t *conn, char *method) {
 /******************************************************************************
  * Private internal functions.
  *****************************************************************************/
+#ifndef _DOXYGEN_SKIP
 
 /**
  * If there's no event, loopbreak or loopexit call won't work until one more
@@ -688,3 +758,4 @@ static void *get_userdata(ad_conn_t *conn, int index) {
     return conn->userdata[index];
 }
 
+#endif _DOXYGEN_SKIP

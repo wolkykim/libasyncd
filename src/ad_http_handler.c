@@ -12,6 +12,12 @@
 #include "ad_http_handler.h"
 #include "macro.h"
 
+/**
+ * HTTP protocol request/response handler.
+ *
+ * @file ad_http_handler.c
+ */
+
 #ifndef _DOXYGEN_SKIP
 static ad_http_t *http_new(struct evbuffer *out);
 static void http_free(ad_http_t *http);
@@ -31,6 +37,19 @@ static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enu
 
 #endif
 
+/**
+ * HTTP protocol handler hook.
+ *
+ * This hook provides an easy way to handle HTTP request/response.
+ *
+ * @note
+ *   This hook must be registered at the top of hook chain.
+ *
+ * @code
+ *   ad_server_t *server = ad_server_new();
+ *   ad_server_register_hook(server, ad_http_handler, NULL);
+ * @endcode
+ */
 int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
     if (event & AD_EVENT_INIT) {
         DEBUG("==> HTTP INIT");
@@ -58,6 +77,9 @@ int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
     BUG_EXIT();
 }
 
+/**
+ * Return the request status.
+ */
 enum ad_http_request_status_e ad_http_get_status(ad_conn_t *conn) {
     ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
     if (http == NULL) return AD_HTTP_ERROR;
@@ -302,6 +324,8 @@ const char *ad_http_get_reason(int code) {
 /******************************************************************************
  * Private internal functions.
  *****************************************************************************/
+#ifndef _DOXYGEN_SKIP
+
 static ad_http_t *http_new(struct evbuffer *out) {
     // Create a new connection container.
     ad_http_t *http = NEW_OBJECT(ad_http_t);
@@ -569,10 +593,6 @@ static ssize_t parse_chunked_body(ad_http_t *http, struct evbuffer *in) {
     return chunksize;
 }
 
-/******************************************************************************
- * Private internal functions.
- *****************************************************************************/
-
 /**
  * validate file path
  */
@@ -648,3 +668,5 @@ static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enu
     free(line);
     return linelen;
 }
+
+#endif _DOXYGEN_SKIP

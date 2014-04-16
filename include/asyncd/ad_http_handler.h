@@ -27,9 +27,9 @@
  *****************************************************************************/
 
 /**
- * ad_http header file
+ * ad_http_handler header file
  *
- * @file ad_http.h
+ * @file ad_http_handler.h
  */
 
 #ifndef _AD_HTTP_HANDLER_H
@@ -92,8 +92,8 @@ typedef struct ad_http_s ad_http_t;
 #define AD_HOOK_ON_CLOSE          (1 << 6)    /*!< call right before closing or next request */
 
 enum ad_http_request_status_e {
-    AD_HTTP_REQ_INIT = 0,        /*!< hasn't received the 1st byte yet */
-    AD_HTTP_REQ_REQUESTLINE_DONE,/*!< hasn't received the 1st byte yet */
+    AD_HTTP_REQ_INIT = 0,        /*!< initial state */
+    AD_HTTP_REQ_REQUESTLINE_DONE,/*!< received 1st line */
     AD_HTTP_REQ_HEADER_DONE,     /*!< received headers completely */
     AD_HTTP_REQ_DONE,            /*!< received body completely. no more data expected */
 

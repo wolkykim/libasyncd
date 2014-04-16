@@ -99,7 +99,7 @@ clean:
 	$(RM) -f $(OBJS) $(LIBNAME) $(SLIBNAME) $(SLIBNAME_LINK)
 
 doc:
-	doxygen doxygen-libasyncd.conf
+	doxygen doxygen.conf
 
 cleandoc:
 	$(RM) -rf ../doc/html

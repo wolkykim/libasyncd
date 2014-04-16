@@ -27,13 +27,13 @@
  *****************************************************************************/
 
 /**
- * libasynchttpd header file
+ * Master header file.
  *
- * @file asynchttpd.h
+ * @file asyncd.h
  */
 
-#ifndef _ASYNCHTTPD_H
-#define _ASYNCHTTPD_H
+#ifndef _ASYNCD_H
+#define _ASYNCD_H
 
 #include "ad_server.h"
 #include "ad_http_handler.h"
@@ -46,5 +46,5 @@ extern "C" {
 }
 #endif
 
-#endif /*_ASYNCHTTPD_H */
+#endif /*_ASYNCD_H */
 
