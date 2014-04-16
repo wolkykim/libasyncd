@@ -46,8 +46,10 @@ INST_INCDIR	= @includedir@
 INST_LIBDIR	= @libdir@
 
 ## qlibc related.
-CPPFLAGS	+= -I../lib/qlibc/include
-LIBS		+= ../lib/qlibc/lib/libqlibc.a
+QLIBC_DIR	= ../lib/qlibc
+QLIBC_LIB	= $(QLIBC_DIR)/lib/libqlibc.a
+CPPFLAGS	+= -I$(QLIBC_DIR)/include
+LIBS		+= $(QLIBC_LIB)
 
 ## libasyncd related.
 HEADERDIR	= ../include/asyncd
@@ -65,13 +67,21 @@ CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
 LIBS		+= @DEPLIBS@
 
 ## Make Library
-all: $(LIBNAME)
+all: qlibc $(LIBNAME)
 
 $(LIBNAME): $(OBJS)
 	$(AR) $(ARFLAGS) $(LIBNAME) $(OBJS)
 	$(RANLIB) $(LIBNAME)
 	$(CC) -shared -Wl,-soname,$(SLIBNAME) -o $(SLIBNAME) $(OBJS)
 	$(LN_S) -f $(SLIBNAME) $(SLIBNAME_LINK)
+
+qlibc:
+	@if [ ! -d $(QLIBC_DIR)/src ]; then \
+		../lib/run2init-submodules.sh; \
+	fi
+	@if [ ! -f $(QLIBC_LIB) ]; then \
+		(cd $(QLIBC_DIR); ./configure; make); \
+	fi
 
 install: install-libasyncd
 
