@@ -669,4 +669,4 @@ static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enu
     return linelen;
 }
 
-#endif _DOXYGEN_SKIP
+#endif // _DOXYGEN_SKIP

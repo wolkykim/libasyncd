@@ -221,7 +221,7 @@ int ad_server_start(ad_server_t *server) {
     INFO("Listening on %s:%d%s", addr, port, ((server->sslctx) ? " (SSL)" : ""));
 
     int exitstatus = 0;
-    if (ad_server_get_option_int(server, "server.daemon")) {
+    if (ad_server_get_option_int(server, "server.thread")) {
         DEBUG("Launching server as a thread.")
         server->thread = NEW_OBJECT(pthread_t);
         pthread_create(server->thread, NULL, &server_loop, (void *)server);
@@ -252,7 +252,7 @@ void ad_server_stop(ad_server_t *server) {
     notify_loopexit(server);
     sleep(1);
 
-    if (ad_server_get_option_int(server, "server.daemon")) {
+    if (ad_server_get_option_int(server, "server.thread")) {
         close_server(server);
         if (ad_server_get_option_int(server, "server.free_on_stop")) {
             ad_server_free(server);
@@ -266,8 +266,8 @@ void ad_server_stop(ad_server_t *server) {
 void ad_server_free(ad_server_t *server) {
     if (server == NULL) return;
 
-    int daemon = ad_server_get_option_int(server, "server.daemon");
-    if (daemon && server->thread) {
+    int thread = ad_server_get_option_int(server, "server.thread");
+    if (thread && server->thread) {
         notify_loopexit(server);
         sleep(1);
         close_server(server);
@@ -758,4 +758,4 @@ static void *get_userdata(ad_conn_t *conn, int index) {
     return conn->userdata[index];
 }
 
-#endif _DOXYGEN_SKIP
+#endif // _DOXYGEN_SKIP

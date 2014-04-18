@@ -106,7 +106,7 @@ typedef struct ad_hook_s ad_hook_t;
         { "server.request_pipelining", "1" },                               \
                                                                             \
         /* Run server in a separate thread */                               \
-        { "server.daemon", "0" },                                           \
+        { "server.thread", "0" },                                           \
                                                                             \
         /* Collect resources after stop */                                  \
         { "server.free_on_stop", "1" },                                     \
