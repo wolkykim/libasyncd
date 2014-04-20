@@ -48,17 +48,21 @@ extern "C" {
 /*---------------------------------------------------------------------------*\
 |                                 TYPEDEFS                                    |
 \*---------------------------------------------------------------------------*/
-<<<<<<< HEAD
 typedef struct ad_server_s ad_server_t;
 typedef struct ad_conn_s ad_conn_t;
-typedef enum ad_cb_return_e ad_cb_return_t;
 
-=======
->>>>>>> c5d6a4d5c26cc3b3b66aad069ff7453e455ba631
-/**
+/*
+ * Return values of user callback.
+ */
+#define AD_OK       (0) /*!< I'm done with this request. Escalate to other hooks. */
+#define AD_TAKEOVER (1) /*!< I'll handle the buffer directly this time, skip next hook */
+#define AD_DONE     (2) /*!< We're done with this request but keep the connection open. */
+#define AD_CLOSE    (3) /*!< We're done with this request. Close as soon as we sent all data out. */
+
+/*
  * These flags are used for ad_log_level();
  */
-enum ad_log_e{
+enum ad_log_e {
     AD_LOG_DISABLE = 0,
     AD_LOG_ERROR,
     AD_LOG_WARN,
@@ -66,25 +70,6 @@ enum ad_log_e{
     AD_LOG_DEBUG,
     AD_LOG_DEBUG2,
 };
-
-/**
- * Return values of user callback.
- */
-enum ad_cb_return_e {
-    /*!< I'm done with this request. Escalate to other hooks. */
-    AD_OK = 0,
-    /*!< I'll handle the buffer directly this time, skip next hook */
-    AD_TAKEOVER,
-    /*!< We're done with this request but keep the connection open. */
-    AD_DONE,
-    /*!< We're done with this request. Close as soon as we sent all data out. */
-    AD_CLOSE,
-};
-
-typedef struct ad_server_s ad_server_t;
-typedef struct ad_conn_s ad_conn_t;
-typedef enum ad_cb_return_e ad_cb_return_t;
-typedef struct ad_hook_s ad_hook_t;
 
 /*---------------------------------------------------------------------------*\
 |                              SERVER OPTIONS                                 |
