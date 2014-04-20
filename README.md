@@ -31,7 +31,6 @@ can cut down the complexity.
 ```
 $ git clone git clone https://github.com/wolkykim/libasyncd
 $ cd libasyncd
-$ (cd lib; run2init-submodules.sh; cd qlibc; ./configure; make) 
 $ ./configure
 $ make
 ```
