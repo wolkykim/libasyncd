@@ -10,7 +10,7 @@ It supports HTTP protocol by default and you can add your own protocol handler(h
 to build your own high performance server.
 
 Asynchronous way of programming can easily go quite complicated since you need to
-handle every possible things in non-blocking way. So the goal of Libasyncd project is
+handle every thing in non-blocking way. So the goal of Libasyncd project is
 to make a flexible and fast asynchronous server framework with nice abstraction that
 can cut down the complexity.
 
@@ -31,7 +31,6 @@ can cut down the complexity.
 ```
 $ git clone git clone https://github.com/wolkykim/libasyncd
 $ cd libasyncd
-$ (cd lib; run2init-submodules.sh; cd qlibc; ./configure; make) 
 $ ./configure
 $ make
 ```

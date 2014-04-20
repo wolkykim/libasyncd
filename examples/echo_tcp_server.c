@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
     // Run server in a separate thread. If you want to run multiple
     // server instances or if you want to run it in background, this
     // is the option.
-    ad_server_set_option(server, "server.daemon", "0");
+    ad_server_set_option(server, "server.thread", "0");
 
     // Call ad_server_free() internally when server is shutting down.
     ad_server_set_option(server, "server.free_on_stop", "1");
