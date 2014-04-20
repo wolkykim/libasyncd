@@ -51,7 +51,6 @@ extern "C" {
 typedef struct ad_server_s ad_server_t;
 typedef struct ad_conn_s ad_conn_t;
 typedef enum ad_cb_return_e ad_cb_return_t;
-typedef struct ad_hook_s ad_hook_t;
 
 /**
  * These flags are used for ad_log_level();

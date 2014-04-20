@@ -32,7 +32,7 @@
 /*
  * User callback hook container.
  */
-typedef struct ad_conn_s ad_conn_t;
+typedef struct ad_hook_s ad_hook_t;
 struct ad_hook_s {
     char *method;
     ad_callback cb;
@@ -758,4 +758,4 @@ static void *get_userdata(ad_conn_t *conn, int index) {
     return conn->userdata[index];
 }
 
-#endif _DOXYGEN_SKIP
+#endif // _DOXYGEN_SKIP
