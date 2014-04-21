@@ -1,5 +1,5 @@
 /******************************************************************************
- * LibAsyncd
+ * libasyncd
  *
  * Copyright (c) 2014 Seungyoung Kim.
  * All rights reserved.

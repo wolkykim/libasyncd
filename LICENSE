@@ -1,3 +1,6 @@
+libasyncd is available for use under the following license, commonly known
+as BSD license:
+
 ==============================================================================
  libasyncd
 
@@ -25,4 +28,16 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
 ==============================================================================
-(end of COPYRIGHT)
+
+Underlying libraries that libasyncd uses are works by others, also made
+available by them under the BSD license above. The copyright notices are
+available in the corresponding libraries; Here's the list:
+
+libevent:
+        Copyright (c) 2000-2007 Niels Provos <provos@citi.umich.edu>
+        Copyright (c) 2007-2012 Niels Provos and Nick Mathewson
+
+qlibc:
+        Copyright (c) 2010-2014 Seungyoung Kim.
+
+(end of LICENSE)
