@@ -16,16 +16,19 @@ can cut down the complexity.
 
 ## Why libasyncd?
 
-* Stands as a generic event-based server library.
-* Not only for HTTP server but also as a RPC server, as a Protocol Buffer channel,
-  as a Message transforming layer...
+libasyncd is a light-weight single-threaded asynchronous RPC server. It is efficient
+especially when server needs to handle a large number of concurrent connections where
+connection-per-thread or connection-per-process model is not appropriate to consider.
+
+* Stands as a generic event-based server library. (single-thread)
 * Embeddable library module - you write main().
-* Simple to use.
-* Pluggable protocols.
-* HTTP protocol handler (support chunked transfer-encoding)
-* Support of multiple hooks.
+* Pluggable protocol handlers.
+* Complete HTTP protocol handler. (support chunked transfer-encoding)
 * Support request pipelining.
+* Support multiple hooks.
 * Support SSL - Just flip the switch on.
+* Support IPv4, IPv6 and Unix Socket.
+* Simple to use - Check out examples.
 
 ## Compile & Install.
 ```
