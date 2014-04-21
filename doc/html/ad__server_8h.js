@@ -2,6 +2,10 @@ var ad__server_8h =
 [
     [ "ad_server_s", "structad__server__s.html", "structad__server__s" ],
     [ "ad_conn_s", "structad__conn__s.html", "structad__conn__s" ],
+    [ "AD_OK", "ad__server_8h.html#a8d1358baba080a2f6b0d350928af7a89", null ],
+    [ "AD_TAKEOVER", "ad__server_8h.html#ab31b601df43a52ea6ca3647c62da51c4", null ],
+    [ "AD_DONE", "ad__server_8h.html#a65ea15debc10a5e82448ff065239c4ff", null ],
+    [ "AD_CLOSE", "ad__server_8h.html#a3b06b0e022e3225a5c252f0141cb5ae4", null ],
     [ "AD_SERVER_OPTIONS", "ad__server_8h.html#adc215edc66db6333bb058fb84ed332ca", null ],
     [ "AD_EVENT_INIT", "ad__server_8h.html#afcba550cce3f169b37f718e3a6a7a20c", null ],
     [ "AD_EVENT_READ", "ad__server_8h.html#a5cdb1e1bd63023d45c94447b4254b17d", null ],
@@ -12,8 +16,6 @@ var ad__server_8h =
     [ "AD_NUM_USERDATA", "ad__server_8h.html#a387785dd0db9ef703e97eddf21674b05", null ],
     [ "ad_server_t", "ad__server_8h.html#aa7eb49058c165b0fa6cf9df9f8580d73", null ],
     [ "ad_conn_t", "ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631", null ],
-    [ "ad_cb_return_t", "ad__server_8h.html#a49e6abe968529248786ca9f354066fa1", null ],
-    [ "ad_hook_t", "ad__server_8h.html#aeb25c416269f7ead984e63aa21cd6cd7", null ],
     [ "ad_callback", "ad__server_8h.html#a659a16c6e03fa96212bff528033efc84", null ],
     [ "ad_userdata_free_cb", "ad__server_8h.html#a483770c2534078a7ca37b2e6590329b8", null ],
     [ "ad_log_e", "ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2", [
@@ -23,12 +25,6 @@ var ad__server_8h =
       [ "AD_LOG_INFO", "ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a854cafd75915f95a962aca0c189aebb4", null ],
       [ "AD_LOG_DEBUG", "ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a8812ea0ff35c50043b69112e5988e906", null ],
       [ "AD_LOG_DEBUG2", "ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a169716146eb4ebd68a9dfab24c9d018d", null ]
-    ] ],
-    [ "ad_cb_return_e", "ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4", [
-      [ "AD_OK", "ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1b2a66d01151f104ff59e09d9b8d4b14", null ],
-      [ "AD_TAKEOVER", "ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1350a13249c3cbf4822cecbe74527f1d", null ],
-      [ "AD_DONE", "ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1488388e8af74d6c9be56f49e6693e12", null ],
-      [ "AD_CLOSE", "ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4ac8f2532c059ebf487c12ed2a84df0b4f", null ]
     ] ],
     [ "ad_log_level", "ad__server_8h.html#a1f407e2708a0c9a141d5cbeed190d73b", null ],
     [ "ad_server_new", "ad__server_8h.html#a677263079eb999133e9a0be48dd2cba5", null ],

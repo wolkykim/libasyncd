@@ -87,6 +87,14 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a8d1358baba080a2f6b0d350928af7a89"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a8d1358baba080a2f6b0d350928af7a89">AD_OK</a>&#160;&#160;&#160;(0)</td></tr>
+<tr class="separator:a8d1358baba080a2f6b0d350928af7a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab31b601df43a52ea6ca3647c62da51c4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#ab31b601df43a52ea6ca3647c62da51c4">AD_TAKEOVER</a>&#160;&#160;&#160;(1)</td></tr>
+<tr class="separator:ab31b601df43a52ea6ca3647c62da51c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65ea15debc10a5e82448ff065239c4ff"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a65ea15debc10a5e82448ff065239c4ff">AD_DONE</a>&#160;&#160;&#160;(2)</td></tr>
+<tr class="separator:a65ea15debc10a5e82448ff065239c4ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b06b0e022e3225a5c252f0141cb5ae4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a3b06b0e022e3225a5c252f0141cb5ae4">AD_CLOSE</a>&#160;&#160;&#160;(3)</td></tr>
+<tr class="separator:a3b06b0e022e3225a5c252f0141cb5ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc215edc66db6333bb058fb84ed332ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#adc215edc66db6333bb058fb84ed332ca">AD_SERVER_OPTIONS</a></td></tr>
 <tr class="memdesc:adc215edc66db6333bb058fb84ed332ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Server option names and default values.  <a href="#adc215edc66db6333bb058fb84ed332ca"></a><br/></td></tr>
 <tr class="separator:adc215edc66db6333bb058fb84ed332ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,10 +121,6 @@ Typedefs</h2></td></tr>
 <tr class="separator:aa7eb49058c165b0fa6cf9df9f8580d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ab8ad0b151e6b08c548bb36daef631"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structad__conn__s.html">ad_conn_s</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a></td></tr>
 <tr class="separator:a13ab8ad0b151e6b08c548bb36daef631"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49e6abe968529248786ca9f354066fa1"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a49e6abe968529248786ca9f354066fa1">ad_cb_return_t</a></td></tr>
-<tr class="separator:a49e6abe968529248786ca9f354066fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb25c416269f7ead984e63aa21cd6cd7"><td class="memItemLeft" align="right" valign="top">typedef struct ad_hook_s&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#aeb25c416269f7ead984e63aa21cd6cd7">ad_hook_t</a></td></tr>
-<tr class="separator:aeb25c416269f7ead984e63aa21cd6cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a659a16c6e03fa96212bff528033efc84"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#a659a16c6e03fa96212bff528033efc84">ad_callback</a> )(short event, <a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, void *userdata)</td></tr>
 <tr class="memdesc:a659a16c6e03fa96212bff528033efc84"><td class="mdescLeft">&#160;</td><td class="mdescRight">User callback(hook) prototype.  <a href="#a659a16c6e03fa96212bff528033efc84"></a><br/></td></tr>
 <tr class="separator:a659a16c6e03fa96212bff528033efc84"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,15 +139,7 @@ Enumerations</h2></td></tr>
 <a class="el" href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2a169716146eb4ebd68a9dfab24c9d018d">AD_LOG_DEBUG2</a>
 <br/>
  }</td></tr>
-<tr class="memdesc:a0fe91d344bc3f1610ea68bcec077b1c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">These flags are used for <a class="el" href="ad__server_8c.html#a1f407e2708a0c9a141d5cbeed190d73b" title="Set debug output level.">ad_log_level()</a>;.  <a href="ad__server_8h.html#a0fe91d344bc3f1610ea68bcec077b1c2">More...</a><br/></td></tr>
 <tr class="separator:a0fe91d344bc3f1610ea68bcec077b1c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af99c58d249fc1e5652a6e009425185b4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a> { <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1b2a66d01151f104ff59e09d9b8d4b14">AD_OK</a> = 0, 
-<a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1350a13249c3cbf4822cecbe74527f1d">AD_TAKEOVER</a>, 
-<a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4a1488388e8af74d6c9be56f49e6693e12">AD_DONE</a>, 
-<a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4ac8f2532c059ebf487c12ed2a84df0b4f">AD_CLOSE</a>
- }</td></tr>
-<tr class="memdesc:af99c58d249fc1e5652a6e009425185b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return values of user callback.  <a href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">More...</a><br/></td></tr>
-<tr class="separator:af99c58d249fc1e5652a6e009425185b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -207,6 +203,66 @@ Functions</h2></td></tr>
 
 <p>Definition in file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a8d1358baba080a2f6b0d350928af7a89"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define AD_OK&#160;&#160;&#160;(0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>I'm done with this request. Escalate to other hooks. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00057">57</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab31b601df43a52ea6ca3647c62da51c4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define AD_TAKEOVER&#160;&#160;&#160;(1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>I'll handle the buffer directly this time, skip next hook </p>
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00058">58</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a65ea15debc10a5e82448ff065239c4ff"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define AD_DONE&#160;&#160;&#160;(2)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>We're done with this request but keep the connection open. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00059">59</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b06b0e022e3225a5c252f0141cb5ae4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define AD_CLOSE&#160;&#160;&#160;(3)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>We're done with this request. Close as soon as we sent all data out. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00060">60</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="adc215edc66db6333bb058fb84ed332ca"></a>
 <div class="memitem">
 <div class="memproto">
@@ -217,7 +273,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">{  \</div>
-<div class="line">        { <span class="stringliteral">&quot;server.port&quot;</span>,        <span class="stringliteral">&quot;8080&quot;</span> },                                   \</div>
+<div class="line">        { <span class="stringliteral">&quot;server.port&quot;</span>,        <span class="stringliteral">&quot;8888&quot;</span> },                                   \</div>
 <div class="line">                                                                            \</div>
 <div class="line">        <span class="comment">/* Addr format IPv4=&quot;1.2.3.4&quot;, IPv6=&quot;1:2:3:4:5:6&quot;, Unix=&quot;/path&quot; */</span>  \</div>
 <div class="line">        { <span class="stringliteral">&quot;server.addr&quot;</span>,        <span class="stringliteral">&quot;0.0.0.0&quot;</span> },                                \</div>
@@ -236,7 +292,7 @@ Functions</h2></td></tr>
 <div class="line">        { <span class="stringliteral">&quot;server.request_pipelining&quot;</span>, <span class="stringliteral">&quot;1&quot;</span> },                               \</div>
 <div class="line">                                                                            \</div>
 <div class="line">        <span class="comment">/* Run server in a separate thread */</span>                               \</div>
-<div class="line">        { <span class="stringliteral">&quot;server.daemon&quot;</span>, <span class="stringliteral">&quot;0&quot;</span> },                                           \</div>
+<div class="line">        { <span class="stringliteral">&quot;server.thread&quot;</span>, <span class="stringliteral">&quot;0&quot;</span> },                                           \</div>
 <div class="line">                                                                            \</div>
 <div class="line">        <span class="comment">/* Collect resources after stop */</span>                                  \</div>
 <div class="line">        { <span class="stringliteral">&quot;server.free_on_stop&quot;</span>, <span class="stringliteral">&quot;1&quot;</span> },                                     \</div>
@@ -247,7 +303,7 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Server option names and default values. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00075">75</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00081">81</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -264,7 +320,7 @@ Functions</h2></td></tr>
 <p>Event types. </p>
 <p>Call once upon new connection. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00131">131</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00123">123</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -279,7 +335,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Call on read </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00132">132</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00124">124</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -294,7 +350,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Call on write. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00133">133</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00125">125</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -309,7 +365,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Call before closing. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00134">134</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00126">126</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -324,7 +380,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Timeout indicator, this flag will be set with AD_EVENT_CLOSE. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00135">135</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00127">127</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -339,7 +395,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Shutdown indicator, this flag will be set with AD_EVENT_CLOSE. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00136">136</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00128">128</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -356,7 +412,7 @@ Functions</h2></td></tr>
 <p>Defaults. </p>
 <p>Number of userdata. Currently 0 is for userdata, 1 is for extra. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00141">141</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00133">133</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -389,34 +445,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a49e6abe968529248786ca9f354066fa1"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef enum <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a> <a class="el" href="ad__server_8h.html#a49e6abe968529248786ca9f354066fa1">ad_cb_return_t</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00053">53</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aeb25c416269f7ead984e63aa21cd6cd7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct ad_hook_s <a class="el" href="ad__server_8h.html#aeb25c416269f7ead984e63aa21cd6cd7">ad_hook_t</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00054">54</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a659a16c6e03fa96212bff528033efc84"></a>
 <div class="memitem">
 <div class="memproto">
@@ -429,7 +457,7 @@ Functions</h2></td></tr>
 
 <p>User callback(hook) prototype. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00111">111</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00117">117</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -443,7 +471,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00112">112</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00118">118</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -457,8 +485,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>These flags are used for <a class="el" href="ad__server_8c.html#a1f407e2708a0c9a141d5cbeed190d73b" title="Set debug output level.">ad_log_level()</a>;. </p>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" id="a0fe91d344bc3f1610ea68bcec077b1c2a4822ba6b8a48d50ffab47e875a4eea85"></a>AD_LOG_DISABLE</em>&nbsp;</td><td>
 </td></tr>
@@ -476,38 +502,7 @@ Functions</h2></td></tr>
 </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00059">59</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af99c58d249fc1e5652a6e009425185b4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="ad__server_8h.html#af99c58d249fc1e5652a6e009425185b4">ad_cb_return_e</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Return values of user callback. </p>
-<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" id="af99c58d249fc1e5652a6e009425185b4a1b2a66d01151f104ff59e09d9b8d4b14"></a>AD_OK</em>&nbsp;</td><td>
-<p>I'm done with this request. Escalate to other hooks. I'll handle the buffer directly this time, skip next hook </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="af99c58d249fc1e5652a6e009425185b4a1350a13249c3cbf4822cecbe74527f1d"></a>AD_TAKEOVER</em>&nbsp;</td><td>
-<p>We're done with this request but keep the connection open. </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="af99c58d249fc1e5652a6e009425185b4a1488388e8af74d6c9be56f49e6693e12"></a>AD_DONE</em>&nbsp;</td><td>
-<p>We're done with this request. Close as soon as we sent all data out. </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="af99c58d249fc1e5652a6e009425185b4ac8f2532c059ebf487c12ed2a84df0b4f"></a>AD_CLOSE</em>&nbsp;</td><td>
-</td></tr>
-</table>
-</dd>
-</dl>
-
-<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00117">117</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8h_source.html#l00065">65</a> of file <a class="el" href="ad__server_8h_source.html">ad_server.h</a>.</p>
 
 </div>
 </div>
@@ -536,7 +531,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>previous debug level.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>debug_level: AD_LOG_DISABLE AD_LOG_ERROR AD_LOG_WARN (default) AD_LOG_INFO AD_LOG_DEBUG AD_LOG_DEBUG2 </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00093">93</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00121">121</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -556,7 +551,7 @@ Functions</h2></td></tr>
 
 <p>Create a server object. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00102">102</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00130">130</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -577,7 +572,7 @@ Functions</h2></td></tr>
 <p>Start server. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00131">131</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00159">159</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -599,7 +594,7 @@ Functions</h2></td></tr>
 <p>This call is be used to stop a server from different thread.</p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00250">250</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00278">278</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -619,7 +614,7 @@ Functions</h2></td></tr>
 
 <p>Release server object and all the resources. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00266">266</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00294">294</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -640,7 +635,7 @@ Functions</h2></td></tr>
 <p>Clean up all the global objects. </p>
 <p>This will make memory-leak checkers happy. There are globally shared resources in libevent and openssl and it's usually not a problem since they don't grow but having these can confuse some debugging tools into thinking as memory leak. If you need to make sure that libasyncd has released all internal library-global data structures, call this. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00315">315</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00343">343</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -677,7 +672,7 @@ Functions</h2></td></tr>
 <p>Set server option. </p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8h.html#adc215edc66db6333bb058fb84ed332ca" title="Server option names and default values.">AD_SERVER_OPTIONS</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00333">333</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00361">361</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -707,7 +702,7 @@ Functions</h2></td></tr>
 
 <p>Retrieve server option. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00340">340</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00368">368</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -737,7 +732,7 @@ Functions</h2></td></tr>
 
 <p>Retrieve server option in integer format. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00347">347</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00375">375</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -763,7 +758,7 @@ Functions</h2></td></tr>
 <div class="line">SSL_CTX_set_session_cache_mode(sslctx, SSL_SESS_CACHE_SERVER);</div>
 <div class="line"><a class="code" href="ad__server_8c.html#a75c74385ae98f9c9457534db0557d98e" title="Start server.">ad_server_start</a>(server);</div>
 </div><!-- fragment --> 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00370">370</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00398">398</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -793,7 +788,7 @@ Functions</h2></td></tr>
 
 <p>Return internal statistic counter map. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00377">377</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00405">405</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -829,7 +824,7 @@ Functions</h2></td></tr>
 
 <p>Register user hook. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00384">384</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00412">412</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -871,7 +866,7 @@ Functions</h2></td></tr>
 
 <p>Register user hook on method name. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00391">391</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00419">419</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -908,7 +903,7 @@ Functions</h2></td></tr>
 <p>Attach userdata into the connection. </p>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00406">406</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00434">434</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -929,7 +924,7 @@ Functions</h2></td></tr>
 <p>Get userdata attached in the connection. </p>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00415">415</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00443">443</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -967,7 +962,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata;</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Extra userdata is for default protocol handler such as ad_http_handler to provide higher abstraction. End users should always use only <a class="el" href="ad__server_8c.html#a6e2e8a73baf14dafa0842b76f31765df" title="Attach userdata into the connection.">ad_conn_set_userdata()</a> to avoid any conflict with default handlers. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00429">429</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00457">457</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -987,7 +982,7 @@ Functions</h2></td></tr>
 
 <p>Get extra userdata attached in this connection. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00436">436</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00464">464</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -1019,7 +1014,7 @@ Functions</h2></td></tr>
 <p>Once the method name is set, hooks registered by <a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name.">ad_server_register_hook_on_method()</a> will be called if method name is matching as registered.</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name.">ad_server_register_hook_on_method()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00448">448</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00476">476</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
