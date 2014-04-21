@@ -50,7 +50,8 @@
 static ad_http_t *http_new(struct evbuffer *out);
 static void http_free(ad_http_t *http);
 static void http_free_cb(ad_conn_t *conn, void *userdata);
-static size_t http_add_inbuf(struct evbuffer *buffer, ad_http_t *http, size_t maxsize);
+static size_t http_add_inbuf(struct evbuffer *buffer, ad_http_t *http,
+                             size_t maxsize);
 
 static int http_parser(ad_http_t *http, struct evbuffer *in);
 static int parse_requestline(ad_http_t *http, char *line);
@@ -60,8 +61,10 @@ static ssize_t parse_chunked_body(ad_http_t *http, struct evbuffer *in);
 
 static bool isValidPathname(const char *path);
 static void correctPathname(char *path);
-static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style);
-static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style);
+static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out,
+                             enum evbuffer_eol_style eol_style);
+static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out,
+                                enum evbuffer_eol_style eol_style);
 
 #endif
 
@@ -82,12 +85,13 @@ int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
     if (event & AD_EVENT_INIT) {
         DEBUG("==> HTTP INIT");
         ad_http_t *http = http_new(conn->out);
-        if (http == NULL) return AD_CLOSE;
+        if (http == NULL)
+            return AD_CLOSE;
         ad_conn_set_extra(conn, http, http_free_cb);
         return AD_OK;
     } else if (event & AD_EVENT_READ) {
         DEBUG("==> HTTP READ");
-        ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+        ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
         int status = http_parser(http, conn->in);
         if (conn->method == NULL && http->request.method != NULL) {
             ad_conn_set_method(conn, http->request.method);
@@ -98,7 +102,7 @@ int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
         return AD_OK;
     } else if (event & AD_EVENT_CLOSE) {
         DEBUG("==> HTTP CLOSE=%x (TIMEOUT=%d, SHUTDOWN=%d)",
-              event, event & AD_EVENT_TIMEOUT, event & AD_EVENT_SHUTDOWN);
+                event, event & AD_EVENT_TIMEOUT, event & AD_EVENT_SHUTDOWN);
         return AD_OK;
     }
 
@@ -109,56 +113,108 @@ int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
  * Return the request status.
  */
 enum ad_http_request_status_e ad_http_get_status(ad_conn_t *conn) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
-    if (http == NULL) return AD_HTTP_ERROR;
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
+    if (http == NULL)
+        return AD_HTTP_ERROR;
     return http->request.status;
 }
 
 struct evbuffer *ad_http_get_inbuf(ad_conn_t *conn) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     return http->request.inbuf;
 }
 
 struct evbuffer *ad_http_get_outbuf(ad_conn_t *conn) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     return http->response.outbuf;
 }
 
+/**
+ * Get request header.
+ *
+ * @param name name of header.
+ *
+ * @return value of string if found, otherwise NULL.
+ */
 const char *ad_http_get_request_header(ad_conn_t *conn, const char *name) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     return http->request.headers->getstr(http->request.headers, name, false);
 }
 
+/**
+ * Return the size of content from the request.
+ */
 off_t ad_http_get_content_length(ad_conn_t *conn) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     return http->request.contentlength;
 }
 
 /**
+ * Remove content from the in-buffer.
+ *
  * @param maxsize maximum length of data to pull up. 0 to pull up everything.
  */
 void *ad_http_get_content(ad_conn_t *conn, size_t maxsize, size_t *storedsize) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
 
     size_t inbuflen = evbuffer_get_length(http->request.inbuf);
-    size_t readlen = (maxsize == 0) ? inbuflen : ((inbuflen < maxsize) ? inbuflen : maxsize);
-    if (readlen == 0) return NULL;
+    size_t readlen =
+            (maxsize == 0) ?
+                    inbuflen : ((inbuflen < maxsize) ? inbuflen : maxsize);
+    if (readlen == 0)
+        return NULL;
 
     void *data = malloc(readlen);
-    if (data == NULL) return NULL;
+    if (data == NULL)
+        return NULL;
 
     size_t removedlen = evbuffer_remove(http->request.inbuf, data, readlen);
-    if (storedsize) *storedsize = removedlen;
+    if (storedsize)
+        *storedsize = removedlen;
 
     return data;
 }
 
 /**
+ * Return whether the request is keep-alive request or not.
+ *
+ * @return 1 if keep-alive request, otherwise 0.
+ */
+int ad_http_is_keepalive_request(ad_conn_t *conn) {
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
+    if (http->request.httpver == NULL) {
+        return 0;
+    }
+
+    const char *connection = ad_http_get_request_header(conn, "Connection");
+    if (!strcmp(http->request.httpver, HTTP_PROTOCOL_11)) {
+        // In HTTP/1.1, Keep-Alive is on by default unless explicitly specified.
+        if (connection != NULL && !strcmp(connection, "close")) {
+            return 0;
+        }
+        return 1;
+    } else {
+        // In older version, Keep-Alive is off by default unless requested.
+        if (connection != NULL
+                && (!strcmp(connection, "Keep-Alive")
+                        || !strcmp(connection, "TE"))) {
+            return 1;
+        }
+        return 0;
+    }
+}
+
+/**
+ * Set response header.
+ *
+ * @param name name of header.
  * @param value value string to set. NULL to remove the header.
+ *
  * @return 0 on success, -1 if we already sent it out.
  */
-int ad_http_add_response_header(ad_conn_t *conn, const char *name, const char *value) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+int ad_http_set_response_header(ad_conn_t *conn, const char *name,
+                                const char *value) {
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     if (http->response.frozen_header) {
         return -1;
     }
@@ -173,17 +229,30 @@ int ad_http_add_response_header(ad_conn_t *conn, const char *name, const char *v
 }
 
 /**
+ * Get response header.
+ *
+ * @param name name of header.
+ *
+ * @return value of string if found, otherwise NULL.
+ */
+const char *ad_http_get_response_header(ad_conn_t *conn, const char *name) {
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
+    return http->response.headers->getstr(http->response.headers, name, false);
+}
+
+/**
  *
  * @return 0 on success, -1 if we already sent it out.
  */
 int ad_http_set_response_code(ad_conn_t *conn, int code, const char *reason) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     if (http->response.frozen_header) {
         return -1;
     }
 
     http->response.code = code;
-    if (reason) http->response.reason = strdup(reason);
+    if (reason)
+        http->response.reason = strdup(reason);
 
     return 0;
 }
@@ -193,21 +262,24 @@ int ad_http_set_response_code(ad_conn_t *conn, int code, const char *reason) {
  * @param size content size. -1 for chunked transfer encoding.
  * @return 0 on success, -1 if we already sent it out.
  */
-int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, off_t size) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype,
+                                 off_t size) {
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     if (http->response.frozen_header) {
         return -1;
     }
 
     // Set Content-Type header.
-    ad_http_add_response_header(conn, "Content-Type", (contenttype) ? contenttype : HTTP_DEF_CONTENTTYPE);
+    ad_http_set_response_header(
+            conn, "Content-Type",
+            (contenttype) ? contenttype : HTTP_DEF_CONTENTTYPE);
     if (size >= 0) {
-        char clenval[20+1];
+        char clenval[20 + 1];
         sprintf(clenval, "%jd", size);
-        ad_http_add_response_header(conn, "Content-Length", clenval);
+        ad_http_set_response_header(conn, "Content-Length", clenval);
         http->response.contentlength = size;
     } else {
-        ad_http_add_response_header(conn, "Transfer-Encoding", "chunked");
+        ad_http_set_response_header(conn, "Transfer-Encoding", "chunked");
         http->response.contentlength = -1;
     }
 
@@ -217,11 +289,20 @@ int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, off_t
 /**
  * @return total bytes sent, 0 on error.
  */
-size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, const void *data, off_t size) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype,
+                        const void *data, off_t size) {
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     if (http->response.frozen_header) {
         return 0;
     }
+
+    // Set response headers.
+    if (ad_http_get_response_header(conn, "Connection") == NULL) {
+        ad_http_set_response_header(
+                conn, "Connection",
+                (ad_http_is_keepalive_request(conn)) ? "Keep-Alive" : "close");
+    }
+
     ad_http_set_response_code(conn, code, ad_http_get_reason(code));
     ad_http_set_response_content(conn, contenttype, size);
     return ad_http_send_data(conn, data, size);
@@ -232,23 +313,28 @@ size_t ad_http_response(ad_conn_t *conn, int code, const char *contenttype, cons
  * @return 0 total bytes put in out buffer, -1 if we already sent it out.
  */
 size_t ad_http_send_header(ad_conn_t *conn) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
     if (http->response.frozen_header) {
         return 0;
     }
     http->response.frozen_header = true;
 
     // Send status line.
-    const char *reason = (http->response.reason) ? http->response.reason : ad_http_get_reason(http->response.code);
-    evbuffer_add_printf(http->response.outbuf, "%s %d %s" HTTP_CRLF, http->request.httpver, http->response.code, reason);
+    const char *reason =
+            (http->response.reason) ?
+                    http->response.reason :
+                    ad_http_get_reason(http->response.code);
+    evbuffer_add_printf(http->response.outbuf, "%s %d %s" HTTP_CRLF,
+                        http->request.httpver, http->response.code, reason);
 
     // Send headers.
     qdlnobj_t obj;
-    bzero((void*)&obj, sizeof(obj));
+    bzero((void*) &obj, sizeof(obj));
     qlisttbl_t *tbl = http->response.headers;
     tbl->lock(tbl);
-    while(tbl->getnext(tbl, &obj, NULL, false)) {
-        evbuffer_add_printf(http->response.outbuf, "%s: %s" HTTP_CRLF, (char*)obj.name, (char*)obj.data);
+    while (tbl->getnext(tbl, &obj, NULL, false)) {
+        evbuffer_add_printf(http->response.outbuf, "%s: %s" HTTP_CRLF,
+                            (char*) obj.name, (char*) obj.data);
     }
     tbl->unlock(tbl);
 
@@ -263,7 +349,7 @@ size_t ad_http_send_header(ad_conn_t *conn) {
  * @return 0 on success, -1 if we already sent it out.
  */
 size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
 
     if (http->response.contentlength < 0) {
         WARN("Content-Length is not set. Invalid usage.");
@@ -276,12 +362,13 @@ size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size) {
     }
 
     size_t beforesize = evbuffer_get_length(http->response.outbuf);
-    if (! http->response.frozen_header) {
+    if (!http->response.frozen_header) {
         ad_http_send_header(conn);
     }
 
     if (data != NULL && size > 0) {
-        if (evbuffer_add(http->response.outbuf, data, size)) return 0;
+        if (evbuffer_add(http->response.outbuf, data, size))
+            return 0;
     }
 
     http->response.bodyout += size;
@@ -289,25 +376,28 @@ size_t ad_http_send_data(ad_conn_t *conn, const void *data, size_t size) {
 }
 
 size_t ad_http_send_chunk(ad_conn_t *conn, const void *data, size_t size) {
-    ad_http_t *http = (ad_http_t *)ad_conn_get_extra(conn);
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
 
     if (http->response.contentlength >= 0) {
         WARN("Content-Length is set. Invalid usage.");
         return 0;
     }
 
-    if (! http->response.frozen_header) {
+    if (!http->response.frozen_header) {
         ad_http_send_header(conn);
     }
 
     size_t beforesize = evbuffer_get_length(http->response.outbuf);
     int status = 0;
     if (size > 0) {
-        status += evbuffer_add_printf(http->response.outbuf, "%zu" HTTP_CRLF, size);
+        status += evbuffer_add_printf(http->response.outbuf, "%zu" HTTP_CRLF,
+                                      size);
         status += evbuffer_add(http->response.outbuf, data, size);
-        status += evbuffer_add(http->response.outbuf, HTTP_CRLF, CONST_STRLEN(HTTP_CRLF));
+        status += evbuffer_add(http->response.outbuf, HTTP_CRLF,
+                               CONST_STRLEN(HTTP_CRLF));
     } else {
-        status += evbuffer_add_printf(http->response.outbuf, "0" HTTP_CRLF HTTP_CRLF);
+        status += evbuffer_add_printf(http->response.outbuf,
+                                      "0" HTTP_CRLF HTTP_CRLF);
     }
     if (status != 0) {
         WARN("Failed to add data to out-buffer. (size:%jd)", size);
@@ -321,33 +411,51 @@ size_t ad_http_send_chunk(ad_conn_t *conn, const void *data, size_t size) {
 
 const char *ad_http_get_reason(int code) {
     switch (code) {
-        case HTTP_CODE_CONTINUE : return "Continue";
-        case HTTP_CODE_OK : return "OK";
-        case HTTP_CODE_CREATED : return "Created";
-        case HTTP_CODE_NO_CONTENT : return "No content";
-        case HTTP_CODE_PARTIAL_CONTENT : return "Partial Content";
-        case HTTP_CODE_MULTI_STATUS : return "Multi Status";
-        case HTTP_CODE_MOVED_TEMPORARILY : return "Moved Temporarily";
-        case HTTP_CODE_NOT_MODIFIED : return "Not Modified";
-        case HTTP_CODE_BAD_REQUEST : return "Bad Request";
-        case HTTP_CODE_UNAUTHORIZED : return "Authorization Required";
-        case HTTP_CODE_FORBIDDEN : return "Forbidden";
-        case HTTP_CODE_NOT_FOUND : return "Not Found";
-        case HTTP_CODE_METHOD_NOT_ALLOWED : return "Method Not Allowed";
-        case HTTP_CODE_REQUEST_TIME_OUT : return "Request Time Out";
-        case HTTP_CODE_GONE : return "Gone";
-        case HTTP_CODE_REQUEST_URI_TOO_LONG : return "Request URI Too Long";
-        case HTTP_CODE_LOCKED : return "Locked";
-        case HTTP_CODE_INTERNAL_SERVER_ERROR : return "Internal Server Error";
-        case HTTP_CODE_NOT_IMPLEMENTED : return "Not Implemented";
-        case HTTP_CODE_SERVICE_UNAVAILABLE : return "Service Unavailable";
+        case HTTP_CODE_CONTINUE:
+            return "Continue";
+        case HTTP_CODE_OK:
+            return "OK";
+        case HTTP_CODE_CREATED:
+            return "Created";
+        case HTTP_CODE_NO_CONTENT:
+            return "No content";
+        case HTTP_CODE_PARTIAL_CONTENT:
+            return "Partial Content";
+        case HTTP_CODE_MULTI_STATUS:
+            return "Multi Status";
+        case HTTP_CODE_MOVED_TEMPORARILY:
+            return "Moved Temporarily";
+        case HTTP_CODE_NOT_MODIFIED:
+            return "Not Modified";
+        case HTTP_CODE_BAD_REQUEST:
+            return "Bad Request";
+        case HTTP_CODE_UNAUTHORIZED:
+            return "Authorization Required";
+        case HTTP_CODE_FORBIDDEN:
+            return "Forbidden";
+        case HTTP_CODE_NOT_FOUND:
+            return "Not Found";
+        case HTTP_CODE_METHOD_NOT_ALLOWED:
+            return "Method Not Allowed";
+        case HTTP_CODE_REQUEST_TIME_OUT:
+            return "Request Time Out";
+        case HTTP_CODE_GONE:
+            return "Gone";
+        case HTTP_CODE_REQUEST_URI_TOO_LONG:
+            return "Request URI Too Long";
+        case HTTP_CODE_LOCKED:
+            return "Locked";
+        case HTTP_CODE_INTERNAL_SERVER_ERROR:
+            return "Internal Server Error";
+        case HTTP_CODE_NOT_IMPLEMENTED:
+            return "Not Implemented";
+        case HTTP_CODE_SERVICE_UNAVAILABLE:
+            return "Service Unavailable";
     }
 
     WARN("Undefined code found. %d", code);
     return "-";
 }
-
-
 
 /******************************************************************************
  * Private internal functions.
@@ -357,13 +465,17 @@ const char *ad_http_get_reason(int code) {
 static ad_http_t *http_new(struct evbuffer *out) {
     // Create a new connection container.
     ad_http_t *http = NEW_OBJECT(ad_http_t);
-    if (http == NULL) return NULL;
+    if (http == NULL)
+        return NULL;
 
     // Allocate additional resources.
     http->request.inbuf = evbuffer_new();
-    http->request.headers = qlisttbl(QLISTTBL_UNIQUE | QLISTTBL_CASEINSENSITIVE);
-    http->response.headers = qlisttbl(QLISTTBL_UNIQUE | QLISTTBL_CASEINSENSITIVE);
-    if(http->request.inbuf == NULL || http->request.headers == NULL || http->response.headers == NULL) {
+    http->request.headers = qlisttbl(
+            QLISTTBL_UNIQUE | QLISTTBL_CASEINSENSITIVE);
+    http->response.headers = qlisttbl(
+            QLISTTBL_UNIQUE | QLISTTBL_CASEINSENSITIVE);
+    if (http->request.inbuf == NULL || http->request.headers == NULL
+            || http->response.headers == NULL) {
         http_free(http);
         return NULL;
     }
@@ -379,29 +491,41 @@ static ad_http_t *http_new(struct evbuffer *out) {
 
 static void http_free(ad_http_t *http) {
     if (http) {
-        if (http->request.inbuf) evbuffer_free(http->request.inbuf);
-        if (http->request.method) free(http->request.method);
-        if (http->request.uri) free(http->request.uri);
-        if (http->request.httpver) free(http->request.httpver);
-        if (http->request.path) free(http->request.path);
-        if (http->request.query) free(http->request.query);
+        if (http->request.inbuf)
+            evbuffer_free(http->request.inbuf);
+        if (http->request.method)
+            free(http->request.method);
+        if (http->request.uri)
+            free(http->request.uri);
+        if (http->request.httpver)
+            free(http->request.httpver);
+        if (http->request.path)
+            free(http->request.path);
+        if (http->request.query)
+            free(http->request.query);
 
-        if (http->request.headers) http->request.headers->free(http->request.headers);
-        if (http->request.host) free(http->request.host);
-        if (http->request.domain) free(http->request.domain);
+        if (http->request.headers)
+            http->request.headers->free(http->request.headers);
+        if (http->request.host)
+            free(http->request.host);
+        if (http->request.domain)
+            free(http->request.domain);
 
-        if (http->response.headers) http->response.headers->free(http->response.headers);
-        if (http->response.reason) free(http->response.reason);
+        if (http->response.headers)
+            http->response.headers->free(http->response.headers);
+        if (http->response.reason)
+            free(http->response.reason);
 
         free(http);
     }
 }
 
 static void http_free_cb(ad_conn_t *conn, void *userdata) {
-    http_free((ad_http_t *)userdata);
+    http_free((ad_http_t *) userdata);
 }
 
-static size_t http_add_inbuf(struct evbuffer *buffer, ad_http_t *http, size_t maxsize) {
+static size_t http_add_inbuf(struct evbuffer *buffer, ad_http_t *http,
+                             size_t maxsize) {
     if (maxsize == 0 || evbuffer_get_length(buffer) == 0) {
         return 0;
     }
@@ -414,7 +538,8 @@ static int http_parser(ad_http_t *http, struct evbuffer *in) {
 
     if (http->request.status == AD_HTTP_REQ_INIT) {
         char *line = evbuffer_readln(in, NULL, EVBUFFER_EOL_CRLF);
-        if (line == NULL) return http->request.status;
+        if (line == NULL)
+            return http->request.status;
         http->request.status = parse_requestline(http, line);
         free(line);
         // Do not call user callbacks until I reach the next state.
@@ -451,7 +576,6 @@ static int http_parser(ad_http_t *http, struct evbuffer *in) {
     return AD_CLOSE;
 }
 
-
 static int parse_requestline(ad_http_t *http, char *line) {
     // Parse request line.
     char *saveptr;
@@ -471,9 +595,8 @@ static int parse_requestline(ad_http_t *http, char *line) {
     // Set HTTP version
     http->request.httpver = qstrupper(strdup(httpver));
     if (strcmp(http->request.httpver, HTTP_PROTOCOL_09)
-        && strcmp(http->request.httpver, HTTP_PROTOCOL_10)
-        && strcmp(http->request.httpver, HTTP_PROTOCOL_11)
-       ) {
+            && strcmp(http->request.httpver, HTTP_PROTOCOL_10)
+            && strcmp(http->request.httpver, HTTP_PROTOCOL_11)) {
         DEBUG("Unknown protocol: %s", http->request.httpver);
         return AD_HTTP_ERROR;
     }
@@ -485,11 +608,13 @@ static int parse_requestline(ad_http_t *http, char *line) {
         // divide URI into host and path
         char *path = strstr(tmp + CONST_STRLEN("://"), "/");
         if (path == NULL) {  // URI has no path ex) http://domain.com:80
-            http->request.headers->putstr(http->request.headers, "Host", tmp  + CONST_STRLEN("://"));
+            http->request.headers->putstr(http->request.headers, "Host",
+                                          tmp + CONST_STRLEN("://"));
             http->request.uri = strdup("/");
         } else {  // URI has path, ex) http://domain.com:80/path
             *path = '\0';
-            http->request.headers->putstr(http->request.headers, "Host", tmp  + CONST_STRLEN("://"));
+            http->request.headers->putstr(http->request.headers, "Host",
+                                          tmp + CONST_STRLEN("://"));
             *path = '/';
             http->request.uri = strdup(path);
         }
@@ -502,7 +627,7 @@ static int parse_requestline(ad_http_t *http, char *line) {
     http->request.path = strdup(http->request.uri);
     tmp = strstr(http->request.path, "?");
     if (tmp) {
-        *tmp ='\0';
+        *tmp = '\0';
         http->request.query = strdup(tmp + 1);
     } else {
         http->request.query = strdup("");
@@ -525,7 +650,8 @@ static int parse_headers(ad_http_t *http, struct evbuffer *in) {
     char *line;
     while ((line = evbuffer_readln(in, NULL, EVBUFFER_EOL_CRLF))) {
         if (IS_EMPTY_STR(line)) {
-            const char *clen = http->request.headers->getstr(http->request.headers, "Content-Length", false);
+            const char *clen = http->request.headers->getstr(
+                    http->request.headers, "Content-Length", false);
             http->request.contentlength = (clen) ? atol(clen) : -1;
             return AD_HTTP_REQ_HEADER_DONE;
         }
@@ -565,10 +691,11 @@ static int parse_body(ad_http_t *http, struct evbuffer *in) {
         }
     } else {
         // Check if Transfer-Encoding is chunked.
-        const char *tranenc = http->request.headers->getstr(http->request.headers, "Transfer-Encoding", false);
+        const char *tranenc = http->request.headers->getstr(
+                http->request.headers, "Transfer-Encoding", false);
         if (tranenc != NULL && !strcmp(tranenc, "chunked")) {
             // TODO: handle chunked encoding
-            for(;;) {
+            for (;;) {
                 ssize_t chunksize = parse_chunked_body(http, in);
                 if (chunksize > 0) {
                     continue;
@@ -597,14 +724,16 @@ static ssize_t parse_chunked_body(ad_http_t *http, struct evbuffer *in) {
     // Peek chunk size.
     size_t crlf_len = 0;
     char *line = evbuffer_peekln(in, &crlf_len, EVBUFFER_EOL_CRLF);
-    if (line == NULL) return -1;  // not enough data.
+    if (line == NULL)
+        return -1;  // not enough data.
     size_t linelen = strlen(line);
 
     // Parse chunk size
     int chunksize = -1;
     sscanf(line, "%x", &chunksize);
     free(line);
-    if (chunksize < 0) return -2;  // format error
+    if (chunksize < 0)
+        return -2;  // format error
 
     // Check if we've received whole data of this chunk.
     size_t datalen = linelen + crlf_len + chunksize + crlf_len;
@@ -625,17 +754,21 @@ static ssize_t parse_chunked_body(ad_http_t *http, struct evbuffer *in) {
  * validate file path
  */
 static bool isValidPathname(const char *path) {
-    if (path == NULL) return false;
+    if (path == NULL)
+        return false;
 
     int len = strlen(path);
-    if (len == 0 || len >= PATH_MAX) return false;
-    else if (path[0] != '/') return false;
-    else if (strpbrk(path, "\\:*?\"<>|") != NULL) return false;
+    if (len == 0 || len >= PATH_MAX)
+        return false;
+    else if (path[0] != '/')
+        return false;
+    else if (strpbrk(path, "\\:*?\"<>|") != NULL)
+        return false;
 
     // check folder name length
     int n;
     char *t;
-    for (n = 0, t = (char *)path; *t != '\0'; t++) {
+    for (n = 0, t = (char *) path; *t != '\0'; t++) {
         if (*t == '/') {
             n = 0;
             continue;
@@ -661,25 +794,32 @@ static void correctPathname(char *path) {
     qstrtrim(path);
 
     // Take care of double slashes.
-    while (strstr(path, "//") != NULL) qstrreplace("sr", path, "//", "/");
+    while (strstr(path, "//") != NULL)
+        qstrreplace("sr", path, "//", "/");
 
     // Take care of tailing slash.
     int len = strlen(path);
-    if (len <= 1) return;
-    if (path[len - 1] == '/') path[len - 1] = '\0';
+    if (len <= 1)
+        return;
+    if (path[len - 1] == '/')
+        path[len - 1] = '\0';
 }
 
-static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style) {
+static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out,
+                             enum evbuffer_eol_style eol_style) {
     // Check if first line has arrived.
-    struct evbuffer_ptr ptr = evbuffer_search_eol(buffer, NULL, n_read_out, eol_style);
-    if (ptr.pos == -1) return NULL;
+    struct evbuffer_ptr ptr = evbuffer_search_eol(buffer, NULL, n_read_out,
+                                                  eol_style);
+    if (ptr.pos == -1)
+        return NULL;
 
-    char *line = (char *)malloc(ptr.pos + 1);
-    if (line == NULL) return NULL;
+    char *line = (char *) malloc(ptr.pos + 1);
+    if (line == NULL)
+        return NULL;
 
     // Linearizes buffer
     if (ptr.pos > 0) {
-        char *bufferptr = (char *)evbuffer_pullup(buffer, ptr.pos);
+        char *bufferptr = (char *) evbuffer_pullup(buffer, ptr.pos);
         ASSERT(bufferptr != NULL);
         strncpy(line, bufferptr, ptr.pos);
     }
@@ -688,9 +828,11 @@ static char *evbuffer_peekln(struct evbuffer *buffer, size_t *n_read_out, enum e
     return line;
 }
 
-static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out, enum evbuffer_eol_style eol_style) {
+static ssize_t evbuffer_drainln(struct evbuffer *buffer, size_t *n_read_out,
+                                enum evbuffer_eol_style eol_style) {
     char *line = evbuffer_readln(buffer, n_read_out, eol_style);
-    if (line == NULL) return -1;
+    if (line == NULL)
+        return -1;
 
     size_t linelen = strlen(line);
     free(line);

@@ -112,8 +112,10 @@ extern struct evbuffer *ad_http_get_outbuf(ad_conn_t *conn);
 extern const char *ad_http_get_request_header(ad_conn_t *conn, const char *name);
 extern off_t ad_http_get_content_length(ad_conn_t *conn);
 extern void *ad_http_get_content(ad_conn_t *conn, size_t maxsize, size_t *storedsize);
+extern int ad_http_is_keepalive_request(ad_conn_t *conn);
 
-extern int ad_http_add_response_header(ad_conn_t *conn, const char *name, const char *value);
+extern int ad_http_set_response_header(ad_conn_t *conn, const char *name, const char *value);
+extern const char *ad_http_get_response_header(ad_conn_t *conn, const char *name);
 extern int ad_http_set_response_code(ad_conn_t *conn, int code, const char *reason);
 extern int ad_http_set_response_content(ad_conn_t *conn, const char *contenttype, off_t size);
 

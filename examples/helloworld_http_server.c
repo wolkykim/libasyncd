@@ -31,7 +31,8 @@
 int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
     if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
         ad_http_response(conn, 200, "text/html", "Hello World", 11);
-        return AD_DONE; // Keep connection alive.
+        printf("%d\n", ad_http_is_keepalive_request(conn));
+        return ad_http_is_keepalive_request(conn) ? AD_DONE : AD_CLOSE;
     }
     return AD_OK;
 }
