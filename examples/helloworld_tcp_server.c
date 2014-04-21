@@ -29,10 +29,6 @@
 #include <event2/buffer.h>
 #include "asyncd/asyncd.h"
 
-/*---------------------------------------------------------------------------*\
-|                          THIS IS AN EXAMPLEIN                               |
-\*---------------------------------------------------------------------------*/
-
 int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
     if (event & AD_EVENT_WRITE) {
         evbuffer_add_printf(conn->out, "Hello World.");

@@ -32,10 +32,6 @@
 #include "asyncd/asyncd.h"
 #include "macro.h"
 
-/*---------------------------------------------------------------------------*\
-|                          THIS IS AN EXAMPLEIN                               |
-\*---------------------------------------------------------------------------*/
-
 /**
  * User data for per-connection custom information for non-blocking operation.
  */
