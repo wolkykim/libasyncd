@@ -74,7 +74,7 @@ AC_DEFUN([Q_ARG_DISABLE], [
 ])
 
 ## Initialize
-AC_INIT([libasyncd], [1 RELEASE], [https://github.com/wolkykim/libasyncd])
+AC_INIT([libasyncd], [1], [https://github.com/wolkykim/libasyncd])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile src/Makefile examples/Makefile])
@@ -110,10 +110,10 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
-AC_PATH_PROG(AR, ar)
-AC_PATH_PROG(CHMOD, chmod)
-AC_PATH_PROG(LD, ld)
-AC_PATH_PROG(RM, rm)
+AC_PATH_PROG(AR, ar, [$PATH])
+AC_PATH_PROG(CHMOD, chmod, [$PATH])
+AC_PATH_PROG(LD, ld, [$PATH])
+AC_PATH_PROG(RM, rm, [$PATH])
 
 ## Checks for header files.
 AC_HEADER_STDC
