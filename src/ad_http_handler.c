@@ -75,6 +75,7 @@ int ad_http_handler(short event, ad_conn_t *conn, void *userdata) {
     }
 
     BUG_EXIT();
+    return AD_CLOSE;
 }
 
 /**
