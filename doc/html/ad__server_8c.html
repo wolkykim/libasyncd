@@ -164,7 +164,7 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>previous debug level.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>debug_level: AD_LOG_DISABLE AD_LOG_ERROR AD_LOG_WARN (default) AD_LOG_INFO AD_LOG_DEBUG AD_LOG_DEBUG2 </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00093">93</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00121">121</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -184,7 +184,7 @@ Variables</h2></td></tr>
 
 <p>Create a server object. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00102">102</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00130">130</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -205,7 +205,7 @@ Variables</h2></td></tr>
 <p>Start server. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00131">131</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00159">159</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -227,7 +227,7 @@ Variables</h2></td></tr>
 <p>This call is be used to stop a server from different thread.</p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00250">250</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00278">278</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -247,7 +247,7 @@ Variables</h2></td></tr>
 
 <p>Release server object and all the resources. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00266">266</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00294">294</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -268,7 +268,7 @@ Variables</h2></td></tr>
 <p>Clean up all the global objects. </p>
 <p>This will make memory-leak checkers happy. There are globally shared resources in libevent and openssl and it's usually not a problem since they don't grow but having these can confuse some debugging tools into thinking as memory leak. If you need to make sure that libasyncd has released all internal library-global data structures, call this. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00315">315</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00343">343</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -305,7 +305,7 @@ Variables</h2></td></tr>
 <p>Set server option. </p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8h.html#adc215edc66db6333bb058fb84ed332ca" title="Server option names and default values.">AD_SERVER_OPTIONS</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00333">333</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00361">361</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -335,7 +335,7 @@ Variables</h2></td></tr>
 
 <p>Retrieve server option. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00340">340</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00368">368</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -365,7 +365,7 @@ Variables</h2></td></tr>
 
 <p>Retrieve server option in integer format. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00347">347</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00375">375</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -391,7 +391,7 @@ Variables</h2></td></tr>
 <div class="line">SSL_CTX_set_session_cache_mode(sslctx, SSL_SESS_CACHE_SERVER);</div>
 <div class="line"><a class="code" href="ad__server_8c.html#a75c74385ae98f9c9457534db0557d98e" title="Start server.">ad_server_start</a>(server);</div>
 </div><!-- fragment --> 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00370">370</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00398">398</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -421,7 +421,7 @@ Variables</h2></td></tr>
 
 <p>Return internal statistic counter map. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00377">377</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00405">405</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -457,7 +457,7 @@ Variables</h2></td></tr>
 
 <p>Register user hook. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00384">384</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00412">412</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -499,7 +499,7 @@ Variables</h2></td></tr>
 
 <p>Register user hook on method name. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00391">391</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00419">419</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -536,7 +536,7 @@ Variables</h2></td></tr>
 <p>Attach userdata into the connection. </p>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00406">406</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00434">434</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -557,7 +557,7 @@ Variables</h2></td></tr>
 <p>Get userdata attached in the connection. </p>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00415">415</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00443">443</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -595,7 +595,7 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata;</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Extra userdata is for default protocol handler such as ad_http_handler to provide higher abstraction. End users should always use only <a class="el" href="ad__server_8c.html#a6e2e8a73baf14dafa0842b76f31765df" title="Attach userdata into the connection.">ad_conn_set_userdata()</a> to avoid any conflict with default handlers. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00429">429</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00457">457</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -615,7 +615,7 @@ Variables</h2></td></tr>
 
 <p>Get extra userdata attached in this connection. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00436">436</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00464">464</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -647,7 +647,7 @@ Variables</h2></td></tr>
 <p>Once the method name is set, hooks registered by <a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name.">ad_server_register_hook_on_method()</a> will be called if method name is matching as registered.</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name.">ad_server_register_hook_on_method()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00448">448</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00476">476</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -662,7 +662,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00075">75</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00103">103</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
