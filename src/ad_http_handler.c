@@ -654,6 +654,7 @@ static int parse_headers(ad_http_t *http, struct evbuffer *in) {
             const char *clen = http->request.headers->getstr(
                     http->request.headers, "Content-Length", false);
             http->request.contentlength = (clen) ? atol(clen) : -1;
+            free(line);
             return AD_HTTP_REQ_HEADER_DONE;
         }
         // Parse
