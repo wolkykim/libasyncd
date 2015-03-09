@@ -43,7 +43,7 @@ $ make
 * [libasyncd API reference](http://wolkykim.github.io/libasyncd/doc/html/)
 
 ## "Hello World", Asynchronous Socket Server example.
-```
+```c
 int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
     if (event & AD_EVENT_WRITE) {
         evbuffer_add_printf(conn->out, "Hello World.");
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 ```
 
 ## "Hello World", Asynchronous HTTPS Server example.
-```
+```c
 int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
     if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
         ad_http_response(conn, 200, "text/html", "Hello World", 11);
