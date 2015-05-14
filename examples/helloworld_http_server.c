@@ -34,7 +34,6 @@ int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
             ad_http_response(conn, 200, "text/html", "Hello World", 11);
             return ad_http_is_keepalive_request(conn) ? AD_DONE : AD_CLOSE;
         }
-        return AD_OK;
     }
     return AD_OK;
 }
@@ -45,7 +44,6 @@ int my_http_default_handler(short event, ad_conn_t *conn, void *userdata) {
             ad_http_response(conn, 501, "text/html", "Not implemented", 15);
             return AD_CLOSE; // Close connection.
         }
-        return AD_OK;
     }
     return AD_OK;
 }
