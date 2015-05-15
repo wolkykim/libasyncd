@@ -89,6 +89,11 @@ enum ad_log_e {
         /* Set read timeout seconds. 0 means no timeout. */                 \
         { "server.timeout",     "0" },                                      \
                                                                             \
+        /* SSL options */                                                   \
+        { "server.enable_ssl", "0" },                                       \
+        { "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.crt" },    \
+        { "server.ssl_pkey", "/usr/local/etc/ad_server/ad_server.key" },    \
+                                                                            \
         /* Enable or disable request pipelining, this change AD_DONE's behavior */ \
         { "server.request_pipelining", "1" },                               \
                                                                             \
