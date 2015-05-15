@@ -181,7 +181,9 @@ extern void ad_server_global_free(void);
 
 extern void ad_server_set_option(ad_server_t *server, const char *key, const char *value);
 extern char *ad_server_get_option(ad_server_t *server, const char *key);
+extern void ad_server_set_option_int(ad_server_t *server, const char *key, int value);
 extern int ad_server_get_option_int(ad_server_t *server, const char *key);
+
 extern SSL_CTX *ad_server_get_ssl_ctx(ad_server_t *server);
 extern qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key);
 
