@@ -38,12 +38,13 @@ int my_conn_handler(short event, ad_conn_t *conn, void *userdata) {
 }
 
 int main(int argc, char **argv) {
+    SSL_load_error_strings();
+    SSL_library_init();
     ad_log_level(AD_LOG_DEBUG);
     ad_server_t *server = ad_server_new();
     ad_server_set_option(server, "server.port", "2222");
-    ad_server_set_option(server, "server.enable_ssl", "1");
-    ad_server_set_option(server, "server.ssl_cert", "ssl.cert");
-    ad_server_set_option(server, "server.ssl_pkey", "ssl.pkey");
+    ad_server_set_ssl_ctx(server,
+            ad_server_ssl_ctx_create_simple("ssl.cert", "ssl.pkey"));
     ad_server_register_hook(server, my_conn_handler, NULL);
     return ad_server_start(server);
 }

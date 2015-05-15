@@ -89,11 +89,6 @@ enum ad_log_e {
         /* Set read timeout seconds. 0 means no timeout. */                 \
         { "server.timeout",     "0" },                                      \
                                                                             \
-        /* SSL options */                                                   \
-        { "server.enable_ssl", "0" },                                       \
-        { "server.ssl_cert", "/usr/local/etc/ad_server/ad_server.crt" },    \
-        { "server.ssl_pkey", "/usr/local/etc/ad_server/ad_server.key" },    \
-                                                                            \
         /* Enable or disable request pipelining, this change AD_DONE's behavior */ \
         { "server.request_pipelining", "1" },                               \
                                                                             \
@@ -182,6 +177,8 @@ extern void ad_server_global_free(void);
 extern void ad_server_set_option(ad_server_t *server, const char *key, const char *value);
 extern char *ad_server_get_option(ad_server_t *server, const char *key);
 extern int ad_server_get_option_int(ad_server_t *server, const char *key);
+extern SSL_CTX *ad_server_ssl_ctx_create_simple(const char *cert_path, const char *pkey_path);
+extern void ad_server_set_ssl_ctx(ad_server_t *server, SSL_CTX *sslctx);
 extern SSL_CTX *ad_server_get_ssl_ctx(ad_server_t *server);
 extern qhashtbl_t *ad_server_get_stats(ad_server_t *server, const char *key);
 
