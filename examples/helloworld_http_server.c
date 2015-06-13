@@ -29,17 +29,21 @@
 #include "asyncd/asyncd.h"
 
 int my_http_get_handler(short event, ad_conn_t *conn, void *userdata) {
-    if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
-        ad_http_response(conn, 200, "text/html", "Hello World", 11);
-        return ad_http_is_keepalive_request(conn) ? AD_DONE : AD_CLOSE;
+    if (event & AD_EVENT_READ) {
+        if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
+            ad_http_response(conn, 200, "text/html", "Hello World", 11);
+            return ad_http_is_keepalive_request(conn) ? AD_DONE : AD_CLOSE;
+        }
     }
     return AD_OK;
 }
 
 int my_http_default_handler(short event, ad_conn_t *conn, void *userdata) {
-    if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
-        ad_http_response(conn, 501, "text/html", "Not implemented", 15);
-        return AD_CLOSE; // Close connection.
+    if (event & AD_EVENT_READ) {
+        if (ad_http_get_status(conn) == AD_HTTP_REQ_DONE) {
+            ad_http_response(conn, 501, "text/html", "Not implemented", 15);
+            return AD_CLOSE; // Close connection.
+        }
     }
     return AD_OK;
 }
@@ -48,6 +52,9 @@ int main(int argc, char **argv) {
     ad_log_level(AD_LOG_DEBUG);
     ad_server_t *server = ad_server_new();
     ad_server_set_option(server, "server.port", "8888");
+    //ad_server_set_option(server, "server.enable_ssl", "1");
+    //ad_server_set_option(server, "server.ssl_cert", "ssl.cert");
+    //ad_server_set_option(server, "server.ssl_pkey", "ssl.pkey");
     ad_server_register_hook(server, ad_http_handler, NULL); // HTTP Parser is also a hook.
     ad_server_register_hook_on_method(server, "GET", my_http_get_handler, NULL);
     ad_server_register_hook(server, my_http_default_handler, NULL);

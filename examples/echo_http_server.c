@@ -154,8 +154,8 @@ int main(int argc, char **argv) {
 
     // SSL option.
     //ad_server_set_option(server, "server.enable_ssl", "1");
-    //ad_server_set_option(server, "server.ssl_cert", "example.cert");
-    //ad_server_set_option(server, "server.ssl_pkey", "example.pkey");
+    //ad_server_set_option(server, "server.ssl_cert", "ssl.cert");
+    //ad_server_set_option(server, "server.ssl_pkey", "ssl.pkey");
 
     // Start server.
     int retstatus = ad_server_start(server);
