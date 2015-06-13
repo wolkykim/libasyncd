@@ -370,6 +370,15 @@ char *ad_server_get_option(ad_server_t *server, const char *key) {
 }
 
 /**
+ * Set server option in integer format.
+ *
+ * @see AD_SERVER_OPTIONS
+ */
+void ad_server_set_option_int(ad_server_t *server, const char *key, int value) {
+    server->options->putint(server->options, key, (int64_t) value);
+}
+
+/**
  * Retrieve server option in integer format.
  */
 int ad_server_get_option_int(ad_server_t *server, const char *key) {
