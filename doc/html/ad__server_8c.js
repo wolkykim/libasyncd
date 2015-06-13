@@ -9,6 +9,8 @@ var ad__server_8c =
     [ "ad_server_set_option", "ad__server_8c.html#a15edb8d7e1f406085dbf8c5a5c671bda", null ],
     [ "ad_server_get_option", "ad__server_8c.html#ac67bad711ee893259d4c4dc3717596ab", null ],
     [ "ad_server_get_option_int", "ad__server_8c.html#a2b2e3ec49198b4d35e29a95dc9f06dad", null ],
+    [ "ad_server_ssl_ctx_create_simple", "ad__server_8c.html#ac7ad549632ecf501e170aac234703541", null ],
+    [ "ad_server_set_ssl_ctx", "ad__server_8c.html#a34aa318f8a3872aa1e756adb38acd664", null ],
     [ "ad_server_get_ssl_ctx", "ad__server_8c.html#addb05a5f42de5b20975a92fa69b52895", null ],
     [ "ad_server_get_stats", "ad__server_8c.html#a7fa3e3215415c9f7173f11ea1d276b8e", null ],
     [ "ad_server_register_hook", "ad__server_8c.html#aeb61485fd4f4e2f13c93871558b58025", null ],
