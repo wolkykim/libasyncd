@@ -207,7 +207,7 @@ int ad_server_start(ad_server_t *server) {
     }
 
     // SSL
-    if (ad_server_get_option_int(server, "server.enable_ssl")) {
+    if (!server->sslctx && ad_server_get_option_int(server, "server.enable_ssl")) {
         char *cert_path = ad_server_get_option(server, "server.ssl_cert");
         char *pkey_path = ad_server_get_option(server, "server.ssl_pkey");
         server->sslctx = init_ssl(cert_path, pkey_path);
@@ -378,22 +378,69 @@ int ad_server_get_option_int(ad_server_t *server, const char *key) {
 }
 
 /**
- * Get OpenSSL SSL_CTX object.
+ * Helper method for creating minimal OpenSSL SSL_CTX object.
  *
+ * @param cert_path path to a PEM encoded certificate file
+ * @param pkey_path path to a PEM encoded private key file
+ * 
+ * @return newly allocated SSL_CTX object or NULL on failure
+ * 
+ * @note
+ * This function initializes SSL_CTX with minimum default with
+ * "SSLv23_server_method" which will make the server understand
+ * SSLv2, SSLv3, and TLSv1 protocol.
+ * 
+ * @see ad_server_set_ssl_ctx()
+ */
+SSL_CTX *ad_server_ssl_ctx_create_simple(const char *cert_path,
+        const char *pkey_path) {
+    
+    SSL_CTX *sslctx = SSL_CTX_new(SSLv23_server_method());
+    if (! SSL_CTX_use_certificate_file(sslctx, cert_path, SSL_FILETYPE_PEM) ||
+        ! SSL_CTX_use_PrivateKey_file(sslctx, pkey_path, SSL_FILETYPE_PEM)) {
+        
+        ERROR("Couldn't load certificate file(%s) or private key file(%s).",
+              cert_path, pkey_path);
+        
+        return NULL;
+    }
+    
+    return sslctx;
+}
+
+/**
+ * Attach OpenSSL SSL_CTX to the server.
+ * 
+ * @param server a valid server instance
+ * @param sslctx allocated and configured SSL_CTX object
+ * 
+ * @note
+ * This function attached SSL_CTX object to the server causing it to
+ * communicate over SSL. Use ad_server_ssl_ctx_create_simple() to
+ * quickly create a simple SSL_CTX object or make your own with OpenSSL
+ * directly. This function must never be called when ad_server is running.
+ * 
+ * @see ad_server_ssl_ctx_create_simple()
+ */
+void ad_server_set_ssl_ctx(ad_server_t *server, SSL_CTX *sslctx) {
+    
+    if (server->sslctx) {
+        SSL_CTX_free(server->sslctx);
+    }
+    
+    server->sslctx = sslctx;
+}
+
+/**
+ * Get OpenSSL SSL_CTX object.
+ * 
+ * @param server a valid server instance
  * @return SSL_CTX object, NULL if not enabled.
  *
  * @note
- * Libasyncd initializes SSL_CTX with minimum default with
- * "SSLv23_server_method" which will make the server understand
- * SSLv2, SSLv3, and TLSv1 protocol. Use returned SSL_CTX object
- * to set any custom options before starting the server.
- *
- * @code
- *  SSL_CTX *sslctx = ad_server_get_ssl_ctx(server);
- *  SSL_CTX_set_options(sslctx, SSL_OP_NO_SSLv2);
- *  SSL_CTX_set_session_cache_mode(sslctx, SSL_SESS_CACHE_SERVER);
- *  ad_server_start(server);
- * @endcode
+ * As a general rule the returned SSL_CTX object must not be modified
+ * while server is running as it may cause unpredictable results.
+ * However, it is safe to use it for reading SSL statistics.
  */
 SSL_CTX *ad_server_get_ssl_ctx(ad_server_t *server) {
     return server->sslctx;
@@ -575,17 +622,11 @@ static int set_undefined_options(ad_server_t *server) {
 }
 
 static SSL_CTX *init_ssl(const char *cert_path, const char *pkey_path) {
-    // Initialize OpenSSL library.
-    SSL_load_error_strings();
-    SSL_library_init();
-    RAND_poll();
-
     SSL_CTX *sslctx = SSL_CTX_new(SSLv23_server_method());
     if (! SSL_CTX_use_certificate_file(sslctx, cert_path, SSL_FILETYPE_PEM) ||
         ! SSL_CTX_use_PrivateKey_file(sslctx, pkey_path, SSL_FILETYPE_PEM)) {
         return NULL;
     }
-
     return sslctx;
 }
 
