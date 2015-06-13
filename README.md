@@ -107,3 +107,11 @@ Please refer sample codes such as echo example in examples directory for more de
 * [C10K problem](http://en.wikipedia.org/wiki/C10k_problem)
 * [libevent library - an event notification library](http://libevent.org/)
 * [qLibc library - a STL like C library](http://wolkykim.github.io/qlibc/)
+
+## Contributors
+
+The following people have helped with suggestions, ideas, code or fixing bugs:
+(in alphabetical order by first name)
+
+* [Dmitri Toubelis](https://github.com/dtoubelis)
+* [Seungyoung Kim](https://github.com/wolkykim) - The author
