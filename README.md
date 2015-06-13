@@ -40,7 +40,7 @@ $ make
 
 ## API Reference
 
-* [libasyncd API reference](http://wolkykim.github.io/libasyncd/doc/html/)
+* [libasyncd API reference](http://wolkykim.github.io/libasyncd/doc/html/globals_func.html)
 
 ## "Hello World", Asynchronous Socket Server example.
 ```c
