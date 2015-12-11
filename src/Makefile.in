@@ -103,7 +103,6 @@ uninstall-libasyncd:
 
 deinstall: uninstall
 uninstall: uninstall-libasyncd
-	$(RMDIR) $(INST_INCDIR)/asyncd
 
 clean:
 	$(RM) -f $(OBJS) $(LIBNAME) $(SLIBNAME) $(SLIBNAME_LINK)

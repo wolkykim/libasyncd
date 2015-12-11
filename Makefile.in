@@ -37,10 +37,19 @@ all:
 
 install:
 	(cd src/; make install)
+	@echo "======================================================="
+	@echo "Run 'make install-libs' to install dependent libraries."
+	@echo "======================================================="
+
+install-libs:
+	(cd lib/qlibc/; make install)
 
 deinstall: uninstall
 uninstall:
-	(cd src/; make deinstall)
+	(cd src/; make uninstall)
+
+uninstall-libs:
+	(cd lib/qlibc/; make uninstall)
 
 clean:
 	@for DIR in src examples; do				\
