@@ -799,8 +799,8 @@ static int call_hooks(short event, ad_conn_t *conn) {
     DEBUG("call_hooks: event 0x%x", event);
     qlist_t *hooks = conn->server->hooks;
 
-    qdlobj_t obj;
-    bzero((void *)&obj, sizeof(qdlobj_t));
+    qlist_obj_t obj;
+    bzero((void *)&obj, sizeof(qlist_obj_t));
     while (hooks->getnext(hooks, &obj, false) == true) {
         ad_hook_t *hook = (ad_hook_t *)obj.data;
         if (hook->cb) {

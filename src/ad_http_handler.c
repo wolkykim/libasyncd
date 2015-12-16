@@ -329,7 +329,7 @@ size_t ad_http_send_header(ad_conn_t *conn) {
                         http->request.httpver, http->response.code, reason);
 
     // Send headers.
-    qdlnobj_t obj;
+    qlisttbl_obj_t obj;
     bzero((void*) &obj, sizeof(obj));
     qlisttbl_t *tbl = http->response.headers;
     tbl->lock(tbl);
