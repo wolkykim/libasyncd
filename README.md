@@ -114,5 +114,6 @@ Please refer sample codes such as echo example in examples directory for more de
 The following people have helped with suggestions, ideas, code or fixing bugs:
 (in alphabetical order by first name)
 
+* [Carpentier Pierre-Francois](https://github.com/kakwa)
 * [Dmitri Toubelis](https://github.com/dtoubelis)
 * [Seungyoung Kim](https://github.com/wolkykim) - The author
