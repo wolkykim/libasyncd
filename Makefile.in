@@ -29,34 +29,26 @@
 RM	= @RM@
 
 all:
-	@for DIR in src; do					\
-		echo "===> $${DIR}";				\
-		(cd $${DIR}; make all);				\
-		echo "<=== $${DIR}";				\
-	done
+	$(MAKE) -C src all
 
 install:
-	(cd src/; make install)
+	$(MAKE) -C src install
 	@echo "======================================================="
 	@echo "Run 'make install-libs' to install dependent libraries."
 	@echo "======================================================="
 
 install-libs:
-	(cd lib/qlibc/; make install)
+	$(MAKE) -C lib/qlibc install
 
 deinstall: uninstall
 uninstall:
-	(cd src/; make uninstall)
+	$(MAKE) -C src uninstall
 
 uninstall-libs:
-	(cd lib/qlibc/; make uninstall)
+	$(MAKE) -C lib/qlibc/ uninstall
 
 clean:
-	@for DIR in src examples; do				\
-		echo "===> $${DIR}";				\
-		(cd $${DIR}; make clean);			\
-		echo "<=== $${DIR}";				\
-	done
+	$(MAKE) -C src clean
 
 distclean: clean
 	@for DIR in src examples; do				\

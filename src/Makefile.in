@@ -50,6 +50,7 @@ QLIBC_DIR	= ../lib/qlibc
 QLIBC_LIB	= $(QLIBC_DIR)/lib/libqlibc.a
 CPPFLAGS	+= -I$(QLIBC_DIR)/include
 LIBS		+= $(QLIBC_LIB)
+QLIBC		= embedded
 
 ## libasyncd related.
 HEADERDIR	= ../include/asyncd
@@ -67,7 +68,12 @@ CPPFLAGS	+=  -I/usr/include -I/usr/local/include \
 LIBS		+= @DEPLIBS@
 
 ## Make Library
+
+ifeq ($(QLIBC),system)
+all: $(LIBNAME)
+else
 all: qlibc $(LIBNAME)
+endif
 
 $(LIBNAME): $(OBJS)
 	$(AR) $(ARFLAGS) $(LIBNAME) $(OBJS)
@@ -77,32 +83,33 @@ $(LIBNAME): $(OBJS)
 
 qlibc:
 	@if [ ! -d $(QLIBC_DIR)/src ]; then \
-		../lib/run2init-submodules.sh; \
+	        ../lib/run2init-submodules.sh; \
 	fi
 	@if [ ! -f $(QLIBC_LIB) ]; then \
-		(cd $(QLIBC_DIR); ./configure; make); \
+	        (cd $(QLIBC_DIR) && ./configure && make); \
 	fi
 
 install: install-libasyncd
 
-install-libasyncd: $(LIBNAME)
-	$(MKDIR_P) $(INST_INCDIR)/asyncd
-	$(INSTALL_DATA) $(HEADERDIR)/asyncd.h $(INST_INCDIR)/asyncd/asyncd.h
-	$(INSTALL_DATA) $(HEADERDIR)/ad_server.h $(INST_INCDIR)/asyncd/ad_server.h
-	$(INSTALL_DATA) $(HEADERDIR)/ad_http_handler.h $(INST_INCDIR)/asyncd/ad_http_handler.h
-	$(MKDIR_P) $(INST_LIBDIR)
-	$(INSTALL_DATA) $(LIBNAME) $(INST_LIBDIR)/$(LIBNAME)
-	$(INSTALL_DATA) $(SLIBNAME) $(INST_LIBDIR)/$(SLIBNAME)
-	( cd $(INST_LIBDIR); $(LN_S) -f $(SLIBNAME) $(SLIBNAME_LINK) )
+install-libasyncd: all
+	$(MKDIR_P) $(DESTDIR)/$(INST_INCDIR)/asyncd
+	$(INSTALL_DATA) $(HEADERDIR)/asyncd.h $(DESTDIR)/$(INST_INCDIR)/asyncd/asyncd.h
+	$(INSTALL_DATA) $(HEADERDIR)/ad_server.h $(DESTDIR)/$(INST_INCDIR)/asyncd/ad_server.h
+	$(INSTALL_DATA) $(HEADERDIR)/ad_http_handler.h $(DESTDIR)/$(INST_INCDIR)/asyncd/ad_http_handler.h
+	$(MKDIR_P) $(DESTDIR)/$(INST_LIBDIR)
+	$(INSTALL_DATA) $(LIBNAME) $(DESTDIR)/$(INST_LIBDIR)/$(LIBNAME)
+	$(INSTALL_DATA) $(SLIBNAME) $(DESTDIR)/$(INST_LIBDIR)/$(SLIBNAME)
+	( cd $(DESTDIR)/$(INST_LIBDIR); $(LN_S) -f $(SLIBNAME) $(SLIBNAME_LINK) )
 
 uninstall-libasyncd:
-	$(RM) -rf $(INST_INCDIR)/asyncd
-	$(RM) -f $(INST_LIBDIR)/$(LIBNAME)
-	$(RM) -f $(INST_LIBDIR)/$(SLIBNAME)
-	$(RM) -f $(INST_LIBDIR)/$(SLIBNAME_LINK)
+	$(RM) -rf $(DESTDIR)/$(INST_INCDIR)/asyncd
+	$(RM) -f $(DESTDIR)/$(INST_LIBDIR)/$(LIBNAME)
+	$(RM) -f $(DESTDIR)/$(INST_LIBDIR)/$(SLIBNAME)
+	$(RM) -f $(DESTDIR)/$(INST_LIBDIR)/$(SLIBNAME_LINK)
 
 deinstall: uninstall
 uninstall: uninstall-libasyncd
+	$(RMDIR) $(DESTDIR)/$(INST_INCDIR)/asyncd
 
 clean:
 	$(RM) -f $(OBJS) $(LIBNAME) $(SLIBNAME) $(SLIBNAME_LINK)
