@@ -35,7 +35,8 @@ connection-per-thread or connection-per-process model is not appropriate to cons
 $ git clone git clone https://github.com/wolkykim/libasyncd
 $ cd libasyncd
 $ ./configure
-$ make
+# If using system wide install of qlibc, add QLIBC=system to make install command
+$ make install
 ```
 
 ## API Reference
