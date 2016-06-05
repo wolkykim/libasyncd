@@ -31,6 +31,7 @@
  *
  * @file ad_platform.c
  */
+#include "ad_platform.h"
 
 #ifndef _DOXYGEN_SKIP
 
