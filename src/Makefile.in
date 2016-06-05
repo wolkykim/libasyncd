@@ -55,7 +55,7 @@ QLIBC		= embedded
 ## libasyncd related.
 HEADERDIR	= ../include/asyncd
 CPPFLAGS	+= -I$(HEADERDIR)
-OBJS		= ad_server.o ad_http_handler.o
+OBJS		= ad_server.o ad_http_handler.o ad_platform.o
 LIBNAME		= libasyncd.a
 SLIBNAME	= libasyncd.so.1
 SLIBNAME_LINK	= libasyncd.so
