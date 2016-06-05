@@ -54,12 +54,7 @@
 #include "macro.h"
 #include "qlibc/qlibc.h"
 #include "ad_server.h"
-
-#ifdef __linux__
-#include <sys/eventfd.h>
-#else
-#include <sys/event.h>
-#endif
+#include "ad_platform.h"
 
 #ifndef _DOXYGEN_SKIP
 /*
@@ -234,11 +229,7 @@ int ad_server_start(ad_server_t *server) {
     }
 
     // Create a eventfd for notification channel.
-#ifdef __linux__
-    int notifyfd = eventfd(0, 0);
-#else
-    int notifyfd = kqueue();
-#endif
+    int notifyfd = ad_platform_getfd();
     server->notify_buffer = bufferevent_socket_new(server->evbase, notifyfd, BEV_OPT_CLOSE_ON_FREE);
     bufferevent_setcb(server->notify_buffer, NULL, notify_cb, NULL, server);
 
