@@ -38,6 +38,7 @@
 #ifdef __linux__
 #include <sys/eventfd.h>
 #else
+#include <sys/types.h>
 #include <sys/event.h>
 #endif
 
