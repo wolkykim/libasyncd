@@ -117,3 +117,4 @@ The following people have helped with suggestions, ideas, code or fixing bugs:
 * [Carpentier Pierre-Francois](https://github.com/kakwa)
 * [Dmitri Toubelis](https://github.com/dtoubelis)
 * [Seungyoung Kim](https://github.com/wolkykim) - The author
+* [Shaun Bruner](https://github.com/spbruner)
