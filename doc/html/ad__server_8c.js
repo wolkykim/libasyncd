@@ -19,6 +19,7 @@ var ad__server_8c =
     [ "ad_conn_get_userdata", "ad__server_8c.html#ae5630244c7bb627a0561439f3cd24aca", null ],
     [ "ad_conn_set_extra", "ad__server_8c.html#a5ed8e931164315ca27568958a1d70316", null ],
     [ "ad_conn_get_extra", "ad__server_8c.html#ad6dd41a4169cd1fcbac17462fa6b5cf8", null ],
-    [ "ad_conn_set_method", "ad__server_8c.html#a35241493c96c6bdf6305f4419fea1c21", null ],
+    [ "ad_conn_set_method", "ad__server_8c.html#aef5876145774e9c6d38e68c06d05e34c", null ],
+    [ "ad_conn_get_socket", "ad__server_8c.html#a5ba67b542d4ba48ad4a25280d10ef86f", null ],
     [ "_ad_log_level", "ad__server_8c.html#aebeaab98b3cd2af4201083b56142eab7", null ]
 ];

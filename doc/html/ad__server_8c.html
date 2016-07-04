@@ -134,9 +134,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8c.html#ad6dd41a4169cd1fcbac17462fa6b5cf8">ad_conn_get_extra</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn)</td></tr>
 <tr class="memdesc:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get extra userdata attached in this connection.  <a href="#ad6dd41a4169cd1fcbac17462fa6b5cf8">More...</a><br/></td></tr>
 <tr class="separator:ad6dd41a4169cd1fcbac17462fa6b5cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35241493c96c6bdf6305f4419fea1c21"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8c.html#a35241493c96c6bdf6305f4419fea1c21">ad_conn_set_method</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, char *method)</td></tr>
-<tr class="memdesc:a35241493c96c6bdf6305f4419fea1c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set method name on this connection.  <a href="#a35241493c96c6bdf6305f4419fea1c21">More...</a><br/></td></tr>
-<tr class="separator:a35241493c96c6bdf6305f4419fea1c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5876145774e9c6d38e68c06d05e34c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8c.html#aef5876145774e9c6d38e68c06d05e34c">ad_conn_set_method</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, char *method)</td></tr>
+<tr class="memdesc:aef5876145774e9c6d38e68c06d05e34c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set method name on this connection.  <a href="#aef5876145774e9c6d38e68c06d05e34c">More...</a><br/></td></tr>
+<tr class="separator:aef5876145774e9c6d38e68c06d05e34c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba67b542d4ba48ad4a25280d10ef86f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__server_8c.html#a5ba67b542d4ba48ad4a25280d10ef86f">ad_conn_get_socket</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn)</td></tr>
+<tr class="memdesc:a5ba67b542d4ba48ad4a25280d10ef86f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return socket file descriptor associated with a connection.  <a href="#a5ba67b542d4ba48ad4a25280d10ef86f">More...</a><br/></td></tr>
+<tr class="separator:a5ba67b542d4ba48ad4a25280d10ef86f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -172,7 +175,7 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>previous debug level.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>debug_level: AD_LOG_DISABLE AD_LOG_ERROR AD_LOG_WARN (default) AD_LOG_INFO AD_LOG_DEBUG AD_LOG_DEBUG2 </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00121">121</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00126">126</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -192,7 +195,7 @@ Variables</h2></td></tr>
 
 <p>Create a server object. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00130">130</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00135">135</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -213,7 +216,7 @@ Variables</h2></td></tr>
 <p>Start server. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00159">159</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00164">164</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -235,7 +238,7 @@ Variables</h2></td></tr>
 <p>This call is be used to stop a server from different thread.</p>
 <dl class="section return"><dt>Returns</dt><dd>0 if successful, otherwise -1. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00278">278</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00287">287</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -255,7 +258,7 @@ Variables</h2></td></tr>
 
 <p>Release server object and all the resources. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00294">294</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00303">303</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -276,7 +279,7 @@ Variables</h2></td></tr>
 <p>Clean up all the global objects. </p>
 <p>This will make memory-leak checkers happy. There are globally shared resources in libevent and openssl and it's usually not a problem since they don't grow but having these can confuse some debugging tools into thinking as memory leak. If you need to make sure that libasyncd has released all internal library-global data structures, call this. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00343">343</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00352">352</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -313,7 +316,7 @@ Variables</h2></td></tr>
 <p>Set server option. </p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8h.html#adc215edc66db6333bb058fb84ed332ca" title="Server option names and default values. ">AD_SERVER_OPTIONS</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00361">361</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00370">370</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -343,7 +346,7 @@ Variables</h2></td></tr>
 
 <p>Retrieve server option. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00368">368</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00377">377</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -373,7 +376,7 @@ Variables</h2></td></tr>
 
 <p>Retrieve server option in integer format. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00375">375</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00384">384</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -413,7 +416,7 @@ Variables</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>This function initializes SSL_CTX with minimum default with "SSLv23_server_method" which will make the server understand SSLv2, SSLv3, and TLSv1 protocol.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8c.html#a34aa318f8a3872aa1e756adb38acd664" title="Attach OpenSSL SSL_CTX to the server. ">ad_server_set_ssl_ctx()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00395">395</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00404">404</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -452,7 +455,7 @@ Variables</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>This function attached SSL_CTX object to the server causing it to communicate over SSL. Use <a class="el" href="ad__server_8c.html#ac7ad549632ecf501e170aac234703541" title="Helper method for creating minimal OpenSSL SSL_CTX object. ">ad_server_ssl_ctx_create_simple()</a> to quickly create a simple SSL_CTX object or make your own with OpenSSL directly. This function must never be called when ad_server is running.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8c.html#ac7ad549632ecf501e170aac234703541" title="Helper method for creating minimal OpenSSL SSL_CTX object. ">ad_server_ssl_ctx_create_simple()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00425">425</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00434">434</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -480,7 +483,7 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>SSL_CTX object, NULL if not enabled.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>As a general rule the returned SSL_CTX object must not be modified while server is running as it may cause unpredictable results. However, it is safe to use it for reading SSL statistics. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00445">445</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00454">454</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -510,7 +513,7 @@ Variables</h2></td></tr>
 
 <p>Return internal statistic counter map. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00452">452</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00461">461</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -546,7 +549,7 @@ Variables</h2></td></tr>
 
 <p>Register user hook. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00459">459</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00468">468</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -588,7 +591,7 @@ Variables</h2></td></tr>
 
 <p>Register user hook on method name. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00466">466</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00475">475</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -625,7 +628,7 @@ Variables</h2></td></tr>
 <p>Attach userdata into the connection. </p>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00481">481</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00490">490</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -646,7 +649,7 @@ Variables</h2></td></tr>
 <p>Get userdata attached in the connection. </p>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata; </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00490">490</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00499">499</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -684,7 +687,7 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>previous userdata;</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Extra userdata is for default protocol handler such as ad_http_handler to provide higher abstraction. End users should always use only <a class="el" href="ad__server_8c.html#a6e2e8a73baf14dafa0842b76f31765df" title="Attach userdata into the connection. ">ad_conn_set_userdata()</a> to avoid any conflict with default handlers. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00504">504</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00513">513</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -704,16 +707,16 @@ Variables</h2></td></tr>
 
 <p>Get extra userdata attached in this connection. </p>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00511">511</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00520">520</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a35241493c96c6bdf6305f4419fea1c21"></a>
+<a class="anchor" id="aef5876145774e9c6d38e68c06d05e34c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* ad_conn_set_method </td>
+          <td class="memname">void ad_conn_set_method </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
           <td class="paramname"><em>conn</em>, </td>
@@ -733,10 +736,30 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Set method name on this connection. </p>
-<p>Once the method name is set, hooks registered by <a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name. ">ad_server_register_hook_on_method()</a> will be called if method name is matching as registered.</p>
+<p>Once the method name is set, hooks registered by <a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name. ">ad_server_register_hook_on_method()</a> will be called if method name matches with the registered name.</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="ad__server_8c.html#a4c319c4143b999a1c5e4b6d17415a500" title="Register user hook on method name. ">ad_server_register_hook_on_method()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00523">523</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00532">532</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5ba67b542d4ba48ad4a25280d10ef86f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ad_conn_get_socket </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return socket file descriptor associated with a connection. </p>
+
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00543">543</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
@@ -751,7 +774,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00103">103</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__server_8c_source.html#l00108">108</a> of file <a class="el" href="ad__server_8c_source.html">ad_server.c</a>.</p>
 
 </div>
 </div>
