@@ -525,17 +525,16 @@ void *ad_conn_get_extra(ad_conn_t *conn) {
  * Set method name on this connection.
  *
  * Once the method name is set, hooks registered by ad_server_register_hook_on_method()
- * will be called if method name is matching as registered.
+ * will be called if method name matches with the registered name.
  *
  * @see ad_server_register_hook_on_method()
  */
-char *ad_conn_set_method(ad_conn_t *conn, char *method) {
+void ad_conn_set_method(ad_conn_t *conn, char *method) {
     char *prev = conn->method;
-    if (conn->method) {
-        free(conn->method);
+    conn->method = (method != NULL) ? strdup(method) : NULL;
+    if (prev) {
+        free(prev);
     }
-    conn->method = strdup(method);
-    return prev;
 }
 
 /******************************************************************************
