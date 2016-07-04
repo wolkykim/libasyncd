@@ -537,6 +537,13 @@ void ad_conn_set_method(ad_conn_t *conn, char *method) {
     }
 }
 
+/**
+ * Return socket file descriptor associated with a connection.
+ */
+int ad_conn_get_socket(ad_conn_t *conn) {
+    return bufferevent_getfd(conn->buffer);
+}
+
 /******************************************************************************
  * Private internal functions.
  *****************************************************************************/

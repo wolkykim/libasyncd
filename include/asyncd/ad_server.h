@@ -196,6 +196,7 @@ extern void *ad_conn_get_userdata(ad_conn_t *conn);
 extern void *ad_conn_set_extra(ad_conn_t *conn, const void *extra, ad_userdata_free_cb free_cb);
 extern void *ad_conn_get_extra(ad_conn_t *conn);
 extern void ad_conn_set_method(ad_conn_t *conn, char *method);
+extern int  ad_conn_get_socket(ad_conn_t *conn);
 
 /*---------------------------------------------------------------------------*\
 |                             INTERNAL USE ONLY                               |
