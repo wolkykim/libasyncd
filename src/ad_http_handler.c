@@ -150,10 +150,24 @@ off_t ad_http_get_content_length(ad_conn_t *conn) {
     return http->request.contentlength;
 }
 
+
+/**
+ * Return the actual size of data stored in in-buffer
+ */
+size_t ad_http_get_content_length_stored(ad_conn_t *conn) {
+    ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
+    return evbuffer_get_length(http->request.inbuf);
+}
+
 /**
  * Remove content from the in-buffer.
  *
- * @param maxsize maximum length of data to pull up. 0 to pull up everything.
+ * The return data gets null terminated for convenience. For an example,
+ * if it reads 3 bytes, it will allocate 4 bytes and the 4th byte will
+ * be set to null terminator. `storedsized` will still return 3.
+ *
+ * @param maxsize maximum length of data to read. 0 to read everything.
+ * @param storedsize the size of data read and stored in the return.
  */
 void *ad_http_get_content(ad_conn_t *conn, size_t maxsize, size_t *storedsize) {
     ad_http_t *http = (ad_http_t *) ad_conn_get_extra(conn);
@@ -165,11 +179,12 @@ void *ad_http_get_content(ad_conn_t *conn, size_t maxsize, size_t *storedsize) {
     if (readlen == 0)
         return NULL;
 
-    void *data = malloc(readlen);
+    void *data = malloc(readlen + 1);
     if (data == NULL)
         return NULL;
 
     size_t removedlen = evbuffer_remove(http->request.inbuf, data, readlen);
+    ((char*)data)[removedlen] = '\0';
     if (storedsize)
         *storedsize = removedlen;
 
