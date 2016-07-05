@@ -48,6 +48,7 @@ var ad__http__handler_8h =
     [ "ad_http_get_outbuf", "ad__http__handler_8h.html#af5085188b8be2e7ab290fe0ec22789b4", null ],
     [ "ad_http_get_request_header", "ad__http__handler_8h.html#aa931a4adcd07f3bc23fe4f183dc4c8dc", null ],
     [ "ad_http_get_content_length", "ad__http__handler_8h.html#ac07e895997348c2885722f98c3260438", null ],
+    [ "ad_http_get_content_length_stored", "ad__http__handler_8h.html#a468ef4268a9a7c71dfce494c446ebcb5", null ],
     [ "ad_http_get_content", "ad__http__handler_8h.html#a4d28e689e120cfa22217507c74683779", null ],
     [ "ad_http_is_keepalive_request", "ad__http__handler_8h.html#ae6a1a9707180447257fd769b249ee42d", null ],
     [ "ad_http_set_response_header", "ad__http__handler_8h.html#a59ed09afcce36474000c6cded0bd7b64", null ],

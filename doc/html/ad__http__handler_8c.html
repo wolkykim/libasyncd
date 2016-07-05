@@ -92,6 +92,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ac07e895997348c2885722f98c3260438"><td class="memItemLeft" align="right" valign="top">off_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__http__handler_8c.html#ac07e895997348c2885722f98c3260438">ad_http_get_content_length</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn)</td></tr>
 <tr class="memdesc:ac07e895997348c2885722f98c3260438"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the size of content from the request.  <a href="#ac07e895997348c2885722f98c3260438">More...</a><br/></td></tr>
 <tr class="separator:ac07e895997348c2885722f98c3260438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a468ef4268a9a7c71dfce494c446ebcb5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__http__handler_8c.html#a468ef4268a9a7c71dfce494c446ebcb5">ad_http_get_content_length_stored</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn)</td></tr>
+<tr class="memdesc:a468ef4268a9a7c71dfce494c446ebcb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the actual size of data stored in in-buffer.  <a href="#a468ef4268a9a7c71dfce494c446ebcb5">More...</a><br/></td></tr>
+<tr class="separator:a468ef4268a9a7c71dfce494c446ebcb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d28e689e120cfa22217507c74683779"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ad__http__handler_8c.html#a4d28e689e120cfa22217507c74683779">ad_http_get_content</a> (<a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *conn, size_t maxsize, size_t *storedsize)</td></tr>
 <tr class="memdesc:a4d28e689e120cfa22217507c74683779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove content from the in-buffer.  <a href="#a4d28e689e120cfa22217507c74683779">More...</a><br/></td></tr>
 <tr class="separator:a4d28e689e120cfa22217507c74683779"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -277,6 +280,26 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a468ef4268a9a7c71dfce494c446ebcb5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t ad_http_get_content_length_stored </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="ad__server_8h.html#a13ab8ad0b151e6b08c548bb36daef631">ad_conn_t</a> *&#160;</td>
+          <td class="paramname"><em>conn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the actual size of data stored in in-buffer. </p>
+
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00157">157</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a4d28e689e120cfa22217507c74683779"></a>
 <div class="memitem">
 <div class="memproto">
@@ -308,14 +331,16 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Remove content from the in-buffer. </p>
+<p>The return data gets null terminated for convenience. For an example, if it reads 3 bytes, it will allocate 4 bytes and the 4th byte will be set to null terminator. <code>storedsized</code> will still return 3.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxsize</td><td>maximum length of data to pull up. 0 to pull up everything. </td></tr>
+    <tr><td class="paramname">maxsize</td><td>maximum length of data to read. 0 to read everything. </td></tr>
+    <tr><td class="paramname">storedsize</td><td>the size of data read and stored in the return. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00158">158</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00172">172</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -336,7 +361,7 @@ Functions</h2></td></tr>
 <p>Return whether the request is keep-alive request or not. </p>
 <dl class="section return"><dt>Returns</dt><dd>1 if keep-alive request, otherwise 0. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00184">184</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00199">199</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -380,7 +405,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if we already sent it out. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00216">216</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00231">231</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -417,7 +442,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>value of string if found, otherwise NULL. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00239">239</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00254">254</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -452,7 +477,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if we already sent it out. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00248">248</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00263">263</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -493,7 +518,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if we already sent it out. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00266">266</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00281">281</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -540,7 +565,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>total bytes sent, 0 on error. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00293">293</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00308">308</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -559,7 +584,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>0 total bytes put in out buffer, -1 if we already sent it out. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00316">316</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00331">331</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -594,7 +619,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if we already sent it out. </dd></dl>
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00352">352</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00367">367</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -628,7 +653,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00379">379</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00394">394</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
@@ -646,7 +671,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00413">413</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
+<p>Definition at line <a class="el" href="ad__http__handler_8c_source.html#l00428">428</a> of file <a class="el" href="ad__http__handler_8c_source.html">ad_http_handler.c</a>.</p>
 
 </div>
 </div>
