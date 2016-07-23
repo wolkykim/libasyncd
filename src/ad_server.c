@@ -405,7 +405,7 @@ SSL_CTX *ad_server_ssl_ctx_create_simple(const char *cert_path,
         const char *pkey_path) {
     
     SSL_CTX *sslctx = SSL_CTX_new(SSLv23_server_method());
-    if (! SSL_CTX_use_certificate_file(sslctx, cert_path, SSL_FILETYPE_PEM) ||
+    if (! SSL_CTX_use_certificate_chain_file(sslctx, cert_path) ||
         ! SSL_CTX_use_PrivateKey_file(sslctx, pkey_path, SSL_FILETYPE_PEM)) {
         
         ERROR("Couldn't load certificate file(%s) or private key file(%s).",
