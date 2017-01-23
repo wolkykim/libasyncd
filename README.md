@@ -114,10 +114,10 @@ Please refer sample codes such as echo example in examples directory for more de
 The following people have helped with suggestions, ideas, code or fixing bugs:
 (in alphabetical order by first name)
 
+* [Seungyoung "Steve" Kim](https://github.com/wolkykim) - Author
 * [Carpentier Pierre-Francois](https://github.com/kakwa)
 * [Dmitri Toubelis](https://github.com/dtoubelis)
 * [Levi Durfee](https://github.com/levidurfee)
-* [Seungyoung "Steve" Kim](https://github.com/wolkykim) - The author
 * [Shaun Bruner](https://github.com/spbruner)
 
 Please send a PR for adding your name here, so we know whom to appreciate.
