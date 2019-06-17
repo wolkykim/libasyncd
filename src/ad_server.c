@@ -593,7 +593,7 @@ static void close_server(ad_server_t *server) {
     if (server->thread) {
         void *retval = NULL;
         DEBUG("Waiting server's last loop to finish.");
-        pthread_join(*(server->thread), &retval);
+        pthread_join((server->thread), &retval);
         free(retval);
         free(server->thread);
         server->thread = NULL;
